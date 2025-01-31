@@ -6,6 +6,8 @@ function _interopDefaultLegacy(e) { return e && typeof e === 'object' && 'defaul
 
 var obsidian__default = /*#__PURE__*/_interopDefaultLegacy(obsidian);
 
+const PERIODICITY = ["daily", "weekly", "monthly", "quarterly", "yearly"];
+
 const DEFAULT_NOTE_FORMAT = {
   day: "YYYY-MM-DD",
   week: "gggg-[W]ww",
@@ -587,30 +589,6 @@ const periodConfigs = {
     createNote: createYearlyNote,
   },
 };
-/* NB(PNK)
-  *
-  * Work around https://github.com/liamcain/obsidian-periodic-notes/issues/238:
-  * - Use unitOfTime2 instead of unitOfTime2.
-  */
-async function openPeriodicNote(periodicity, date, inNewSplit) {
-  const granularity = periodicityToGranularity(periodicity);
-  const config = periodConfigs[periodicity];
-  const startOfPeriod = date.clone().startOf(config.unitOfTime2);
-  let allNotes;
-  try {
-    allNotes = getAllPeriodicNotes(granularity);
-  }
-  catch (err) {
-    console.error(`failed to find your ${periodicity} notes folder`, err);
-    new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
-    return;
-  }
-  let periodicNote = getPeriodicNote(allNotes, granularity, startOfPeriod);
-  if (!periodicNote) {
-    periodicNote = await config.createNote(startOfPeriod);
-  }
-  await openFile(periodicNote, inNewSplit);
-}
 function getActiveFile() {
   const { workspace } = window.app;
   const activeView = workspace.getActiveViewOfType(obsidian.MarkdownView);
@@ -622,70 +600,6 @@ async function openFile(file, inNewSplit) {
     ? workspace.splitActiveLeaf()
     : workspace.getUnpinnedLeaf();
   await leaf.openFile(file, { active: true });
-}
-async function openNextNote(periodicity) {
-  const granularity = periodicityToGranularity(periodicity);
-  const activeFile = getActiveFile();
-  try {
-    const allNotes = orderedValues(getAllPeriodicNotes(granularity));
-    const activeNoteIndex = allNotes.findIndex((file) => file === activeFile);
-    const nextNote = allNotes[activeNoteIndex + 1];
-    if (nextNote) {
-      await openFile(nextNote, false);
-    }
-  }
-  catch (err) {
-    console.error(`failed to find your ${periodicity} notes folder`, err);
-    new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
-  }
-}
-async function openPrevNote(periodicity) {
-  const granularity = periodicityToGranularity(periodicity);
-  const activeFile = getActiveFile();
-  try {
-    const allNotes = orderedValues(getAllPeriodicNotes(granularity));
-    const activeNoteIndex = allNotes.findIndex((file) => file === activeFile);
-    const prevNote = allNotes[activeNoteIndex - 1];
-    if (prevNote) {
-      await openFile(prevNote, false);
-    }
-  }
-  catch (err) {
-    console.error(`failed to find your ${periodicity} notes folder`, err);
-    new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
-  }
-}
-function getCommands(periodicity) {
-  const granularity = periodicityToGranularity(periodicity);
-  return [
-    {
-      id: `open-${periodicity}-note`,
-      name: `Open ${periodicity} note`,
-      callback: () => openPeriodicNote(periodicity, window.moment(), false),
-    },
-    {
-      id: `next-${periodicity}-note`,
-      name: `Open next ${periodicity} note`,
-      checkCallback: (checking) => {
-        if (checking) {
-          const activeFile = getActiveFile();
-          return !!(activeFile && getDateFromFile(activeFile, granularity));
-        }
-        openNextNote(periodicity);
-      },
-    },
-    {
-      id: `prev-${periodicity}-note`,
-      name: `Open previous ${periodicity} note`,
-      checkCallback: (checking) => {
-        if (checking) {
-          const activeFile = getActiveFile();
-          return !!(activeFile && getDateFromFile(activeFile, granularity));
-        }
-        openPrevNote(periodicity);
-      },
-    },
-  ];
 }
 
 const SETTINGS_UPDATED = "periodic-notes:settings-updated";
@@ -5290,13 +5204,7 @@ class PeriodicNotesPlugin extends obsidian.Plugin {
   configureRibbonIcons() {
     var _a;
     (_a = this.ribbonEl) === null || _a === void 0 ? void 0 : _a.detach();
-    const configuredPeriodicities = [
-      "daily",
-      "weekly",
-      "monthly",
-      "quarterly",
-      "yearly",
-    ].filter((periodicity) => this.settings[periodicity].enabled);
+    const configuredPeriodicities = PERIODICITY.filter((periodicity) => this.settings[periodicity].enabled);
     if (configuredPeriodicities.length) {
       const periodicity = configuredPeriodicities[0];
       const config = periodConfigs[periodicity];
@@ -5309,22 +5217,49 @@ class PeriodicNotesPlugin extends obsidian.Plugin {
       });
     }
   }
+
   configureCommands() {
-    // Remove disabled commands
-    ["daily", "weekly", "monthly", "quarterly", "yearly"]
-      .filter((periodicity) => !this.settings[periodicity].enabled)
-      .forEach((periodicity) => {
-        getCommands(periodicity).forEach((command) =>
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          this.app.commands.removeCommand(`periodic-notes:${command.id}`));
-      });
-    // register enabled commands
-    ["daily", "weekly", "monthly", "quarterly", "yearly"]
-      .filter((periodicity) => this.settings[periodicity].enabled)
-      .forEach((periodicity) => {
-        getCommands(periodicity).forEach(this.addCommand.bind(this));
-      });
+    PERIODICITY.forEach((p) => {
+      const g = periodicityToGranularity(p);
+      const commands = [
+        {
+          id: `open-${p}-note`,
+          name: `Open ${p} note`,
+          callback: () => this.openNote(p, window.moment(), false),
+        },
+        {
+          id: `next-${p}-note`,
+          name: `Open next ${p} note`,
+          checkCallback: (checking) => {
+            if (checking) {
+              const activeFile = getActiveFile();
+              return !!(activeFile && getDateFromFile(activeFile, g));
+            }
+            this.openOtherNote(p, +1);
+          },
+        },
+        {
+          id: `prev-${p}-note`,
+          name: `Open previous ${p} note`,
+          checkCallback: (checking) => {
+            if (checking) {
+              const activeFile = getActiveFile();
+              return !!(activeFile && getDateFromFile(activeFile, g));
+            }
+            this.openOtherNote(p, -1);
+          },
+        },
+      ];
+      if (this.settings[p].enabled) {
+        // Register enabled commands
+        commands.forEach((c) => this.addCommand(c));
+      } else {
+        // Remove disabled commands
+        commands.forEach((c) => this.app.commands.removeCommand(`periodic-notes:${c.id}`));
+      }
+    });
   }
+
   async loadSettings() {
     const settings = await this.loadData();
     if (!settings) {
@@ -5351,6 +5286,49 @@ class PeriodicNotesPlugin extends obsidian.Plugin {
     this.settings = val;
     await this.saveData(this.settings);
     this.onSettingsUpdate();
+  }
+
+  /* NB(PNK)
+    *
+    * Work around https://github.com/liamcain/obsidian-periodic-notes/issues/238:
+    * - Use unitOfTime2 instead of unitOfTime2.
+    */
+  async openNote(periodicity, date, inNewSplit) {
+    const granularity = periodicityToGranularity(periodicity);
+    const config = periodConfigs[periodicity];
+    const startOfPeriod = date.clone().startOf(config.unitOfTime2);
+    let allNotes;
+    try {
+      allNotes = getAllPeriodicNotes(granularity);
+    }
+    catch (err) {
+      console.error(`failed to find your ${periodicity} notes folder`, err);
+      new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
+      return;
+    }
+    let note = getPeriodicNote(allNotes, granularity, startOfPeriod);
+    if (!note) {
+      note = await config.createNote(startOfPeriod);
+    }
+    await openFile(note, inNewSplit);
+  }
+
+  async openOtherNote(periodicity, offset) {
+    // Either the previous (offset = -1) or next (offset = 1) note.
+    const granularity = periodicityToGranularity(periodicity);
+    const activeFile = getActiveFile();
+    try {
+      const allNotes = orderedValues(getAllPeriodicNotes(granularity));
+      const activeNoteIndex = allNotes.findIndex((file) => file === activeFile);
+      const note = allNotes[activeNoteIndex + offset];
+      if (note) {
+        await openFile(note, false);
+      }
+    }
+    catch (err) {
+      console.error(`failed to find your ${periodicity} notes folder`, err);
+      new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
+    }
   }
 }
 
