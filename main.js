@@ -2,7 +2,7 @@
 
 var obsidian = require('obsidian');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+function _interopDefaultLegacy(e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var obsidian__default = /*#__PURE__*/_interopDefaultLegacy(obsidian);
 
@@ -13,190 +13,190 @@ const DEFAULT_QUARTERLY_NOTE_FORMAT = "YYYY-[Q]Q";
 const DEFAULT_YEARLY_NOTE_FORMAT = "YYYY";
 
 function shouldUsePeriodicNotesSettings(periodicity) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const periodicNotes = window.app.plugins.getPlugin("periodic-notes");
-    return periodicNotes && periodicNotes.settings?.[periodicity]?.enabled;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const periodicNotes = window.app.plugins.getPlugin("periodic-notes");
+  return periodicNotes && periodicNotes.settings?.[periodicity]?.enabled;
 }
 /**
  * Read the user settings for the `daily-notes` plugin
  * to keep behavior of creating a new note in-sync.
  */
 function getDailyNoteSettings() {
-    try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const { internalPlugins, plugins } = window.app;
-        if (shouldUsePeriodicNotesSettings("daily")) {
-            const { format, folder, template } = plugins.getPlugin("periodic-notes")?.settings?.daily || {};
-            return {
-                format: format || DEFAULT_DAILY_NOTE_FORMAT,
-                folder: folder?.trim() || "",
-                template: template?.trim() || "",
-            };
-        }
-        const { folder, format, template } = internalPlugins.getPluginById("daily-notes")?.instance?.options || {};
-        return {
-            format: format || DEFAULT_DAILY_NOTE_FORMAT,
-            folder: folder?.trim() || "",
-            template: template?.trim() || "",
-        };
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { internalPlugins, plugins } = window.app;
+    if (shouldUsePeriodicNotesSettings("daily")) {
+      const { format, folder, template } = plugins.getPlugin("periodic-notes")?.settings?.daily || {};
+      return {
+        format: format || DEFAULT_DAILY_NOTE_FORMAT,
+        folder: folder?.trim() || "",
+        template: template?.trim() || "",
+      };
     }
-    catch (err) {
-        console.info("No custom daily note settings found!", err);
-    }
+    const { folder, format, template } = internalPlugins.getPluginById("daily-notes")?.instance?.options || {};
+    return {
+      format: format || DEFAULT_DAILY_NOTE_FORMAT,
+      folder: folder?.trim() || "",
+      template: template?.trim() || "",
+    };
+  }
+  catch (err) {
+    console.info("No custom daily note settings found!", err);
+  }
 }
 /**
  * Read the user settings for the `weekly-notes` plugin
  * to keep behavior of creating a new note in-sync.
  */
 function getWeeklyNoteSettings() {
-    try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const pluginManager = window.app.plugins;
-        const calendarSettings = pluginManager.getPlugin("calendar")?.options;
-        const periodicNotesSettings = pluginManager.getPlugin("periodic-notes")?.settings?.weekly;
-        if (shouldUsePeriodicNotesSettings("weekly")) {
-            return {
-                format: periodicNotesSettings.format || DEFAULT_WEEKLY_NOTE_FORMAT,
-                folder: periodicNotesSettings.folder?.trim() || "",
-                template: periodicNotesSettings.template?.trim() || "",
-            };
-        }
-        const settings = calendarSettings || {};
-        return {
-            format: settings.weeklyNoteFormat || DEFAULT_WEEKLY_NOTE_FORMAT,
-            folder: settings.weeklyNoteFolder?.trim() || "",
-            template: settings.weeklyNoteTemplate?.trim() || "",
-        };
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pluginManager = window.app.plugins;
+    const calendarSettings = pluginManager.getPlugin("calendar")?.options;
+    const periodicNotesSettings = pluginManager.getPlugin("periodic-notes")?.settings?.weekly;
+    if (shouldUsePeriodicNotesSettings("weekly")) {
+      return {
+        format: periodicNotesSettings.format || DEFAULT_WEEKLY_NOTE_FORMAT,
+        folder: periodicNotesSettings.folder?.trim() || "",
+        template: periodicNotesSettings.template?.trim() || "",
+      };
     }
-    catch (err) {
-        console.info("No custom weekly note settings found!", err);
-    }
+    const settings = calendarSettings || {};
+    return {
+      format: settings.weeklyNoteFormat || DEFAULT_WEEKLY_NOTE_FORMAT,
+      folder: settings.weeklyNoteFolder?.trim() || "",
+      template: settings.weeklyNoteTemplate?.trim() || "",
+    };
+  }
+  catch (err) {
+    console.info("No custom weekly note settings found!", err);
+  }
 }
 /**
  * Read the user settings for the `periodic-notes` plugin
  * to keep behavior of creating a new note in-sync.
  */
 function getMonthlyNoteSettings() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const pluginManager = window.app.plugins;
-    try {
-        const settings = (shouldUsePeriodicNotesSettings("monthly") &&
-            pluginManager.getPlugin("periodic-notes")?.settings?.monthly) ||
-            {};
-        return {
-            format: settings.format || DEFAULT_MONTHLY_NOTE_FORMAT,
-            folder: settings.folder?.trim() || "",
-            template: settings.template?.trim() || "",
-        };
-    }
-    catch (err) {
-        console.info("No custom monthly note settings found!", err);
-    }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pluginManager = window.app.plugins;
+  try {
+    const settings = (shouldUsePeriodicNotesSettings("monthly") &&
+      pluginManager.getPlugin("periodic-notes")?.settings?.monthly) ||
+      {};
+    return {
+      format: settings.format || DEFAULT_MONTHLY_NOTE_FORMAT,
+      folder: settings.folder?.trim() || "",
+      template: settings.template?.trim() || "",
+    };
+  }
+  catch (err) {
+    console.info("No custom monthly note settings found!", err);
+  }
 }
 /**
  * Read the user settings for the `periodic-notes` plugin
  * to keep behavior of creating a new note in-sync.
  */
 function getQuarterlyNoteSettings() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const pluginManager = window.app.plugins;
-    try {
-        const settings = (shouldUsePeriodicNotesSettings("quarterly") &&
-            pluginManager.getPlugin("periodic-notes")?.settings?.quarterly) ||
-            {};
-        return {
-            format: settings.format || DEFAULT_QUARTERLY_NOTE_FORMAT,
-            folder: settings.folder?.trim() || "",
-            template: settings.template?.trim() || "",
-        };
-    }
-    catch (err) {
-        console.info("No custom quarterly note settings found!", err);
-    }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pluginManager = window.app.plugins;
+  try {
+    const settings = (shouldUsePeriodicNotesSettings("quarterly") &&
+      pluginManager.getPlugin("periodic-notes")?.settings?.quarterly) ||
+      {};
+    return {
+      format: settings.format || DEFAULT_QUARTERLY_NOTE_FORMAT,
+      folder: settings.folder?.trim() || "",
+      template: settings.template?.trim() || "",
+    };
+  }
+  catch (err) {
+    console.info("No custom quarterly note settings found!", err);
+  }
 }
 /**
  * Read the user settings for the `periodic-notes` plugin
  * to keep behavior of creating a new note in-sync.
  */
 function getYearlyNoteSettings() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const pluginManager = window.app.plugins;
-    try {
-        const settings = (shouldUsePeriodicNotesSettings("yearly") &&
-            pluginManager.getPlugin("periodic-notes")?.settings?.yearly) ||
-            {};
-        return {
-            format: settings.format || DEFAULT_YEARLY_NOTE_FORMAT,
-            folder: settings.folder?.trim() || "",
-            template: settings.template?.trim() || "",
-        };
-    }
-    catch (err) {
-        console.info("No custom yearly note settings found!", err);
-    }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pluginManager = window.app.plugins;
+  try {
+    const settings = (shouldUsePeriodicNotesSettings("yearly") &&
+      pluginManager.getPlugin("periodic-notes")?.settings?.yearly) ||
+      {};
+    return {
+      format: settings.format || DEFAULT_YEARLY_NOTE_FORMAT,
+      folder: settings.folder?.trim() || "",
+      template: settings.template?.trim() || "",
+    };
+  }
+  catch (err) {
+    console.info("No custom yearly note settings found!", err);
+  }
 }
 
 // Credit: @creationix/path.js
 function join(...partSegments) {
-    // Split the inputs into a list of path commands.
-    let parts = [];
-    for (let i = 0, l = partSegments.length; i < l; i++) {
-        parts = parts.concat(partSegments[i].split("/"));
-    }
-    // Interpret the path commands to get the new resolved path.
-    const newParts = [];
-    for (let i = 0, l = parts.length; i < l; i++) {
-        const part = parts[i];
-        // Remove leading and trailing slashes
-        // Also remove "." segments
-        if (!part || part === ".")
-            continue;
-        // Push new path segments.
-        else
-            newParts.push(part);
-    }
-    // Preserve the initial slash if there was one.
-    if (parts[0] === "")
-        newParts.unshift("");
-    // Turn back into a single string path.
-    return newParts.join("/");
+  // Split the inputs into a list of path commands.
+  let parts = [];
+  for (let i = 0, l = partSegments.length; i < l; i++) {
+    parts = parts.concat(partSegments[i].split("/"));
+  }
+  // Interpret the path commands to get the new resolved path.
+  const newParts = [];
+  for (let i = 0, l = parts.length; i < l; i++) {
+    const part = parts[i];
+    // Remove leading and trailing slashes
+    // Also remove "." segments
+    if (!part || part === ".")
+      continue;
+    // Push new path segments.
+    else
+      newParts.push(part);
+  }
+  // Preserve the initial slash if there was one.
+  if (parts[0] === "")
+    newParts.unshift("");
+  // Turn back into a single string path.
+  return newParts.join("/");
 }
 async function ensureFolderExists(path) {
-    const dirs = path.replace(/\\/g, "/").split("/");
-    dirs.pop(); // remove basename
-    if (dirs.length) {
-        const dir = join(...dirs);
-        if (!window.app.vault.getAbstractFileByPath(dir)) {
-            await window.app.vault.createFolder(dir);
-        }
+  const dirs = path.replace(/\\/g, "/").split("/");
+  dirs.pop(); // remove basename
+  if (dirs.length) {
+    const dir = join(...dirs);
+    if (!window.app.vault.getAbstractFileByPath(dir)) {
+      await window.app.vault.createFolder(dir);
     }
+  }
 }
 async function getNotePath(directory, filename) {
-    if (!filename.endsWith(".md")) {
-        filename += ".md";
-    }
-    const path = obsidian__default['default'].normalizePath(join(directory, filename));
-    await ensureFolderExists(path);
-    return path;
+  if (!filename.endsWith(".md")) {
+    filename += ".md";
+  }
+  const path = obsidian__default['default'].normalizePath(join(directory, filename));
+  await ensureFolderExists(path);
+  return path;
 }
 async function getTemplateInfo(template) {
-    const { metadataCache, vault } = window.app;
-    const templatePath = obsidian__default['default'].normalizePath(template);
-    if (templatePath === "/") {
-        return Promise.resolve(["", null]);
-    }
-    try {
-        const templateFile = metadataCache.getFirstLinkpathDest(templatePath, "");
-        const contents = await vault.cachedRead(templateFile);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const IFoldInfo = window.app.foldManager.load(templateFile);
-        return [contents, IFoldInfo];
-    }
-    catch (err) {
-        console.error(`Failed to read the daily note template '${templatePath}'`, err);
-        new obsidian__default['default'].Notice("Failed to read the daily note template");
-        return ["", null];
-    }
+  const { metadataCache, vault } = window.app;
+  const templatePath = obsidian__default['default'].normalizePath(template);
+  if (templatePath === "/") {
+    return Promise.resolve(["", null]);
+  }
+  try {
+    const templateFile = metadataCache.getFirstLinkpathDest(templatePath, "");
+    const contents = await vault.cachedRead(templateFile);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const IFoldInfo = window.app.foldManager.load(templateFile);
+    return [contents, IFoldInfo];
+  }
+  catch (err) {
+    console.error(`Failed to read the daily note template '${templatePath}'`, err);
+    new obsidian__default['default'].Notice("Failed to read the daily note template");
+    return ["", null];
+  }
 }
 
 /**
@@ -204,11 +204,11 @@ async function getTemplateInfo(template) {
  * They are prefixed with the granularity to avoid ambiguity.
  */
 function getDateUID(date, granularity = "day") {
-    const ts = date.clone().startOf(granularity).format();
-    return `${granularity}-${ts}`;
+  const ts = date.clone().startOf(granularity).format();
+  return `${granularity}-${ts}`;
 }
 function removeEscapedCharacters(format) {
-    return format.replace(/\[[^\]]*\]/g, ""); // remove everything within brackets
+  return format.replace(/\[[^\]]*\]/g, ""); // remove everything within brackets
 }
 /**
  * XXX: When parsing dates that contain both week numbers and months,
@@ -216,38 +216,38 @@ function removeEscapedCharacters(format) {
  * want the opposite behavior. Strip the MMM from the format to patch.
  */
 function isFormatAmbiguous(format, granularity) {
-    if (granularity === "week") {
-        const cleanFormat = removeEscapedCharacters(format);
-        return (/w{1,2}/i.test(cleanFormat) &&
-            (/M{1,4}/.test(cleanFormat) || /D{1,4}/.test(cleanFormat)));
-    }
-    return false;
+  if (granularity === "week") {
+    const cleanFormat = removeEscapedCharacters(format);
+    return (/w{1,2}/i.test(cleanFormat) &&
+      (/M{1,4}/.test(cleanFormat) || /D{1,4}/.test(cleanFormat)));
+  }
+  return false;
 }
 function getDateFromFile(file, granularity) {
-    const filename = file.basename;
-    const getSettings = {
-        day: getDailyNoteSettings,
-        week: getWeeklyNoteSettings,
-        month: getMonthlyNoteSettings,
-        quarter: getQuarterlyNoteSettings,
-        year: getYearlyNoteSettings,
-    };
-    const noteDate = window.moment(file.path, getSettings[granularity]().format, true);
-    if (!noteDate.isValid()) {
-        return null;
+  const filename = file.basename;
+  const getSettings = {
+    day: getDailyNoteSettings,
+    week: getWeeklyNoteSettings,
+    month: getMonthlyNoteSettings,
+    quarter: getQuarterlyNoteSettings,
+    year: getYearlyNoteSettings,
+  };
+  const noteDate = window.moment(file.path, getSettings[granularity]().format, true);
+  if (!noteDate.isValid()) {
+    return null;
+  }
+  console.debug(`${file.path} | ${filename} | ${format} | ${noteDate}`)
+  if (isFormatAmbiguous(format, granularity)) {
+    if (granularity === "week") {
+      const cleanFormat = removeEscapedCharacters(format);
+      if (/w{1,2}/i.test(cleanFormat)) {
+        return window.moment(filename,
+          // If format contains week, remove day & month formatting
+          format.replace(/M{1,4}/g, "").replace(/D{1,4}/g, ""), false);
+      }
     }
-    console.debug(`${file.path} | ${filename} | ${format} | ${noteDate}`)
-    if (isFormatAmbiguous(format, granularity)) {
-        if (granularity === "week") {
-            const cleanFormat = removeEscapedCharacters(format);
-            if (/w{1,2}/i.test(cleanFormat)) {
-                return window.moment(filename,
-                // If format contains week, remove day & month formatting
-                format.replace(/M{1,4}/g, "").replace(/D{1,4}/g, ""), false);
-            }
-        }
-    }
-    return noteDate;
+  }
+  return noteDate;
 }
 
 class DailyNotesFolderMissingError extends Error {
@@ -260,163 +260,163 @@ class DailyNotesFolderMissingError extends Error {
  * Note: it has an added bonus that it's not 'today' specific.
  */
 async function createDailyNote(date) {
-    const app = window.app;
-    const { vault } = app;
-    const moment = window.moment;
-    const { template, format, folder } = getDailyNoteSettings();
-    const [templateContents, IFoldInfo] = await getTemplateInfo(template);
-    const filename = date.format(format);
-    const normalizedPath = await getNotePath(folder, filename);
-    try {
-        const createdFile = await vault.create(normalizedPath, templateContents
-            .replace(/{{\s*date\s*}}/gi, filename)
-            .replace(/{{\s*time\s*}}/gi, moment().format("HH:mm"))
-            .replace(/{{\s*title\s*}}/gi, filename)
-            .replace(/{{\s*(date|time)\s*(([+-]\d+)([yqmwdhs]))?\s*(:.+?)?}}/gi, (_, _timeOrDate, calc, timeDelta, unit, momentFormat) => {
-            const now = moment();
-            const currentDate = date.clone().set({
-                hour: now.get("hour"),
-                minute: now.get("minute"),
-                second: now.get("second"),
-            });
-            if (calc) {
-                currentDate.add(parseInt(timeDelta, 10), unit);
-            }
-            if (momentFormat) {
-                return currentDate.format(momentFormat.substring(1).trim());
-            }
-            return currentDate.format(format);
-        })
-            .replace(/{{\s*yesterday\s*}}/gi, date.clone().subtract(1, "day").format(format))
-            .replace(/{{\s*tomorrow\s*}}/gi, date.clone().add(1, "d").format(format)));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        app.foldManager.save(createdFile, IFoldInfo);
-        return createdFile;
-    }
-    catch (err) {
-        console.error(`Failed to create file: '${normalizedPath}'`, err);
-        new obsidian__default['default'].Notice("Unable to create new file.");
-    }
+  const app = window.app;
+  const { vault } = app;
+  const moment = window.moment;
+  const { template, format, folder } = getDailyNoteSettings();
+  const [templateContents, IFoldInfo] = await getTemplateInfo(template);
+  const filename = date.format(format);
+  const normalizedPath = await getNotePath(folder, filename);
+  try {
+    const createdFile = await vault.create(normalizedPath, templateContents
+      .replace(/{{\s*date\s*}}/gi, filename)
+      .replace(/{{\s*time\s*}}/gi, moment().format("HH:mm"))
+      .replace(/{{\s*title\s*}}/gi, filename)
+      .replace(/{{\s*(date|time)\s*(([+-]\d+)([yqmwdhs]))?\s*(:.+?)?}}/gi, (_, _timeOrDate, calc, timeDelta, unit, momentFormat) => {
+        const now = moment();
+        const currentDate = date.clone().set({
+          hour: now.get("hour"),
+          minute: now.get("minute"),
+          second: now.get("second"),
+        });
+        if (calc) {
+          currentDate.add(parseInt(timeDelta, 10), unit);
+        }
+        if (momentFormat) {
+          return currentDate.format(momentFormat.substring(1).trim());
+        }
+        return currentDate.format(format);
+      })
+      .replace(/{{\s*yesterday\s*}}/gi, date.clone().subtract(1, "day").format(format))
+      .replace(/{{\s*tomorrow\s*}}/gi, date.clone().add(1, "d").format(format)));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    app.foldManager.save(createdFile, IFoldInfo);
+    return createdFile;
+  }
+  catch (err) {
+    console.error(`Failed to create file: '${normalizedPath}'`, err);
+    new obsidian__default['default'].Notice("Unable to create new file.");
+  }
 }
 function getDailyNote(date, dailyNotes) {
-    return dailyNotes[getDateUID(date, "day")] ?? null;
+  return dailyNotes[getDateUID(date, "day")] ?? null;
 }
 function getAllDailyNotes() {
-    /**
-     * Find all daily notes in the daily note folder
-     */
-    const { vault } = window.app;
-    const { folder } = getDailyNoteSettings();
-    const dailyNotesFolder = vault.getAbstractFileByPath(obsidian__default['default'].normalizePath(folder));
-    if (!dailyNotesFolder) {
-        throw new DailyNotesFolderMissingError("Failed to find daily notes folder");
+  /**
+   * Find all daily notes in the daily note folder
+   */
+  const { vault } = window.app;
+  const { folder } = getDailyNoteSettings();
+  const dailyNotesFolder = vault.getAbstractFileByPath(obsidian__default['default'].normalizePath(folder));
+  if (!dailyNotesFolder) {
+    throw new DailyNotesFolderMissingError("Failed to find daily notes folder");
+  }
+  const dailyNotes = {};
+  obsidian__default['default'].Vault.recurseChildren(dailyNotesFolder, (note) => {
+    if (note instanceof obsidian__default['default'].TFile) {
+      const date = getDateFromFile(note, "day");
+      if (date) {
+        const dateString = getDateUID(date, "day");
+        dailyNotes[dateString] = note;
+      }
     }
-    const dailyNotes = {};
-    obsidian__default['default'].Vault.recurseChildren(dailyNotesFolder, (note) => {
-        if (note instanceof obsidian__default['default'].TFile) {
-            const date = getDateFromFile(note, "day");
-            if (date) {
-                const dateString = getDateUID(date, "day");
-                dailyNotes[dateString] = note;
-            }
-        }
-    });
-    return dailyNotes;
+  });
+  return dailyNotes;
 }
 
 class WeeklyNotesFolderMissingError extends Error {
 }
 function getDaysOfWeek() {
-    const { moment } = window;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let weekStart = moment.localeData()._week.dow;
-    const daysOfWeek = [
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-    ];
-    while (weekStart) {
-        daysOfWeek.push(daysOfWeek.shift());
-        weekStart--;
-    }
-    return daysOfWeek;
+  const { moment } = window;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let weekStart = moment.localeData()._week.dow;
+  const daysOfWeek = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+  while (weekStart) {
+    daysOfWeek.push(daysOfWeek.shift());
+    weekStart--;
+  }
+  return daysOfWeek;
 }
 function getDayOfWeekNumericalValue(dayOfWeekName) {
-    return getDaysOfWeek().indexOf(dayOfWeekName.toLowerCase());
+  return getDaysOfWeek().indexOf(dayOfWeekName.toLowerCase());
 }
 async function createWeeklyNote(date) {
-    const { vault } = window.app;
-    const { template, format, folder } = getWeeklyNoteSettings();
-    const [templateContents, IFoldInfo] = await getTemplateInfo(template);
-    const filename = date.format(format);
-    const normalizedPath = await getNotePath(folder, filename);
-    /* DEBUG new obsidian__default['default'].Notice(`${format} ${folder} ${filename} ${normalizedPath}`); */
-    try {
-        const createdFile = await vault.create(normalizedPath, templateContents
-            .replace(/{{\s*(date|time)\s*(([+-]\d+)([yqmwdhs]))?\s*(:.+?)?}}/gi, (_, _timeOrDate, calc, timeDelta, unit, momentFormat) => {
-            const now = window.moment();
-            const currentDate = date.clone().set({
-                hour: now.get("hour"),
-                minute: now.get("minute"),
-                second: now.get("second"),
-            });
-            if (calc) {
-                currentDate.add(parseInt(timeDelta, 10), unit);
-            }
-            if (momentFormat) {
-                return currentDate.format(momentFormat.substring(1).trim());
-            }
-            return currentDate.format(format);
-        })
-            .replace(/{{\s*title\s*}}/gi, filename)
-            .replace(/{{\s*time\s*}}/gi, window.moment().format("HH:mm"))
-            .replace(/{{\s*(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\s*:(.*?)}}/gi, (_, dayOfWeek, momentFormat) => {
-            const day = getDayOfWeekNumericalValue(dayOfWeek);
-            return date.weekday(day).format(momentFormat.trim());
-        }));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        window.app.foldManager.save(createdFile, IFoldInfo);
-        return createdFile;
-    }
-    catch (err) {
-        console.error(`Failed to create file: '${normalizedPath} ${date}'`, err);
-        new obsidian__default['default'].Notice("Unable to create new file.");
-    }
+  const { vault } = window.app;
+  const { template, format, folder } = getWeeklyNoteSettings();
+  const [templateContents, IFoldInfo] = await getTemplateInfo(template);
+  const filename = date.format(format);
+  const normalizedPath = await getNotePath(folder, filename);
+  /* DEBUG new obsidian__default['default'].Notice(`${format} ${folder} ${filename} ${normalizedPath}`); */
+  try {
+    const createdFile = await vault.create(normalizedPath, templateContents
+      .replace(/{{\s*(date|time)\s*(([+-]\d+)([yqmwdhs]))?\s*(:.+?)?}}/gi, (_, _timeOrDate, calc, timeDelta, unit, momentFormat) => {
+        const now = window.moment();
+        const currentDate = date.clone().set({
+          hour: now.get("hour"),
+          minute: now.get("minute"),
+          second: now.get("second"),
+        });
+        if (calc) {
+          currentDate.add(parseInt(timeDelta, 10), unit);
+        }
+        if (momentFormat) {
+          return currentDate.format(momentFormat.substring(1).trim());
+        }
+        return currentDate.format(format);
+      })
+      .replace(/{{\s*title\s*}}/gi, filename)
+      .replace(/{{\s*time\s*}}/gi, window.moment().format("HH:mm"))
+      .replace(/{{\s*(sunday|monday|tuesday|wednesday|thursday|friday|saturday)\s*:(.*?)}}/gi, (_, dayOfWeek, momentFormat) => {
+        const day = getDayOfWeekNumericalValue(dayOfWeek);
+        return date.weekday(day).format(momentFormat.trim());
+      }));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    window.app.foldManager.save(createdFile, IFoldInfo);
+    return createdFile;
+  }
+  catch (err) {
+    console.error(`Failed to create file: '${normalizedPath} ${date}'`, err);
+    new obsidian__default['default'].Notice("Unable to create new file.");
+  }
 }
 function getWeeklyNote(date, weeklyNotes) {
-    /* DEBUG
-    const tmp1 = getDateUID(date, "week");
-    new obsidian.Notice(`DEBUG 2 ${date} ${tmp1}`);
-    console.error(`DEBUG 2 ${date} ${tmp1} ${weeklyNotes} ${weeklyNotes[tmp1]}`)
-    */
-    return weeklyNotes[getDateUID(date, "week")] ?? null;
+  /* DEBUG
+  const tmp1 = getDateUID(date, "week");
+  new obsidian.Notice(`DEBUG 2 ${date} ${tmp1}`);
+  console.error(`DEBUG 2 ${date} ${tmp1} ${weeklyNotes} ${weeklyNotes[tmp1]}`)
+  */
+  return weeklyNotes[getDateUID(date, "week")] ?? null;
 }
 function getAllWeeklyNotes() {
-    const weeklyNotes = {};
-    if (!appHasWeeklyNotesPluginLoaded()) {
-        return weeklyNotes;
-    }
-    const { vault } = window.app;
-    const { folder } = getWeeklyNoteSettings();
-    const weeklyNotesFolder = vault.getAbstractFileByPath(obsidian__default['default'].normalizePath(folder));
-    if (!weeklyNotesFolder) {
-        throw new WeeklyNotesFolderMissingError("Failed to find weekly notes folder");
-    }
-    obsidian__default['default'].Vault.recurseChildren(weeklyNotesFolder, (note) => {
-        if (note instanceof obsidian__default['default'].TFile) {
-            const date = getDateFromFile(note, "week");
-            if (date) {
-                const dateString = getDateUID(date, "week");
-                /* console.debug(`${dateString}`); */
-                weeklyNotes[dateString] = note;
-            }
-        }
-    });
+  const weeklyNotes = {};
+  if (!appHasWeeklyNotesPluginLoaded()) {
     return weeklyNotes;
+  }
+  const { vault } = window.app;
+  const { folder } = getWeeklyNoteSettings();
+  const weeklyNotesFolder = vault.getAbstractFileByPath(obsidian__default['default'].normalizePath(folder));
+  if (!weeklyNotesFolder) {
+    throw new WeeklyNotesFolderMissingError("Failed to find weekly notes folder");
+  }
+  obsidian__default['default'].Vault.recurseChildren(weeklyNotesFolder, (note) => {
+    if (note instanceof obsidian__default['default'].TFile) {
+      const date = getDateFromFile(note, "week");
+      if (date) {
+        const dateString = getDateUID(date, "week");
+        /* console.debug(`${dateString}`); */
+        weeklyNotes[dateString] = note;
+      }
+    }
+  });
+  return weeklyNotes;
 }
 
 class MonthlyNotesFolderMissingError extends Error {
@@ -429,64 +429,64 @@ class MonthlyNotesFolderMissingError extends Error {
  * Note: it has an added bonus that it's not 'today' specific.
  */
 async function createMonthlyNote(date) {
-    const { vault } = window.app;
-    const { template, format, folder } = getMonthlyNoteSettings();
-    const [templateContents, IFoldInfo] = await getTemplateInfo(template);
-    const filename = date.format(format);
-    const normalizedPath = await getNotePath(folder, filename);
-    try {
-        const createdFile = await vault.create(normalizedPath, templateContents
-            .replace(/{{\s*(date|time)\s*(([+-]\d+)([yqmwdhs]))?\s*(:.+?)?}}/gi, (_, _timeOrDate, calc, timeDelta, unit, momentFormat) => {
-            const now = window.moment();
-            const currentDate = date.clone().set({
-                hour: now.get("hour"),
-                minute: now.get("minute"),
-                second: now.get("second"),
-            });
-            if (calc) {
-                currentDate.add(parseInt(timeDelta, 10), unit);
-            }
-            if (momentFormat) {
-                return currentDate.format(momentFormat.substring(1).trim());
-            }
-            return currentDate.format(format);
-        })
-            .replace(/{{\s*date\s*}}/gi, filename)
-            .replace(/{{\s*time\s*}}/gi, window.moment().format("HH:mm"))
-            .replace(/{{\s*title\s*}}/gi, filename));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        window.app.foldManager.save(createdFile, IFoldInfo);
-        return createdFile;
-    }
-    catch (err) {
-        console.error(`Failed to create file: '${normalizedPath}'`, err);
-        new obsidian__default['default'].Notice("Unable to create new file.");
-    }
+  const { vault } = window.app;
+  const { template, format, folder } = getMonthlyNoteSettings();
+  const [templateContents, IFoldInfo] = await getTemplateInfo(template);
+  const filename = date.format(format);
+  const normalizedPath = await getNotePath(folder, filename);
+  try {
+    const createdFile = await vault.create(normalizedPath, templateContents
+      .replace(/{{\s*(date|time)\s*(([+-]\d+)([yqmwdhs]))?\s*(:.+?)?}}/gi, (_, _timeOrDate, calc, timeDelta, unit, momentFormat) => {
+        const now = window.moment();
+        const currentDate = date.clone().set({
+          hour: now.get("hour"),
+          minute: now.get("minute"),
+          second: now.get("second"),
+        });
+        if (calc) {
+          currentDate.add(parseInt(timeDelta, 10), unit);
+        }
+        if (momentFormat) {
+          return currentDate.format(momentFormat.substring(1).trim());
+        }
+        return currentDate.format(format);
+      })
+      .replace(/{{\s*date\s*}}/gi, filename)
+      .replace(/{{\s*time\s*}}/gi, window.moment().format("HH:mm"))
+      .replace(/{{\s*title\s*}}/gi, filename));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    window.app.foldManager.save(createdFile, IFoldInfo);
+    return createdFile;
+  }
+  catch (err) {
+    console.error(`Failed to create file: '${normalizedPath}'`, err);
+    new obsidian__default['default'].Notice("Unable to create new file.");
+  }
 }
 function getMonthlyNote(date, monthlyNotes) {
-    return monthlyNotes[getDateUID(date, "month")] ?? null;
+  return monthlyNotes[getDateUID(date, "month")] ?? null;
 }
 function getAllMonthlyNotes() {
-    const monthlyNotes = {};
-    if (!appHasMonthlyNotesPluginLoaded()) {
-        return monthlyNotes;
-    }
-    const { vault } = window.app;
-    const { folder } = getMonthlyNoteSettings();
-    const monthlyNotesFolder = vault.getAbstractFileByPath(obsidian__default['default'].normalizePath(folder));
-    if (!monthlyNotesFolder) {
-        throw new MonthlyNotesFolderMissingError("Failed to find monthly notes folder");
-    }
-    obsidian__default['default'].Vault.recurseChildren(monthlyNotesFolder, (note) => {
-        if (note instanceof obsidian__default['default'].TFile) {
-            const date = getDateFromFile(note, "month");
-            if (date) {
-                const dateString = getDateUID(date, "month");
-                monthlyNotes[dateString] = note;
-            }
-        }
-    });
+  const monthlyNotes = {};
+  if (!appHasMonthlyNotesPluginLoaded()) {
     return monthlyNotes;
+  }
+  const { vault } = window.app;
+  const { folder } = getMonthlyNoteSettings();
+  const monthlyNotesFolder = vault.getAbstractFileByPath(obsidian__default['default'].normalizePath(folder));
+  if (!monthlyNotesFolder) {
+    throw new MonthlyNotesFolderMissingError("Failed to find monthly notes folder");
+  }
+  obsidian__default['default'].Vault.recurseChildren(monthlyNotesFolder, (note) => {
+    if (note instanceof obsidian__default['default'].TFile) {
+      const date = getDateFromFile(note, "month");
+      if (date) {
+        const dateString = getDateUID(date, "month");
+        monthlyNotes[dateString] = note;
+      }
+    }
+  });
+  return monthlyNotes;
 }
 
 class QuarterlyNotesFolderMissingError extends Error {
@@ -499,64 +499,64 @@ class QuarterlyNotesFolderMissingError extends Error {
  * Note: it has an added bonus that it's not 'today' specific.
  */
 async function createQuarterlyNote(date) {
-    const { vault } = window.app;
-    const { template, format, folder } = getQuarterlyNoteSettings();
-    const [templateContents, IFoldInfo] = await getTemplateInfo(template);
-    const filename = date.format(format);
-    const normalizedPath = await getNotePath(folder, filename);
-    try {
-        const createdFile = await vault.create(normalizedPath, templateContents
-            .replace(/{{\s*(date|time)\s*(([+-]\d+)([yqmwdhs]))?\s*(:.+?)?}}/gi, (_, _timeOrDate, calc, timeDelta, unit, momentFormat) => {
-            const now = window.moment();
-            const currentDate = date.clone().set({
-                hour: now.get("hour"),
-                minute: now.get("minute"),
-                second: now.get("second"),
-            });
-            if (calc) {
-                currentDate.add(parseInt(timeDelta, 10), unit);
-            }
-            if (momentFormat) {
-                return currentDate.format(momentFormat.substring(1).trim());
-            }
-            return currentDate.format(format);
-        })
-            .replace(/{{\s*date\s*}}/gi, filename)
-            .replace(/{{\s*time\s*}}/gi, window.moment().format("HH:mm"))
-            .replace(/{{\s*title\s*}}/gi, filename));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        window.app.foldManager.save(createdFile, IFoldInfo);
-        return createdFile;
-    }
-    catch (err) {
-        console.error(`Failed to create file: '${normalizedPath}'`, err);
-        new obsidian__default['default'].Notice("Unable to create new file.");
-    }
+  const { vault } = window.app;
+  const { template, format, folder } = getQuarterlyNoteSettings();
+  const [templateContents, IFoldInfo] = await getTemplateInfo(template);
+  const filename = date.format(format);
+  const normalizedPath = await getNotePath(folder, filename);
+  try {
+    const createdFile = await vault.create(normalizedPath, templateContents
+      .replace(/{{\s*(date|time)\s*(([+-]\d+)([yqmwdhs]))?\s*(:.+?)?}}/gi, (_, _timeOrDate, calc, timeDelta, unit, momentFormat) => {
+        const now = window.moment();
+        const currentDate = date.clone().set({
+          hour: now.get("hour"),
+          minute: now.get("minute"),
+          second: now.get("second"),
+        });
+        if (calc) {
+          currentDate.add(parseInt(timeDelta, 10), unit);
+        }
+        if (momentFormat) {
+          return currentDate.format(momentFormat.substring(1).trim());
+        }
+        return currentDate.format(format);
+      })
+      .replace(/{{\s*date\s*}}/gi, filename)
+      .replace(/{{\s*time\s*}}/gi, window.moment().format("HH:mm"))
+      .replace(/{{\s*title\s*}}/gi, filename));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    window.app.foldManager.save(createdFile, IFoldInfo);
+    return createdFile;
+  }
+  catch (err) {
+    console.error(`Failed to create file: '${normalizedPath}'`, err);
+    new obsidian__default['default'].Notice("Unable to create new file.");
+  }
 }
 function getQuarterlyNote(date, quarterly) {
-    return quarterly[getDateUID(date, "quarter")] ?? null;
+  return quarterly[getDateUID(date, "quarter")] ?? null;
 }
 function getAllQuarterlyNotes() {
-    const quarterly = {};
-    if (!appHasQuarterlyNotesPluginLoaded()) {
-        return quarterly;
-    }
-    const { vault } = window.app;
-    const { folder } = getQuarterlyNoteSettings();
-    const quarterlyFolder = vault.getAbstractFileByPath(obsidian__default['default'].normalizePath(folder));
-    if (!quarterlyFolder) {
-        throw new QuarterlyNotesFolderMissingError("Failed to find quarterly notes folder");
-    }
-    obsidian__default['default'].Vault.recurseChildren(quarterlyFolder, (note) => {
-        if (note instanceof obsidian__default['default'].TFile) {
-            const date = getDateFromFile(note, "quarter");
-            if (date) {
-                const dateString = getDateUID(date, "quarter");
-                quarterly[dateString] = note;
-            }
-        }
-    });
+  const quarterly = {};
+  if (!appHasQuarterlyNotesPluginLoaded()) {
     return quarterly;
+  }
+  const { vault } = window.app;
+  const { folder } = getQuarterlyNoteSettings();
+  const quarterlyFolder = vault.getAbstractFileByPath(obsidian__default['default'].normalizePath(folder));
+  if (!quarterlyFolder) {
+    throw new QuarterlyNotesFolderMissingError("Failed to find quarterly notes folder");
+  }
+  obsidian__default['default'].Vault.recurseChildren(quarterlyFolder, (note) => {
+    if (note instanceof obsidian__default['default'].TFile) {
+      const date = getDateFromFile(note, "quarter");
+      if (date) {
+        const dateString = getDateUID(date, "quarter");
+        quarterly[dateString] = note;
+      }
+    }
+  });
+  return quarterly;
 }
 
 class YearlyNotesFolderMissingError extends Error {
@@ -569,108 +569,108 @@ class YearlyNotesFolderMissingError extends Error {
  * Note: it has an added bonus that it's not 'today' specific.
  */
 async function createYearlyNote(date) {
-    const { vault } = window.app;
-    const { template, format, folder } = getYearlyNoteSettings();
-    const [templateContents, IFoldInfo] = await getTemplateInfo(template);
-    const filename = date.format(format);
-    const normalizedPath = await getNotePath(folder, filename);
-    try {
-        const createdFile = await vault.create(normalizedPath, templateContents
-            .replace(/{{\s*(date|time)\s*(([+-]\d+)([yqmwdhs]))?\s*(:.+?)?}}/gi, (_, _timeOrDate, calc, timeDelta, unit, momentFormat) => {
-            const now = window.moment();
-            const currentDate = date.clone().set({
-                hour: now.get("hour"),
-                minute: now.get("minute"),
-                second: now.get("second"),
-            });
-            if (calc) {
-                currentDate.add(parseInt(timeDelta, 10), unit);
-            }
-            if (momentFormat) {
-                return currentDate.format(momentFormat.substring(1).trim());
-            }
-            return currentDate.format(format);
-        })
-            .replace(/{{\s*date\s*}}/gi, filename)
-            .replace(/{{\s*time\s*}}/gi, window.moment().format("HH:mm"))
-            .replace(/{{\s*title\s*}}/gi, filename));
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        window.app.foldManager.save(createdFile, IFoldInfo);
-        return createdFile;
-    }
-    catch (err) {
-        console.error(`Failed to create file: '${normalizedPath}'`, err);
-        new obsidian__default['default'].Notice("Unable to create new file.");
-    }
+  const { vault } = window.app;
+  const { template, format, folder } = getYearlyNoteSettings();
+  const [templateContents, IFoldInfo] = await getTemplateInfo(template);
+  const filename = date.format(format);
+  const normalizedPath = await getNotePath(folder, filename);
+  try {
+    const createdFile = await vault.create(normalizedPath, templateContents
+      .replace(/{{\s*(date|time)\s*(([+-]\d+)([yqmwdhs]))?\s*(:.+?)?}}/gi, (_, _timeOrDate, calc, timeDelta, unit, momentFormat) => {
+        const now = window.moment();
+        const currentDate = date.clone().set({
+          hour: now.get("hour"),
+          minute: now.get("minute"),
+          second: now.get("second"),
+        });
+        if (calc) {
+          currentDate.add(parseInt(timeDelta, 10), unit);
+        }
+        if (momentFormat) {
+          return currentDate.format(momentFormat.substring(1).trim());
+        }
+        return currentDate.format(format);
+      })
+      .replace(/{{\s*date\s*}}/gi, filename)
+      .replace(/{{\s*time\s*}}/gi, window.moment().format("HH:mm"))
+      .replace(/{{\s*title\s*}}/gi, filename));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    window.app.foldManager.save(createdFile, IFoldInfo);
+    return createdFile;
+  }
+  catch (err) {
+    console.error(`Failed to create file: '${normalizedPath}'`, err);
+    new obsidian__default['default'].Notice("Unable to create new file.");
+  }
 }
 function getYearlyNote(date, yearlyNotes) {
-    return yearlyNotes[getDateUID(date, "year")] ?? null;
+  return yearlyNotes[getDateUID(date, "year")] ?? null;
 }
 function getAllYearlyNotes() {
-    const yearlyNotes = {};
-    if (!appHasYearlyNotesPluginLoaded()) {
-        return yearlyNotes;
-    }
-    const { vault } = window.app;
-    const { folder } = getYearlyNoteSettings();
-    const yearlyNotesFolder = vault.getAbstractFileByPath(obsidian__default['default'].normalizePath(folder));
-    if (!yearlyNotesFolder) {
-        throw new YearlyNotesFolderMissingError("Failed to find yearly notes folder");
-    }
-    obsidian__default['default'].Vault.recurseChildren(yearlyNotesFolder, (note) => {
-        if (note instanceof obsidian__default['default'].TFile) {
-            const date = getDateFromFile(note, "year");
-            if (date) {
-                const dateString = getDateUID(date, "year");
-                yearlyNotes[dateString] = note;
-            }
-        }
-    });
+  const yearlyNotes = {};
+  if (!appHasYearlyNotesPluginLoaded()) {
     return yearlyNotes;
+  }
+  const { vault } = window.app;
+  const { folder } = getYearlyNoteSettings();
+  const yearlyNotesFolder = vault.getAbstractFileByPath(obsidian__default['default'].normalizePath(folder));
+  if (!yearlyNotesFolder) {
+    throw new YearlyNotesFolderMissingError("Failed to find yearly notes folder");
+  }
+  obsidian__default['default'].Vault.recurseChildren(yearlyNotesFolder, (note) => {
+    if (note instanceof obsidian__default['default'].TFile) {
+      const date = getDateFromFile(note, "year");
+      if (date) {
+        const dateString = getDateUID(date, "year");
+        yearlyNotes[dateString] = note;
+      }
+    }
+  });
+  return yearlyNotes;
 }
 
 function appHasDailyNotesPluginLoaded() {
-    const { app } = window;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const dailyNotesPlugin = app.internalPlugins.plugins["daily-notes"];
-    if (dailyNotesPlugin && dailyNotesPlugin.enabled) {
-        return true;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const periodicNotes = app.plugins.getPlugin("periodic-notes");
-    return periodicNotes && periodicNotes.settings?.daily?.enabled;
+  const { app } = window;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dailyNotesPlugin = app.internalPlugins.plugins["daily-notes"];
+  if (dailyNotesPlugin && dailyNotesPlugin.enabled) {
+    return true;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const periodicNotes = app.plugins.getPlugin("periodic-notes");
+  return periodicNotes && periodicNotes.settings?.daily?.enabled;
 }
 /**
  * XXX: "Weekly Notes" live in either the Calendar plugin or the periodic-notes plugin.
  * Check both until the weekly notes feature is removed from the Calendar plugin.
  */
 function appHasWeeklyNotesPluginLoaded() {
-    const { app } = window;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (app.plugins.getPlugin("calendar")) {
-        return true;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const periodicNotes = app.plugins.getPlugin("periodic-notes");
-    return periodicNotes && periodicNotes.settings?.weekly?.enabled;
+  const { app } = window;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (app.plugins.getPlugin("calendar")) {
+    return true;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const periodicNotes = app.plugins.getPlugin("periodic-notes");
+  return periodicNotes && periodicNotes.settings?.weekly?.enabled;
 }
 function appHasMonthlyNotesPluginLoaded() {
-    const { app } = window;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const periodicNotes = app.plugins.getPlugin("periodic-notes");
-    return periodicNotes && periodicNotes.settings?.monthly?.enabled;
+  const { app } = window;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const periodicNotes = app.plugins.getPlugin("periodic-notes");
+  return periodicNotes && periodicNotes.settings?.monthly?.enabled;
 }
 function appHasQuarterlyNotesPluginLoaded() {
-    const { app } = window;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const periodicNotes = app.plugins.getPlugin("periodic-notes");
-    return periodicNotes && periodicNotes.settings?.quarterly?.enabled;
+  const { app } = window;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const periodicNotes = app.plugins.getPlugin("periodic-notes");
+  return periodicNotes && periodicNotes.settings?.quarterly?.enabled;
 }
 function appHasYearlyNotesPluginLoaded() {
-    const { app } = window;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const periodicNotes = app.plugins.getPlugin("periodic-notes");
-    return periodicNotes && periodicNotes.settings?.yearly?.enabled;
+  const { app } = window;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const periodicNotes = app.plugins.getPlugin("periodic-notes");
+  return periodicNotes && periodicNotes.settings?.yearly?.enabled;
 }
 
 var DEFAULT_DAILY_NOTE_FORMAT_1 = DEFAULT_DAILY_NOTE_FORMAT;
@@ -697,207 +697,207 @@ var getWeeklyNote_1 = getWeeklyNote;
 var getYearlyNote_1 = getYearlyNote;
 
 const wrapAround = (value, size) => {
-    return ((value % size) + size) % size;
+  return ((value % size) + size) % size;
 };
 function orderedValues(unordered) {
-    return Object.keys(unordered)
-        .sort()
-        .reduce((acc, key) => {
-        acc.push(unordered[key]);
-        return acc;
+  return Object.keys(unordered)
+    .sort()
+    .reduce((acc, key) => {
+      acc.push(unordered[key]);
+      return acc;
     }, []);
 }
 function getCalendarPlugin() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return window.app.plugins.getPlugin("calendar");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return window.app.plugins.getPlugin("calendar");
 }
 function getDailyNotesPlugin() {
-    var _a;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { internalPlugins } = window.app;
-    return (_a = internalPlugins.getPluginById("daily-notes")) === null || _a === void 0 ? void 0 : _a.instance;
+  var _a;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { internalPlugins } = window.app;
+  return (_a = internalPlugins.getPluginById("daily-notes")) === null || _a === void 0 ? void 0 : _a.instance;
 }
 function capitalize(text) {
-    return text.charAt(0).toUpperCase() + text.slice(1);
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 function hasLegacyDailyNoteSettings() {
-    var _a;
-    if (!appHasDailyNotesPluginLoaded_1()) {
-        return false;
-    }
-    const options = (_a = getDailyNotesPlugin()) === null || _a === void 0 ? void 0 : _a.options;
-    return !!(options.format || options.folder || options.template);
+  var _a;
+  if (!appHasDailyNotesPluginLoaded_1()) {
+    return false;
+  }
+  const options = (_a = getDailyNotesPlugin()) === null || _a === void 0 ? void 0 : _a.options;
+  return !!(options.format || options.folder || options.template);
 }
 function getLegacyDailyNoteSettings() {
-    var _a, _b;
-    const options = getDailyNotesPlugin().options || {};
-    return {
-        format: options.format,
-        folder: (_a = options.folder) === null || _a === void 0 ? void 0 : _a.trim(),
-        template: (_b = options.template) === null || _b === void 0 ? void 0 : _b.trim(),
-    };
+  var _a, _b;
+  const options = getDailyNotesPlugin().options || {};
+  return {
+    format: options.format,
+    folder: (_a = options.folder) === null || _a === void 0 ? void 0 : _a.trim(),
+    template: (_b = options.template) === null || _b === void 0 ? void 0 : _b.trim(),
+  };
 }
 function hasLegacyWeeklyNoteSettings() {
-    const calendarPlugin = getCalendarPlugin();
-    if (!calendarPlugin) {
-        return false;
-    }
-    const options = calendarPlugin.options || {};
-    return !!(options.weeklyNoteFormat ||
-        options.weeklyNoteFolder ||
-        options.weeklyNoteTemplate);
+  const calendarPlugin = getCalendarPlugin();
+  if (!calendarPlugin) {
+    return false;
+  }
+  const options = calendarPlugin.options || {};
+  return !!(options.weeklyNoteFormat ||
+    options.weeklyNoteFolder ||
+    options.weeklyNoteTemplate);
 }
 function getLegacyWeeklyNoteSettings() {
-    var _a, _b;
-    const options = getCalendarPlugin().options || {};
-    return {
-        format: options.weeklyNoteFormat || "",
-        folder: ((_a = options.weeklyNoteFolder) === null || _a === void 0 ? void 0 : _a.trim()) || "",
-        template: ((_b = options.weeklyNoteTemplate) === null || _b === void 0 ? void 0 : _b.trim()) || "",
-    };
+  var _a, _b;
+  const options = getCalendarPlugin().options || {};
+  return {
+    format: options.weeklyNoteFormat || "",
+    folder: ((_a = options.weeklyNoteFolder) === null || _a === void 0 ? void 0 : _a.trim()) || "",
+    template: ((_b = options.weeklyNoteTemplate) === null || _b === void 0 ? void 0 : _b.trim()) || "",
+  };
 }
 function isMacOS() {
-    return navigator.appVersion.indexOf("Mac") !== -1;
+  return navigator.appVersion.indexOf("Mac") !== -1;
 }
 function isMetaPressed(e) {
-    return isMacOS() ? e.metaKey : e.ctrlKey;
+  return isMacOS() ? e.metaKey : e.ctrlKey;
 }
 
 const periodConfigs = {
-    daily: {
-        unitOfTime: "day",
-        unitOfTime2: "day",
-        relativeUnit: "today",
-        createNote: createDailyNote_1,
-        getNote: getDailyNote_1,
-        getAllNotes: getAllDailyNotes_1,
-    },
-    weekly: {
-        unitOfTime: "week",
-        unitOfTime2: "isoWeek",
-        relativeUnit: "this week",
-        createNote: createWeeklyNote_1,
-        getNote: getWeeklyNote_1,
-        getAllNotes: getAllWeeklyNotes_1,
-    },
-    monthly: {
-        unitOfTime: "month",
-        unitOfTime2: "month",
-        relativeUnit: "this month",
-        createNote: createMonthlyNote_1,
-        getNote: getMonthlyNote_1,
-        getAllNotes: getAllMonthlyNotes_1,
-    },
-    quarterly: {
-        unitOfTime: "quarter",
-        unitOfTime2: "quarter",
-        relativeUnit: "this quarter",
-        createNote: createQuarterlyNote_1,
-        getNote: getQuarterlyNote_1,
-        getAllNotes: getAllQuarterlyNotes_1,
-    },
-    yearly: {
-        unitOfTime: "year",
-        unitOfTime2: "year",
-        relativeUnit: "this year",
-        createNote: createYearlyNote_1,
-        getNote: getYearlyNote_1,
-        getAllNotes: getAllYearlyNotes_1,
-    },
+  daily: {
+    unitOfTime: "day",
+    unitOfTime2: "day",
+    relativeUnit: "today",
+    createNote: createDailyNote_1,
+    getNote: getDailyNote_1,
+    getAllNotes: getAllDailyNotes_1,
+  },
+  weekly: {
+    unitOfTime: "week",
+    unitOfTime2: "isoWeek",
+    relativeUnit: "this week",
+    createNote: createWeeklyNote_1,
+    getNote: getWeeklyNote_1,
+    getAllNotes: getAllWeeklyNotes_1,
+  },
+  monthly: {
+    unitOfTime: "month",
+    unitOfTime2: "month",
+    relativeUnit: "this month",
+    createNote: createMonthlyNote_1,
+    getNote: getMonthlyNote_1,
+    getAllNotes: getAllMonthlyNotes_1,
+  },
+  quarterly: {
+    unitOfTime: "quarter",
+    unitOfTime2: "quarter",
+    relativeUnit: "this quarter",
+    createNote: createQuarterlyNote_1,
+    getNote: getQuarterlyNote_1,
+    getAllNotes: getAllQuarterlyNotes_1,
+  },
+  yearly: {
+    unitOfTime: "year",
+    unitOfTime2: "year",
+    relativeUnit: "this year",
+    createNote: createYearlyNote_1,
+    getNote: getYearlyNote_1,
+    getAllNotes: getAllYearlyNotes_1,
+  },
 };
 async function openPeriodicNote(periodicity, date, inNewSplit) {
-    const config = periodConfigs[periodicity];
-    const startOfPeriod = date.clone().startOf(config.unitOfTime2);
-    let allNotes;
-    try {
-        allNotes = config.getAllNotes();
-    }
-    catch (err) {
-        console.error(`failed to find your ${periodicity} notes folder`, err);
-        new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
-        return;
-    }
-    let periodicNote = config.getNote(startOfPeriod, allNotes);
-    if (!periodicNote) {
-        periodicNote = await config.createNote(startOfPeriod);
-    }
-    await openFile(periodicNote, inNewSplit);
+  const config = periodConfigs[periodicity];
+  const startOfPeriod = date.clone().startOf(config.unitOfTime2);
+  let allNotes;
+  try {
+    allNotes = config.getAllNotes();
+  }
+  catch (err) {
+    console.error(`failed to find your ${periodicity} notes folder`, err);
+    new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
+    return;
+  }
+  let periodicNote = config.getNote(startOfPeriod, allNotes);
+  if (!periodicNote) {
+    periodicNote = await config.createNote(startOfPeriod);
+  }
+  await openFile(periodicNote, inNewSplit);
 }
 function getActiveFile() {
-    const { workspace } = window.app;
-    const activeView = workspace.getActiveViewOfType(obsidian.MarkdownView);
-    return activeView === null || activeView === void 0 ? void 0 : activeView.file;
+  const { workspace } = window.app;
+  const activeView = workspace.getActiveViewOfType(obsidian.MarkdownView);
+  return activeView === null || activeView === void 0 ? void 0 : activeView.file;
 }
 async function openFile(file, inNewSplit) {
-    const { workspace } = window.app;
-    const leaf = inNewSplit
-        ? workspace.splitActiveLeaf()
-        : workspace.getUnpinnedLeaf();
-    await leaf.openFile(file, { active: true });
+  const { workspace } = window.app;
+  const leaf = inNewSplit
+    ? workspace.splitActiveLeaf()
+    : workspace.getUnpinnedLeaf();
+  await leaf.openFile(file, { active: true });
 }
 async function openNextNote(periodicity) {
-    const config = periodConfigs[periodicity];
-    const activeFile = getActiveFile();
-    try {
-        const allNotes = orderedValues(config.getAllNotes());
-        const activeNoteIndex = allNotes.findIndex((file) => file === activeFile);
-        const nextNote = allNotes[activeNoteIndex + 1];
-        if (nextNote) {
-            await openFile(nextNote, false);
-        }
+  const config = periodConfigs[periodicity];
+  const activeFile = getActiveFile();
+  try {
+    const allNotes = orderedValues(config.getAllNotes());
+    const activeNoteIndex = allNotes.findIndex((file) => file === activeFile);
+    const nextNote = allNotes[activeNoteIndex + 1];
+    if (nextNote) {
+      await openFile(nextNote, false);
     }
-    catch (err) {
-        console.error(`failed to find your ${periodicity} notes folder`, err);
-        new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
-    }
+  }
+  catch (err) {
+    console.error(`failed to find your ${periodicity} notes folder`, err);
+    new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
+  }
 }
 async function openPrevNote(periodicity) {
-    const config = periodConfigs[periodicity];
-    const activeFile = getActiveFile();
-    try {
-        const allNotes = orderedValues(config.getAllNotes());
-        const activeNoteIndex = allNotes.findIndex((file) => file === activeFile);
-        const prevNote = allNotes[activeNoteIndex - 1];
-        if (prevNote) {
-            await openFile(prevNote, false);
-        }
+  const config = periodConfigs[periodicity];
+  const activeFile = getActiveFile();
+  try {
+    const allNotes = orderedValues(config.getAllNotes());
+    const activeNoteIndex = allNotes.findIndex((file) => file === activeFile);
+    const prevNote = allNotes[activeNoteIndex - 1];
+    if (prevNote) {
+      await openFile(prevNote, false);
     }
-    catch (err) {
-        console.error(`failed to find your ${periodicity} notes folder`, err);
-        new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
-    }
+  }
+  catch (err) {
+    console.error(`failed to find your ${periodicity} notes folder`, err);
+    new obsidian.Notice(`Failed to find your ${periodicity} notes folder`);
+  }
 }
 function getCommands(periodicity) {
-    const config = periodConfigs[periodicity];
-    return [
-        {
-            id: `open-${periodicity}-note`,
-            name: `Open ${periodicity} note`,
-            callback: () => openPeriodicNote(periodicity, window.moment(), false),
-        },
-        {
-            id: `next-${periodicity}-note`,
-            name: `Open next ${periodicity} note`,
-            checkCallback: (checking) => {
-                if (checking) {
-                    const activeFile = getActiveFile();
-                    return !!(activeFile && getDateFromFile_1(activeFile, config.unitOfTime));
-                }
-                openNextNote(periodicity);
-            },
-        },
-        {
-            id: `prev-${periodicity}-note`,
-            name: `Open previous ${periodicity} note`,
-            checkCallback: (checking) => {
-                if (checking) {
-                    const activeFile = getActiveFile();
-                    return !!(activeFile && getDateFromFile_1(activeFile, config.unitOfTime));
-                }
-                openPrevNote(periodicity);
-            },
-        },
-    ];
+  const config = periodConfigs[periodicity];
+  return [
+    {
+      id: `open-${periodicity}-note`,
+      name: `Open ${periodicity} note`,
+      callback: () => openPeriodicNote(periodicity, window.moment(), false),
+    },
+    {
+      id: `next-${periodicity}-note`,
+      name: `Open next ${periodicity} note`,
+      checkCallback: (checking) => {
+        if (checking) {
+          const activeFile = getActiveFile();
+          return !!(activeFile && getDateFromFile_1(activeFile, config.unitOfTime));
+        }
+        openNextNote(periodicity);
+      },
+    },
+    {
+      id: `prev-${periodicity}-note`,
+      name: `Open previous ${periodicity} note`,
+      checkCallback: (checking) => {
+        if (checking) {
+          const activeFile = getActiveFile();
+          return !!(activeFile && getDateFromFile_1(activeFile, config.unitOfTime));
+        }
+        openPrevNote(periodicity);
+      },
+    },
+  ];
 }
 
 const SETTINGS_UPDATED = "periodic-notes:settings-updated";
@@ -935,226 +935,226 @@ const calendarYearIcon = `
 `;
 
 function showFileMenu(app, settings, position) {
-    const contextMenu = new obsidian.Menu(app);
-    ["daily", "weekly", "monthly"]
-        .filter((periodicity) => settings[periodicity].enabled)
-        .forEach((periodicity) => {
-        const config = periodConfigs[periodicity];
-        contextMenu.addItem((item) => item
-            .setTitle(`Open ${config.relativeUnit}`)
-            .setIcon(`calendar-${config.unitOfTime}`)
-            .onClick(() => {
-            openPeriodicNote(periodicity, window.moment(), false);
+  const contextMenu = new obsidian.Menu(app);
+  ["daily", "weekly", "monthly"]
+    .filter((periodicity) => settings[periodicity].enabled)
+    .forEach((periodicity) => {
+      const config = periodConfigs[periodicity];
+      contextMenu.addItem((item) => item
+        .setTitle(`Open ${config.relativeUnit}`)
+        .setIcon(`calendar-${config.unitOfTime}`)
+        .onClick(() => {
+          openPeriodicNote(periodicity, window.moment(), false);
         }));
     });
-    contextMenu.showAtPosition(position);
+  contextMenu.showAtPosition(position);
 }
 
 function noop() { }
 const identity = x => x;
 function run(fn) {
-    return fn();
+  return fn();
 }
 function blank_object() {
-    return Object.create(null);
+  return Object.create(null);
 }
 function run_all(fns) {
-    fns.forEach(run);
+  fns.forEach(run);
 }
 function is_function(thing) {
-    return typeof thing === 'function';
+  return typeof thing === 'function';
 }
 function safe_not_equal(a, b) {
-    return a != a ? b == b : a !== b || ((a && typeof a === 'object') || typeof a === 'function');
+  return a != a ? b == b : a !== b || ((a && typeof a === 'object') || typeof a === 'function');
 }
 function is_empty(obj) {
-    return Object.keys(obj).length === 0;
+  return Object.keys(obj).length === 0;
 }
 function subscribe(store, ...callbacks) {
-    if (store == null) {
-        return noop;
-    }
-    const unsub = store.subscribe(...callbacks);
-    return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
+  if (store == null) {
+    return noop;
+  }
+  const unsub = store.subscribe(...callbacks);
+  return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
 }
 function component_subscribe(component, store, callback) {
-    component.$$.on_destroy.push(subscribe(store, callback));
+  component.$$.on_destroy.push(subscribe(store, callback));
 }
 function set_store_value(store, ret, value = ret) {
-    store.set(value);
-    return ret;
+  store.set(value);
+  return ret;
 }
 
 const is_client = typeof window !== 'undefined';
 let now = is_client
-    ? () => window.performance.now()
-    : () => Date.now();
+  ? () => window.performance.now()
+  : () => Date.now();
 let raf = is_client ? cb => requestAnimationFrame(cb) : noop;
 
 const tasks = new Set();
 function run_tasks(now) {
-    tasks.forEach(task => {
-        if (!task.c(now)) {
-            tasks.delete(task);
-            task.f();
-        }
-    });
-    if (tasks.size !== 0)
-        raf(run_tasks);
+  tasks.forEach(task => {
+    if (!task.c(now)) {
+      tasks.delete(task);
+      task.f();
+    }
+  });
+  if (tasks.size !== 0)
+    raf(run_tasks);
 }
 /**
  * Creates a new task that runs on each raf frame
  * until it returns a falsy value or is aborted
  */
 function loop(callback) {
-    let task;
-    if (tasks.size === 0)
-        raf(run_tasks);
-    return {
-        promise: new Promise(fulfill => {
-            tasks.add(task = { c: callback, f: fulfill });
-        }),
-        abort() {
-            tasks.delete(task);
-        }
-    };
+  let task;
+  if (tasks.size === 0)
+    raf(run_tasks);
+  return {
+    promise: new Promise(fulfill => {
+      tasks.add(task = { c: callback, f: fulfill });
+    }),
+    abort() {
+      tasks.delete(task);
+    }
+  };
 }
 
 function append(target, node) {
-    target.appendChild(node);
+  target.appendChild(node);
 }
 function insert(target, node, anchor) {
-    target.insertBefore(node, anchor || null);
+  target.insertBefore(node, anchor || null);
 }
 function detach(node) {
-    node.parentNode.removeChild(node);
+  node.parentNode.removeChild(node);
 }
 function destroy_each(iterations, detaching) {
-    for (let i = 0; i < iterations.length; i += 1) {
-        if (iterations[i])
-            iterations[i].d(detaching);
-    }
+  for (let i = 0; i < iterations.length; i += 1) {
+    if (iterations[i])
+      iterations[i].d(detaching);
+  }
 }
 function element(name) {
-    return document.createElement(name);
+  return document.createElement(name);
 }
 function svg_element(name) {
-    return document.createElementNS('http://www.w3.org/2000/svg', name);
+  return document.createElementNS('http://www.w3.org/2000/svg', name);
 }
 function text(data) {
-    return document.createTextNode(data);
+  return document.createTextNode(data);
 }
 function space() {
-    return text(' ');
+  return text(' ');
 }
 function empty() {
-    return text('');
+  return text('');
 }
 function listen(node, event, handler, options) {
-    node.addEventListener(event, handler, options);
-    return () => node.removeEventListener(event, handler, options);
+  node.addEventListener(event, handler, options);
+  return () => node.removeEventListener(event, handler, options);
 }
 function attr(node, attribute, value) {
-    if (value == null)
-        node.removeAttribute(attribute);
-    else if (node.getAttribute(attribute) !== value)
-        node.setAttribute(attribute, value);
+  if (value == null)
+    node.removeAttribute(attribute);
+  else if (node.getAttribute(attribute) !== value)
+    node.setAttribute(attribute, value);
 }
 function children(element) {
-    return Array.from(element.childNodes);
+  return Array.from(element.childNodes);
 }
 function set_data(text, data) {
-    data = '' + data;
-    if (text.wholeText !== data)
-        text.data = data;
+  data = '' + data;
+  if (text.wholeText !== data)
+    text.data = data;
 }
 function set_input_value(input, value) {
-    input.value = value == null ? '' : value;
+  input.value = value == null ? '' : value;
 }
 function toggle_class(element, name, toggle) {
-    element.classList[toggle ? 'add' : 'remove'](name);
+  element.classList[toggle ? 'add' : 'remove'](name);
 }
 function custom_event(type, detail) {
-    const e = document.createEvent('CustomEvent');
-    e.initCustomEvent(type, false, false, detail);
-    return e;
+  const e = document.createEvent('CustomEvent');
+  e.initCustomEvent(type, false, false, detail);
+  return e;
 }
 
 const active_docs = new Set();
 let active = 0;
 // https://github.com/darkskyapp/string-hash/blob/master/index.js
 function hash$2(str) {
-    let hash = 5381;
-    let i = str.length;
-    while (i--)
-        hash = ((hash << 5) - hash) ^ str.charCodeAt(i);
-    return hash >>> 0;
+  let hash = 5381;
+  let i = str.length;
+  while (i--)
+    hash = ((hash << 5) - hash) ^ str.charCodeAt(i);
+  return hash >>> 0;
 }
 function create_rule(node, a, b, duration, delay, ease, fn, uid = 0) {
-    const step = 16.666 / duration;
-    let keyframes = '{\n';
-    for (let p = 0; p <= 1; p += step) {
-        const t = a + (b - a) * ease(p);
-        keyframes += p * 100 + `%{${fn(t, 1 - t)}}\n`;
-    }
-    const rule = keyframes + `100% {${fn(b, 1 - b)}}\n}`;
-    const name = `__svelte_${hash$2(rule)}_${uid}`;
-    const doc = node.ownerDocument;
-    active_docs.add(doc);
-    const stylesheet = doc.__svelte_stylesheet || (doc.__svelte_stylesheet = doc.head.appendChild(element('style')).sheet);
-    const current_rules = doc.__svelte_rules || (doc.__svelte_rules = {});
-    if (!current_rules[name]) {
-        current_rules[name] = true;
-        stylesheet.insertRule(`@keyframes ${name} ${rule}`, stylesheet.cssRules.length);
-    }
-    const animation = node.style.animation || '';
-    node.style.animation = `${animation ? `${animation}, ` : ''}${name} ${duration}ms linear ${delay}ms 1 both`;
-    active += 1;
-    return name;
+  const step = 16.666 / duration;
+  let keyframes = '{\n';
+  for (let p = 0; p <= 1; p += step) {
+    const t = a + (b - a) * ease(p);
+    keyframes += p * 100 + `%{${fn(t, 1 - t)}}\n`;
+  }
+  const rule = keyframes + `100% {${fn(b, 1 - b)}}\n}`;
+  const name = `__svelte_${hash$2(rule)}_${uid}`;
+  const doc = node.ownerDocument;
+  active_docs.add(doc);
+  const stylesheet = doc.__svelte_stylesheet || (doc.__svelte_stylesheet = doc.head.appendChild(element('style')).sheet);
+  const current_rules = doc.__svelte_rules || (doc.__svelte_rules = {});
+  if (!current_rules[name]) {
+    current_rules[name] = true;
+    stylesheet.insertRule(`@keyframes ${name} ${rule}`, stylesheet.cssRules.length);
+  }
+  const animation = node.style.animation || '';
+  node.style.animation = `${animation ? `${animation}, ` : ''}${name} ${duration}ms linear ${delay}ms 1 both`;
+  active += 1;
+  return name;
 }
 function delete_rule(node, name) {
-    const previous = (node.style.animation || '').split(', ');
-    const next = previous.filter(name
-        ? anim => anim.indexOf(name) < 0 // remove specific animation
-        : anim => anim.indexOf('__svelte') === -1 // remove all Svelte animations
-    );
-    const deleted = previous.length - next.length;
-    if (deleted) {
-        node.style.animation = next.join(', ');
-        active -= deleted;
-        if (!active)
-            clear_rules();
-    }
+  const previous = (node.style.animation || '').split(', ');
+  const next = previous.filter(name
+    ? anim => anim.indexOf(name) < 0 // remove specific animation
+    : anim => anim.indexOf('__svelte') === -1 // remove all Svelte animations
+  );
+  const deleted = previous.length - next.length;
+  if (deleted) {
+    node.style.animation = next.join(', ');
+    active -= deleted;
+    if (!active)
+      clear_rules();
+  }
 }
 function clear_rules() {
-    raf(() => {
-        if (active)
-            return;
-        active_docs.forEach(doc => {
-            const stylesheet = doc.__svelte_stylesheet;
-            let i = stylesheet.cssRules.length;
-            while (i--)
-                stylesheet.deleteRule(i);
-            doc.__svelte_rules = {};
-        });
-        active_docs.clear();
+  raf(() => {
+    if (active)
+      return;
+    active_docs.forEach(doc => {
+      const stylesheet = doc.__svelte_stylesheet;
+      let i = stylesheet.cssRules.length;
+      while (i--)
+        stylesheet.deleteRule(i);
+      doc.__svelte_rules = {};
     });
+    active_docs.clear();
+  });
 }
 
 let current_component;
 function set_current_component(component) {
-    current_component = component;
+  current_component = component;
 }
 function get_current_component() {
-    if (!current_component)
-        throw new Error('Function called outside component initialization');
-    return current_component;
+  if (!current_component)
+    throw new Error('Function called outside component initialization');
+  return current_component;
 }
 function onMount(fn) {
-    get_current_component().$$.on_mount.push(fn);
+  get_current_component().$$.on_mount.push(fn);
 }
 function onDestroy(fn) {
-    get_current_component().$$.on_destroy.push(fn);
+  get_current_component().$$.on_destroy.push(fn);
 }
 
 const dirty_components = [];
@@ -1164,357 +1164,357 @@ const flush_callbacks = [];
 const resolved_promise = Promise.resolve();
 let update_scheduled = false;
 function schedule_update() {
-    if (!update_scheduled) {
-        update_scheduled = true;
-        resolved_promise.then(flush);
-    }
+  if (!update_scheduled) {
+    update_scheduled = true;
+    resolved_promise.then(flush);
+  }
 }
 function add_render_callback(fn) {
-    render_callbacks.push(fn);
+  render_callbacks.push(fn);
 }
 let flushing = false;
 const seen_callbacks = new Set();
 function flush() {
-    if (flushing)
-        return;
-    flushing = true;
-    do {
-        // first, call beforeUpdate functions
-        // and update components
-        for (let i = 0; i < dirty_components.length; i += 1) {
-            const component = dirty_components[i];
-            set_current_component(component);
-            update(component.$$);
-        }
-        set_current_component(null);
-        dirty_components.length = 0;
-        while (binding_callbacks.length)
-            binding_callbacks.pop()();
-        // then, once components are updated, call
-        // afterUpdate functions. This may cause
-        // subsequent updates...
-        for (let i = 0; i < render_callbacks.length; i += 1) {
-            const callback = render_callbacks[i];
-            if (!seen_callbacks.has(callback)) {
-                // ...so guard against infinite loops
-                seen_callbacks.add(callback);
-                callback();
-            }
-        }
-        render_callbacks.length = 0;
-    } while (dirty_components.length);
-    while (flush_callbacks.length) {
-        flush_callbacks.pop()();
+  if (flushing)
+    return;
+  flushing = true;
+  do {
+    // first, call beforeUpdate functions
+    // and update components
+    for (let i = 0; i < dirty_components.length; i += 1) {
+      const component = dirty_components[i];
+      set_current_component(component);
+      update(component.$$);
     }
-    update_scheduled = false;
-    flushing = false;
-    seen_callbacks.clear();
+    set_current_component(null);
+    dirty_components.length = 0;
+    while (binding_callbacks.length)
+      binding_callbacks.pop()();
+    // then, once components are updated, call
+    // afterUpdate functions. This may cause
+    // subsequent updates...
+    for (let i = 0; i < render_callbacks.length; i += 1) {
+      const callback = render_callbacks[i];
+      if (!seen_callbacks.has(callback)) {
+        // ...so guard against infinite loops
+        seen_callbacks.add(callback);
+        callback();
+      }
+    }
+    render_callbacks.length = 0;
+  } while (dirty_components.length);
+  while (flush_callbacks.length) {
+    flush_callbacks.pop()();
+  }
+  update_scheduled = false;
+  flushing = false;
+  seen_callbacks.clear();
 }
 function update($$) {
-    if ($$.fragment !== null) {
-        $$.update();
-        run_all($$.before_update);
-        const dirty = $$.dirty;
-        $$.dirty = [-1];
-        $$.fragment && $$.fragment.p($$.ctx, dirty);
-        $$.after_update.forEach(add_render_callback);
-    }
+  if ($$.fragment !== null) {
+    $$.update();
+    run_all($$.before_update);
+    const dirty = $$.dirty;
+    $$.dirty = [-1];
+    $$.fragment && $$.fragment.p($$.ctx, dirty);
+    $$.after_update.forEach(add_render_callback);
+  }
 }
 
 let promise;
 function wait() {
-    if (!promise) {
-        promise = Promise.resolve();
-        promise.then(() => {
-            promise = null;
-        });
-    }
-    return promise;
+  if (!promise) {
+    promise = Promise.resolve();
+    promise.then(() => {
+      promise = null;
+    });
+  }
+  return promise;
 }
 function dispatch(node, direction, kind) {
-    node.dispatchEvent(custom_event(`${direction ? 'intro' : 'outro'}${kind}`));
+  node.dispatchEvent(custom_event(`${direction ? 'intro' : 'outro'}${kind}`));
 }
 const outroing = new Set();
 let outros;
 function group_outros() {
-    outros = {
-        r: 0,
-        c: [],
-        p: outros // parent group
-    };
+  outros = {
+    r: 0,
+    c: [],
+    p: outros // parent group
+  };
 }
 function check_outros() {
-    if (!outros.r) {
-        run_all(outros.c);
-    }
-    outros = outros.p;
+  if (!outros.r) {
+    run_all(outros.c);
+  }
+  outros = outros.p;
 }
 function transition_in(block, local) {
-    if (block && block.i) {
-        outroing.delete(block);
-        block.i(local);
-    }
+  if (block && block.i) {
+    outroing.delete(block);
+    block.i(local);
+  }
 }
 function transition_out(block, local, detach, callback) {
-    if (block && block.o) {
-        if (outroing.has(block))
-            return;
-        outroing.add(block);
-        outros.c.push(() => {
-            outroing.delete(block);
-            if (callback) {
-                if (detach)
-                    block.d(1);
-                callback();
-            }
-        });
-        block.o(local);
-    }
+  if (block && block.o) {
+    if (outroing.has(block))
+      return;
+    outroing.add(block);
+    outros.c.push(() => {
+      outroing.delete(block);
+      if (callback) {
+        if (detach)
+          block.d(1);
+        callback();
+      }
+    });
+    block.o(local);
+  }
 }
 const null_transition = { duration: 0 };
 function create_in_transition(node, fn, params) {
-    let config = fn(node, params);
-    let running = false;
-    let animation_name;
-    let task;
-    let uid = 0;
-    function cleanup() {
-        if (animation_name)
-            delete_rule(node, animation_name);
-    }
-    function go() {
-        const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
-        if (css)
-            animation_name = create_rule(node, 0, 1, duration, delay, easing, css, uid++);
-        tick(0, 1);
-        const start_time = now() + delay;
-        const end_time = start_time + duration;
-        if (task)
-            task.abort();
-        running = true;
-        add_render_callback(() => dispatch(node, true, 'start'));
-        task = loop(now => {
-            if (running) {
-                if (now >= end_time) {
-                    tick(1, 0);
-                    dispatch(node, true, 'end');
-                    cleanup();
-                    return running = false;
-                }
-                if (now >= start_time) {
-                    const t = easing((now - start_time) / duration);
-                    tick(t, 1 - t);
-                }
-            }
-            return running;
-        });
-    }
-    let started = false;
-    return {
-        start() {
-            if (started)
-                return;
-            delete_rule(node);
-            if (is_function(config)) {
-                config = config();
-                wait().then(go);
-            }
-            else {
-                go();
-            }
-        },
-        invalidate() {
-            started = false;
-        },
-        end() {
-            if (running) {
-                cleanup();
-                running = false;
-            }
+  let config = fn(node, params);
+  let running = false;
+  let animation_name;
+  let task;
+  let uid = 0;
+  function cleanup() {
+    if (animation_name)
+      delete_rule(node, animation_name);
+  }
+  function go() {
+    const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+    if (css)
+      animation_name = create_rule(node, 0, 1, duration, delay, easing, css, uid++);
+    tick(0, 1);
+    const start_time = now() + delay;
+    const end_time = start_time + duration;
+    if (task)
+      task.abort();
+    running = true;
+    add_render_callback(() => dispatch(node, true, 'start'));
+    task = loop(now => {
+      if (running) {
+        if (now >= end_time) {
+          tick(1, 0);
+          dispatch(node, true, 'end');
+          cleanup();
+          return running = false;
         }
-    };
+        if (now >= start_time) {
+          const t = easing((now - start_time) / duration);
+          tick(t, 1 - t);
+        }
+      }
+      return running;
+    });
+  }
+  let started = false;
+  return {
+    start() {
+      if (started)
+        return;
+      delete_rule(node);
+      if (is_function(config)) {
+        config = config();
+        wait().then(go);
+      }
+      else {
+        go();
+      }
+    },
+    invalidate() {
+      started = false;
+    },
+    end() {
+      if (running) {
+        cleanup();
+        running = false;
+      }
+    }
+  };
 }
 function create_out_transition(node, fn, params) {
-    let config = fn(node, params);
-    let running = true;
-    let animation_name;
-    const group = outros;
-    group.r += 1;
-    function go() {
-        const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
-        if (css)
-            animation_name = create_rule(node, 1, 0, duration, delay, easing, css);
-        const start_time = now() + delay;
-        const end_time = start_time + duration;
-        add_render_callback(() => dispatch(node, false, 'start'));
-        loop(now => {
-            if (running) {
-                if (now >= end_time) {
-                    tick(0, 1);
-                    dispatch(node, false, 'end');
-                    if (!--group.r) {
-                        // this will result in `end()` being called,
-                        // so we don't need to clean up here
-                        run_all(group.c);
-                    }
-                    return false;
-                }
-                if (now >= start_time) {
-                    const t = easing((now - start_time) / duration);
-                    tick(1 - t, t);
-                }
-            }
-            return running;
-        });
-    }
-    if (is_function(config)) {
-        wait().then(() => {
-            // @ts-ignore
-            config = config();
-            go();
-        });
-    }
-    else {
-        go();
-    }
-    return {
-        end(reset) {
-            if (reset && config.tick) {
-                config.tick(1, 0);
-            }
-            if (running) {
-                if (animation_name)
-                    delete_rule(node, animation_name);
-                running = false;
-            }
+  let config = fn(node, params);
+  let running = true;
+  let animation_name;
+  const group = outros;
+  group.r += 1;
+  function go() {
+    const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+    if (css)
+      animation_name = create_rule(node, 1, 0, duration, delay, easing, css);
+    const start_time = now() + delay;
+    const end_time = start_time + duration;
+    add_render_callback(() => dispatch(node, false, 'start'));
+    loop(now => {
+      if (running) {
+        if (now >= end_time) {
+          tick(0, 1);
+          dispatch(node, false, 'end');
+          if (!--group.r) {
+            // this will result in `end()` being called,
+            // so we don't need to clean up here
+            run_all(group.c);
+          }
+          return false;
         }
-    };
+        if (now >= start_time) {
+          const t = easing((now - start_time) / duration);
+          tick(1 - t, t);
+        }
+      }
+      return running;
+    });
+  }
+  if (is_function(config)) {
+    wait().then(() => {
+      // @ts-ignore
+      config = config();
+      go();
+    });
+  }
+  else {
+    go();
+  }
+  return {
+    end(reset) {
+      if (reset && config.tick) {
+        config.tick(1, 0);
+      }
+      if (running) {
+        if (animation_name)
+          delete_rule(node, animation_name);
+        running = false;
+      }
+    }
+  };
 }
 function create_component(block) {
-    block && block.c();
+  block && block.c();
 }
 function mount_component(component, target, anchor, customElement) {
-    const { fragment, on_mount, on_destroy, after_update } = component.$$;
-    fragment && fragment.m(target, anchor);
-    if (!customElement) {
-        // onMount happens before the initial afterUpdate
-        add_render_callback(() => {
-            const new_on_destroy = on_mount.map(run).filter(is_function);
-            if (on_destroy) {
-                on_destroy.push(...new_on_destroy);
-            }
-            else {
-                // Edge case - component was destroyed immediately,
-                // most likely as a result of a binding initialising
-                run_all(new_on_destroy);
-            }
-            component.$$.on_mount = [];
-        });
-    }
-    after_update.forEach(add_render_callback);
+  const { fragment, on_mount, on_destroy, after_update } = component.$$;
+  fragment && fragment.m(target, anchor);
+  if (!customElement) {
+    // onMount happens before the initial afterUpdate
+    add_render_callback(() => {
+      const new_on_destroy = on_mount.map(run).filter(is_function);
+      if (on_destroy) {
+        on_destroy.push(...new_on_destroy);
+      }
+      else {
+        // Edge case - component was destroyed immediately,
+        // most likely as a result of a binding initialising
+        run_all(new_on_destroy);
+      }
+      component.$$.on_mount = [];
+    });
+  }
+  after_update.forEach(add_render_callback);
 }
 function destroy_component(component, detaching) {
-    const $$ = component.$$;
-    if ($$.fragment !== null) {
-        run_all($$.on_destroy);
-        $$.fragment && $$.fragment.d(detaching);
-        // TODO null out other refs, including component.$$ (but need to
-        // preserve final state?)
-        $$.on_destroy = $$.fragment = null;
-        $$.ctx = [];
-    }
+  const $$ = component.$$;
+  if ($$.fragment !== null) {
+    run_all($$.on_destroy);
+    $$.fragment && $$.fragment.d(detaching);
+    // TODO null out other refs, including component.$$ (but need to
+    // preserve final state?)
+    $$.on_destroy = $$.fragment = null;
+    $$.ctx = [];
+  }
 }
 function make_dirty(component, i) {
-    if (component.$$.dirty[0] === -1) {
-        dirty_components.push(component);
-        schedule_update();
-        component.$$.dirty.fill(0);
-    }
-    component.$$.dirty[(i / 31) | 0] |= (1 << (i % 31));
+  if (component.$$.dirty[0] === -1) {
+    dirty_components.push(component);
+    schedule_update();
+    component.$$.dirty.fill(0);
+  }
+  component.$$.dirty[(i / 31) | 0] |= (1 << (i % 31));
 }
 function init(component, options, instance, create_fragment, not_equal, props, dirty = [-1]) {
-    const parent_component = current_component;
-    set_current_component(component);
-    const $$ = component.$$ = {
-        fragment: null,
-        ctx: null,
-        // state
-        props,
-        update: noop,
-        not_equal,
-        bound: blank_object(),
-        // lifecycle
-        on_mount: [],
-        on_destroy: [],
-        on_disconnect: [],
-        before_update: [],
-        after_update: [],
-        context: new Map(parent_component ? parent_component.$$.context : []),
-        // everything else
-        callbacks: blank_object(),
-        dirty,
-        skip_bound: false
-    };
-    let ready = false;
-    $$.ctx = instance
-        ? instance(component, options.props || {}, (i, ret, ...rest) => {
-            const value = rest.length ? rest[0] : ret;
-            if ($$.ctx && not_equal($$.ctx[i], $$.ctx[i] = value)) {
-                if (!$$.skip_bound && $$.bound[i])
-                    $$.bound[i](value);
-                if (ready)
-                    make_dirty(component, i);
-            }
-            return ret;
-        })
-        : [];
-    $$.update();
-    ready = true;
-    run_all($$.before_update);
-    // `false` as a special case of no DOM component
-    $$.fragment = create_fragment ? create_fragment($$.ctx) : false;
-    if (options.target) {
-        if (options.hydrate) {
-            const nodes = children(options.target);
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            $$.fragment && $$.fragment.l(nodes);
-            nodes.forEach(detach);
-        }
-        else {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            $$.fragment && $$.fragment.c();
-        }
-        if (options.intro)
-            transition_in(component.$$.fragment);
-        mount_component(component, options.target, options.anchor, options.customElement);
-        flush();
+  const parent_component = current_component;
+  set_current_component(component);
+  const $$ = component.$$ = {
+    fragment: null,
+    ctx: null,
+    // state
+    props,
+    update: noop,
+    not_equal,
+    bound: blank_object(),
+    // lifecycle
+    on_mount: [],
+    on_destroy: [],
+    on_disconnect: [],
+    before_update: [],
+    after_update: [],
+    context: new Map(parent_component ? parent_component.$$.context : []),
+    // everything else
+    callbacks: blank_object(),
+    dirty,
+    skip_bound: false
+  };
+  let ready = false;
+  $$.ctx = instance
+    ? instance(component, options.props || {}, (i, ret, ...rest) => {
+      const value = rest.length ? rest[0] : ret;
+      if ($$.ctx && not_equal($$.ctx[i], $$.ctx[i] = value)) {
+        if (!$$.skip_bound && $$.bound[i])
+          $$.bound[i](value);
+        if (ready)
+          make_dirty(component, i);
+      }
+      return ret;
+    })
+    : [];
+  $$.update();
+  ready = true;
+  run_all($$.before_update);
+  // `false` as a special case of no DOM component
+  $$.fragment = create_fragment ? create_fragment($$.ctx) : false;
+  if (options.target) {
+    if (options.hydrate) {
+      const nodes = children(options.target);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      $$.fragment && $$.fragment.l(nodes);
+      nodes.forEach(detach);
     }
-    set_current_component(parent_component);
+    else {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      $$.fragment && $$.fragment.c();
+    }
+    if (options.intro)
+      transition_in(component.$$.fragment);
+    mount_component(component, options.target, options.anchor, options.customElement);
+    flush();
+  }
+  set_current_component(parent_component);
 }
 /**
  * Base class for Svelte components. Used when dev=false.
  */
 class SvelteComponent {
-    $destroy() {
-        destroy_component(this, 1);
-        this.$destroy = noop;
+  $destroy() {
+    destroy_component(this, 1);
+    this.$destroy = noop;
+  }
+  $on(type, callback) {
+    const callbacks = (this.$$.callbacks[type] || (this.$$.callbacks[type] = []));
+    callbacks.push(callback);
+    return () => {
+      const index = callbacks.indexOf(callback);
+      if (index !== -1)
+        callbacks.splice(index, 1);
+    };
+  }
+  $set($$props) {
+    if (this.$$set && !is_empty($$props)) {
+      this.$$.skip_bound = true;
+      this.$$set($$props);
+      this.$$.skip_bound = false;
     }
-    $on(type, callback) {
-        const callbacks = (this.$$.callbacks[type] || (this.$$.callbacks[type] = []));
-        callbacks.push(callback);
-        return () => {
-            const index = callbacks.indexOf(callback);
-            if (index !== -1)
-                callbacks.splice(index, 1);
-        };
-    }
-    $set($$props) {
-        if (this.$$set && !is_empty($$props)) {
-            this.$$.skip_bound = true;
-            this.$$set($$props);
-            this.$$.skip_bound = false;
-        }
-    }
+  }
 }
 
 const subscriber_queue = [];
@@ -1524,1061 +1524,1061 @@ const subscriber_queue = [];
  * @param {StartStopNotifier=}start start and stop notifications for subscriptions
  */
 function writable(value, start = noop) {
-    let stop;
-    const subscribers = [];
-    function set(new_value) {
-        if (safe_not_equal(value, new_value)) {
-            value = new_value;
-            if (stop) { // store is ready
-                const run_queue = !subscriber_queue.length;
-                for (let i = 0; i < subscribers.length; i += 1) {
-                    const s = subscribers[i];
-                    s[1]();
-                    subscriber_queue.push(s, value);
-                }
-                if (run_queue) {
-                    for (let i = 0; i < subscriber_queue.length; i += 2) {
-                        subscriber_queue[i][0](subscriber_queue[i + 1]);
-                    }
-                    subscriber_queue.length = 0;
-                }
-            }
+  let stop;
+  const subscribers = [];
+  function set(new_value) {
+    if (safe_not_equal(value, new_value)) {
+      value = new_value;
+      if (stop) { // store is ready
+        const run_queue = !subscriber_queue.length;
+        for (let i = 0; i < subscribers.length; i += 1) {
+          const s = subscribers[i];
+          s[1]();
+          subscriber_queue.push(s, value);
         }
-    }
-    function update(fn) {
-        set(fn(value));
-    }
-    function subscribe(run, invalidate = noop) {
-        const subscriber = [run, invalidate];
-        subscribers.push(subscriber);
-        if (subscribers.length === 1) {
-            stop = start(set) || noop;
+        if (run_queue) {
+          for (let i = 0; i < subscriber_queue.length; i += 2) {
+            subscriber_queue[i][0](subscriber_queue[i + 1]);
+          }
+          subscriber_queue.length = 0;
         }
-        run(value);
-        return () => {
-            const index = subscribers.indexOf(subscriber);
-            if (index !== -1) {
-                subscribers.splice(index, 1);
-            }
-            if (subscribers.length === 0) {
-                stop();
-                stop = null;
-            }
-        };
+      }
     }
-    return { set, update, subscribe };
+  }
+  function update(fn) {
+    set(fn(value));
+  }
+  function subscribe(run, invalidate = noop) {
+    const subscriber = [run, invalidate];
+    subscribers.push(subscriber);
+    if (subscribers.length === 1) {
+      stop = start(set) || noop;
+    }
+    run(value);
+    return () => {
+      const index = subscribers.indexOf(subscriber);
+      if (index !== -1) {
+        subscribers.splice(index, 1);
+      }
+      if (subscribers.length === 0) {
+        stop();
+        stop = null;
+      }
+    };
+  }
+  return { set, update, subscribe };
 }
 
 function cubicOut(t) {
-    const f = t - 1.0;
-    return f * f * f + 1.0;
+  const f = t - 1.0;
+  return f * f * f + 1.0;
 }
 
 function slide(node, { delay = 0, duration = 400, easing = cubicOut } = {}) {
-    const style = getComputedStyle(node);
-    const opacity = +style.opacity;
-    const height = parseFloat(style.height);
-    const padding_top = parseFloat(style.paddingTop);
-    const padding_bottom = parseFloat(style.paddingBottom);
-    const margin_top = parseFloat(style.marginTop);
-    const margin_bottom = parseFloat(style.marginBottom);
-    const border_top_width = parseFloat(style.borderTopWidth);
-    const border_bottom_width = parseFloat(style.borderBottomWidth);
-    return {
-        delay,
-        duration,
-        easing,
-        css: t => 'overflow: hidden;' +
-            `opacity: ${Math.min(t * 20, 1) * opacity};` +
-            `height: ${t * height}px;` +
-            `padding-top: ${t * padding_top}px;` +
-            `padding-bottom: ${t * padding_bottom}px;` +
-            `margin-top: ${t * margin_top}px;` +
-            `margin-bottom: ${t * margin_bottom}px;` +
-            `border-top-width: ${t * border_top_width}px;` +
-            `border-bottom-width: ${t * border_bottom_width}px;`
-    };
+  const style = getComputedStyle(node);
+  const opacity = +style.opacity;
+  const height = parseFloat(style.height);
+  const padding_top = parseFloat(style.paddingTop);
+  const padding_bottom = parseFloat(style.paddingBottom);
+  const margin_top = parseFloat(style.marginTop);
+  const margin_bottom = parseFloat(style.marginBottom);
+  const border_top_width = parseFloat(style.borderTopWidth);
+  const border_bottom_width = parseFloat(style.borderBottomWidth);
+  return {
+    delay,
+    duration,
+    easing,
+    css: t => 'overflow: hidden;' +
+      `opacity: ${Math.min(t * 20, 1) * opacity};` +
+      `height: ${t * height}px;` +
+      `padding-top: ${t * padding_top}px;` +
+      `padding-bottom: ${t * padding_bottom}px;` +
+      `margin-top: ${t * margin_top}px;` +
+      `margin-bottom: ${t * margin_bottom}px;` +
+      `border-top-width: ${t * border_top_width}px;` +
+      `border-bottom-width: ${t * border_bottom_width}px;`
+  };
 }
 
 /* src/settings/Checkmark.svelte generated by Svelte v3.35.0 */
 
 function add_css$1() {
-	var style = element("style");
-	style.id = "svelte-1q3q9tf-style";
-	style.textContent = ".check.svelte-1q3q9tf{margin-left:6px;width:12px;height:12px}";
-	append(document.head, style);
+  var style = element("style");
+  style.id = "svelte-1q3q9tf-style";
+  style.textContent = ".check.svelte-1q3q9tf{margin-left:6px;width:12px;height:12px}";
+  append(document.head, style);
 }
 
 function create_fragment$5(ctx) {
-	let svg;
-	let path;
+  let svg;
+  let path;
 
-	return {
-		c() {
-			svg = svg_element("svg");
-			path = svg_element("path");
-			attr(path, "fill", "currentColor");
-			attr(path, "d", "M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z");
-			attr(svg, "aria-hidden", "true");
-			attr(svg, "focusable", "false");
-			attr(svg, "class", "check svelte-1q3q9tf");
-			attr(svg, "data-icon", "check");
-			attr(svg, "role", "img");
-			attr(svg, "xmlns", "http://www.w3.org/2000/svg");
-			attr(svg, "viewBox", "0 0 512 512");
-		},
-		m(target, anchor) {
-			insert(target, svg, anchor);
-			append(svg, path);
-		},
-		p: noop,
-		i: noop,
-		o: noop,
-		d(detaching) {
-			if (detaching) detach(svg);
-		}
-	};
+  return {
+    c() {
+      svg = svg_element("svg");
+      path = svg_element("path");
+      attr(path, "fill", "currentColor");
+      attr(path, "d", "M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z");
+      attr(svg, "aria-hidden", "true");
+      attr(svg, "focusable", "false");
+      attr(svg, "class", "check svelte-1q3q9tf");
+      attr(svg, "data-icon", "check");
+      attr(svg, "role", "img");
+      attr(svg, "xmlns", "http://www.w3.org/2000/svg");
+      attr(svg, "viewBox", "0 0 512 512");
+    },
+    m(target, anchor) {
+      insert(target, svg, anchor);
+      append(svg, path);
+    },
+    p: noop,
+    i: noop,
+    o: noop,
+    d(detaching) {
+      if (detaching) detach(svg);
+    }
+  };
 }
 
 class Checkmark extends SvelteComponent {
-	constructor(options) {
-		super();
-		if (!document.getElementById("svelte-1q3q9tf-style")) add_css$1();
-		init(this, options, null, create_fragment$5, safe_not_equal, {});
-	}
+  constructor(options) {
+    super();
+    if (!document.getElementById("svelte-1q3q9tf-style")) add_css$1();
+    init(this, options, null, create_fragment$5, safe_not_equal, {});
+  }
 }
 
 /* src/settings/GettingStartedBanner.svelte generated by Svelte v3.35.0 */
 
 function add_css() {
-	var style = element("style");
-	style.id = "svelte-1alo0m9-style";
-	style.textContent = "button.svelte-1alo0m9{display:flex;align-items:center}";
-	append(document.head, style);
+  var style = element("style");
+  style.id = "svelte-1alo0m9-style";
+  style.textContent = "button.svelte-1alo0m9{display:flex;align-items:center}";
+  append(document.head, style);
 }
 
 // (20:2) {#if hasDailyNoteSettings}
 function create_if_block_3(ctx) {
-	let div2;
-	let div0;
-	let h4;
-	let t1;
-	let t2;
-	let div1;
-	let current_block_type_index;
-	let if_block1;
-	let current;
+  let div2;
+  let div0;
+  let h4;
+  let t1;
+  let t2;
+  let div1;
+  let current_block_type_index;
+  let if_block1;
+  let current;
 
-	function select_block_type(ctx, dirty) {
-		if (/*$settings*/ ctx[5].hasMigratedDailyNoteSettings) return create_if_block_5;
-		return create_else_block_2;
-	}
+  function select_block_type(ctx, dirty) {
+    if (/*$settings*/ ctx[5].hasMigratedDailyNoteSettings) return create_if_block_5;
+    return create_else_block_2;
+  }
 
-	let current_block_type = select_block_type(ctx);
-	let if_block0 = current_block_type(ctx);
-	const if_block_creators = [create_if_block_4, create_else_block_1];
-	const if_blocks = [];
+  let current_block_type = select_block_type(ctx);
+  let if_block0 = current_block_type(ctx);
+  const if_block_creators = [create_if_block_4, create_else_block_1];
+  const if_blocks = [];
 
-	function select_block_type_1(ctx, dirty) {
-		if (/*$settings*/ ctx[5].hasMigratedDailyNoteSettings) return 0;
-		return 1;
-	}
+  function select_block_type_1(ctx, dirty) {
+    if (/*$settings*/ ctx[5].hasMigratedDailyNoteSettings) return 0;
+    return 1;
+  }
 
-	current_block_type_index = select_block_type_1(ctx);
-	if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  current_block_type_index = select_block_type_1(ctx);
+  if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 
-	return {
-		c() {
-			div2 = element("div");
-			div0 = element("div");
-			h4 = element("h4");
-			h4.textContent = "Daily Notes plugin is enabled";
-			t1 = space();
-			if_block0.c();
-			t2 = space();
-			div1 = element("div");
-			if_block1.c();
-			attr(div0, "class", "setting-item-info");
-			attr(div1, "class", "setting-item-control");
-			attr(div2, "class", "setting-item");
-		},
-		m(target, anchor) {
-			insert(target, div2, anchor);
-			append(div2, div0);
-			append(div0, h4);
-			append(div0, t1);
-			if_block0.m(div0, null);
-			append(div2, t2);
-			append(div2, div1);
-			if_blocks[current_block_type_index].m(div1, null);
-			current = true;
-		},
-		p(ctx, dirty) {
-			if (current_block_type !== (current_block_type = select_block_type(ctx))) {
-				if_block0.d(1);
-				if_block0 = current_block_type(ctx);
+  return {
+    c() {
+      div2 = element("div");
+      div0 = element("div");
+      h4 = element("h4");
+      h4.textContent = "Daily Notes plugin is enabled";
+      t1 = space();
+      if_block0.c();
+      t2 = space();
+      div1 = element("div");
+      if_block1.c();
+      attr(div0, "class", "setting-item-info");
+      attr(div1, "class", "setting-item-control");
+      attr(div2, "class", "setting-item");
+    },
+    m(target, anchor) {
+      insert(target, div2, anchor);
+      append(div2, div0);
+      append(div0, h4);
+      append(div0, t1);
+      if_block0.m(div0, null);
+      append(div2, t2);
+      append(div2, div1);
+      if_blocks[current_block_type_index].m(div1, null);
+      current = true;
+    },
+    p(ctx, dirty) {
+      if (current_block_type !== (current_block_type = select_block_type(ctx))) {
+        if_block0.d(1);
+        if_block0 = current_block_type(ctx);
 
-				if (if_block0) {
-					if_block0.c();
-					if_block0.m(div0, null);
-				}
-			}
+        if (if_block0) {
+          if_block0.c();
+          if_block0.m(div0, null);
+        }
+      }
 
-			let previous_block_index = current_block_type_index;
-			current_block_type_index = select_block_type_1(ctx);
+      let previous_block_index = current_block_type_index;
+      current_block_type_index = select_block_type_1(ctx);
 
-			if (current_block_type_index === previous_block_index) {
-				if_blocks[current_block_type_index].p(ctx, dirty);
-			} else {
-				group_outros();
+      if (current_block_type_index === previous_block_index) {
+        if_blocks[current_block_type_index].p(ctx, dirty);
+      } else {
+        group_outros();
 
-				transition_out(if_blocks[previous_block_index], 1, 1, () => {
-					if_blocks[previous_block_index] = null;
-				});
+        transition_out(if_blocks[previous_block_index], 1, 1, () => {
+          if_blocks[previous_block_index] = null;
+        });
 
-				check_outros();
-				if_block1 = if_blocks[current_block_type_index];
+        check_outros();
+        if_block1 = if_blocks[current_block_type_index];
 
-				if (!if_block1) {
-					if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-					if_block1.c();
-				} else {
-					if_block1.p(ctx, dirty);
-				}
+        if (!if_block1) {
+          if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+          if_block1.c();
+        } else {
+          if_block1.p(ctx, dirty);
+        }
 
-				transition_in(if_block1, 1);
-				if_block1.m(div1, null);
-			}
-		},
-		i(local) {
-			if (current) return;
-			transition_in(if_block1);
-			current = true;
-		},
-		o(local) {
-			transition_out(if_block1);
-			current = false;
-		},
-		d(detaching) {
-			if (detaching) detach(div2);
-			if_block0.d();
-			if_blocks[current_block_type_index].d();
-		}
-	};
+        transition_in(if_block1, 1);
+        if_block1.m(div1, null);
+      }
+    },
+    i(local) {
+      if (current) return;
+      transition_in(if_block1);
+      current = true;
+    },
+    o(local) {
+      transition_out(if_block1);
+      current = false;
+    },
+    d(detaching) {
+      if (detaching) detach(div2);
+      if_block0.d();
+      if_blocks[current_block_type_index].d();
+    }
+  };
 }
 
 // (31:8) {:else}
 function create_else_block_2(ctx) {
-	let p;
+  let p;
 
-	return {
-		c() {
-			p = element("p");
-			p.textContent = "You are currently using the core Daily Notes plugin. You can migrate\n            those settings over to Periodic Notes to enjoy the same\n            functionality as well as some notable improvements";
-			attr(p, "class", "setting-item-description");
-		},
-		m(target, anchor) {
-			insert(target, p, anchor);
-		},
-		d(detaching) {
-			if (detaching) detach(p);
-		}
-	};
+  return {
+    c() {
+      p = element("p");
+      p.textContent = "You are currently using the core Daily Notes plugin. You can migrate\n            those settings over to Periodic Notes to enjoy the same\n            functionality as well as some notable improvements";
+      attr(p, "class", "setting-item-description");
+    },
+    m(target, anchor) {
+      insert(target, p, anchor);
+    },
+    d(detaching) {
+      if (detaching) detach(p);
+    }
+  };
 }
 
 // (24:8) {#if $settings.hasMigratedDailyNoteSettings}
 function create_if_block_5(ctx) {
-	let p;
+  let p;
 
-	return {
-		c() {
-			p = element("p");
+  return {
+    c() {
+      p = element("p");
 
-			p.innerHTML = `You have successfully migrated your daily notes settings. You can
+      p.innerHTML = `You have successfully migrated your daily notes settings. You can
             now disable the Daily Notes core plugin to avoid any confusion.<br/>If you have an custom hotkeys for daily notes, make sure to update
             them to use the new &quot;Periodic Notes&quot; commands.`;
 
-			attr(p, "class", "setting-item-description");
-		},
-		m(target, anchor) {
-			insert(target, p, anchor);
-		},
-		d(detaching) {
-			if (detaching) detach(p);
-		}
-	};
+      attr(p, "class", "setting-item-description");
+    },
+    m(target, anchor) {
+      insert(target, p, anchor);
+    },
+    d(detaching) {
+      if (detaching) detach(p);
+    }
+  };
 }
 
 // (42:8) {:else}
 function create_else_block_1(ctx) {
-	let button;
-	let mounted;
-	let dispose;
+  let button;
+  let mounted;
+  let dispose;
 
-	return {
-		c() {
-			button = element("button");
-			button.textContent = "Migrate";
-			attr(button, "class", "mod-cta svelte-1alo0m9");
-		},
-		m(target, anchor) {
-			insert(target, button, anchor);
+  return {
+    c() {
+      button = element("button");
+      button.textContent = "Migrate";
+      attr(button, "class", "mod-cta svelte-1alo0m9");
+    },
+    m(target, anchor) {
+      insert(target, button, anchor);
 
-			if (!mounted) {
-				dispose = listen(button, "click", function () {
-					if (is_function(/*migrateDailyNoteSettings*/ ctx[2])) /*migrateDailyNoteSettings*/ ctx[2].apply(this, arguments);
-				});
+      if (!mounted) {
+        dispose = listen(button, "click", function () {
+          if (is_function(/*migrateDailyNoteSettings*/ ctx[2])) /*migrateDailyNoteSettings*/ ctx[2].apply(this, arguments);
+        });
 
-				mounted = true;
-			}
-		},
-		p(new_ctx, dirty) {
-			ctx = new_ctx;
-		},
-		i: noop,
-		o: noop,
-		d(detaching) {
-			if (detaching) detach(button);
-			mounted = false;
-			dispose();
-		}
-	};
+        mounted = true;
+      }
+    },
+    p(new_ctx, dirty) {
+      ctx = new_ctx;
+    },
+    i: noop,
+    o: noop,
+    d(detaching) {
+      if (detaching) detach(button);
+      mounted = false;
+      dispose();
+    }
+  };
 }
 
 // (40:8) {#if $settings.hasMigratedDailyNoteSettings}
 function create_if_block_4(ctx) {
-	let button;
-	let t;
-	let checkmark;
-	let current;
-	checkmark = new Checkmark({});
+  let button;
+  let t;
+  let checkmark;
+  let current;
+  checkmark = new Checkmark({});
 
-	return {
-		c() {
-			button = element("button");
-			t = text("Migrated ");
-			create_component(checkmark.$$.fragment);
-			button.disabled = true;
-			attr(button, "class", "svelte-1alo0m9");
-		},
-		m(target, anchor) {
-			insert(target, button, anchor);
-			append(button, t);
-			mount_component(checkmark, button, null);
-			current = true;
-		},
-		p: noop,
-		i(local) {
-			if (current) return;
-			transition_in(checkmark.$$.fragment, local);
-			current = true;
-		},
-		o(local) {
-			transition_out(checkmark.$$.fragment, local);
-			current = false;
-		},
-		d(detaching) {
-			if (detaching) detach(button);
-			destroy_component(checkmark);
-		}
-	};
+  return {
+    c() {
+      button = element("button");
+      t = text("Migrated ");
+      create_component(checkmark.$$.fragment);
+      button.disabled = true;
+      attr(button, "class", "svelte-1alo0m9");
+    },
+    m(target, anchor) {
+      insert(target, button, anchor);
+      append(button, t);
+      mount_component(checkmark, button, null);
+      current = true;
+    },
+    p: noop,
+    i(local) {
+      if (current) return;
+      transition_in(checkmark.$$.fragment, local);
+      current = true;
+    },
+    o(local) {
+      transition_out(checkmark.$$.fragment, local);
+      current = false;
+    },
+    d(detaching) {
+      if (detaching) detach(button);
+      destroy_component(checkmark);
+    }
+  };
 }
 
 // (51:2) {#if hasWeeklyNoteSettings}
 function create_if_block_1$2(ctx) {
-	let div2;
-	let div0;
-	let t3;
-	let div1;
-	let current_block_type_index;
-	let if_block;
-	let current;
-	const if_block_creators = [create_if_block_2, create_else_block];
-	const if_blocks = [];
+  let div2;
+  let div0;
+  let t3;
+  let div1;
+  let current_block_type_index;
+  let if_block;
+  let current;
+  const if_block_creators = [create_if_block_2, create_else_block];
+  const if_blocks = [];
 
-	function select_block_type_2(ctx, dirty) {
-		if (/*$settings*/ ctx[5].hasMigratedWeeklyNoteSettings) return 0;
-		return 1;
-	}
+  function select_block_type_2(ctx, dirty) {
+    if (/*$settings*/ ctx[5].hasMigratedWeeklyNoteSettings) return 0;
+    return 1;
+  }
 
-	current_block_type_index = select_block_type_2(ctx);
-	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  current_block_type_index = select_block_type_2(ctx);
+  if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 
-	return {
-		c() {
-			div2 = element("div");
-			div0 = element("div");
+  return {
+    c() {
+      div2 = element("div");
+      div0 = element("div");
 
-			div0.innerHTML = `<h4>Weekly Note settings migrated</h4>
+      div0.innerHTML = `<h4>Weekly Note settings migrated</h4>
         <p class="setting-item-description">Your existing weekly-note settings from the Calendar plugin have been
           migrated over automatically. The functionality will be removed from
           the Calendar plugin in the future.</p>`;
 
-			t3 = space();
-			div1 = element("div");
-			if_block.c();
-			attr(div0, "class", "setting-item-info");
-			attr(div1, "class", "setting-item-control");
-			attr(div2, "class", "setting-item");
-		},
-		m(target, anchor) {
-			insert(target, div2, anchor);
-			append(div2, div0);
-			append(div2, t3);
-			append(div2, div1);
-			if_blocks[current_block_type_index].m(div1, null);
-			current = true;
-		},
-		p(ctx, dirty) {
-			let previous_block_index = current_block_type_index;
-			current_block_type_index = select_block_type_2(ctx);
+      t3 = space();
+      div1 = element("div");
+      if_block.c();
+      attr(div0, "class", "setting-item-info");
+      attr(div1, "class", "setting-item-control");
+      attr(div2, "class", "setting-item");
+    },
+    m(target, anchor) {
+      insert(target, div2, anchor);
+      append(div2, div0);
+      append(div2, t3);
+      append(div2, div1);
+      if_blocks[current_block_type_index].m(div1, null);
+      current = true;
+    },
+    p(ctx, dirty) {
+      let previous_block_index = current_block_type_index;
+      current_block_type_index = select_block_type_2(ctx);
 
-			if (current_block_type_index !== previous_block_index) {
-				group_outros();
+      if (current_block_type_index !== previous_block_index) {
+        group_outros();
 
-				transition_out(if_blocks[previous_block_index], 1, 1, () => {
-					if_blocks[previous_block_index] = null;
-				});
+        transition_out(if_blocks[previous_block_index], 1, 1, () => {
+          if_blocks[previous_block_index] = null;
+        });
 
-				check_outros();
-				if_block = if_blocks[current_block_type_index];
+        check_outros();
+        if_block = if_blocks[current_block_type_index];
 
-				if (!if_block) {
-					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-					if_block.c();
-				}
+        if (!if_block) {
+          if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+          if_block.c();
+        }
 
-				transition_in(if_block, 1);
-				if_block.m(div1, null);
-			}
-		},
-		i(local) {
-			if (current) return;
-			transition_in(if_block);
-			current = true;
-		},
-		o(local) {
-			transition_out(if_block);
-			current = false;
-		},
-		d(detaching) {
-			if (detaching) detach(div2);
-			if_blocks[current_block_type_index].d();
-		}
-	};
+        transition_in(if_block, 1);
+        if_block.m(div1, null);
+      }
+    },
+    i(local) {
+      if (current) return;
+      transition_in(if_block);
+      current = true;
+    },
+    o(local) {
+      transition_out(if_block);
+      current = false;
+    },
+    d(detaching) {
+      if (detaching) detach(div2);
+      if_blocks[current_block_type_index].d();
+    }
+  };
 }
 
 // (67:8) {:else}
 function create_else_block(ctx) {
-	let button;
+  let button;
 
-	return {
-		c() {
-			button = element("button");
-			button.textContent = "Migrate";
-			attr(button, "class", "mod-cta svelte-1alo0m9");
-		},
-		m(target, anchor) {
-			insert(target, button, anchor);
-		},
-		i: noop,
-		o: noop,
-		d(detaching) {
-			if (detaching) detach(button);
-		}
-	};
+  return {
+    c() {
+      button = element("button");
+      button.textContent = "Migrate";
+      attr(button, "class", "mod-cta svelte-1alo0m9");
+    },
+    m(target, anchor) {
+      insert(target, button, anchor);
+    },
+    i: noop,
+    o: noop,
+    d(detaching) {
+      if (detaching) detach(button);
+    }
+  };
 }
 
 // (62:8) {#if $settings.hasMigratedWeeklyNoteSettings}
 function create_if_block_2(ctx) {
-	let button;
-	let t;
-	let checkmark;
-	let current;
-	checkmark = new Checkmark({});
+  let button;
+  let t;
+  let checkmark;
+  let current;
+  checkmark = new Checkmark({});
 
-	return {
-		c() {
-			button = element("button");
-			t = text("Migrated\n            ");
-			create_component(checkmark.$$.fragment);
-			button.disabled = true;
-			attr(button, "class", "svelte-1alo0m9");
-		},
-		m(target, anchor) {
-			insert(target, button, anchor);
-			append(button, t);
-			mount_component(checkmark, button, null);
-			current = true;
-		},
-		i(local) {
-			if (current) return;
-			transition_in(checkmark.$$.fragment, local);
-			current = true;
-		},
-		o(local) {
-			transition_out(checkmark.$$.fragment, local);
-			current = false;
-		},
-		d(detaching) {
-			if (detaching) detach(button);
-			destroy_component(checkmark);
-		}
-	};
+  return {
+    c() {
+      button = element("button");
+      t = text("Migrated\n            ");
+      create_component(checkmark.$$.fragment);
+      button.disabled = true;
+      attr(button, "class", "svelte-1alo0m9");
+    },
+    m(target, anchor) {
+      insert(target, button, anchor);
+      append(button, t);
+      mount_component(checkmark, button, null);
+      current = true;
+    },
+    i(local) {
+      if (current) return;
+      transition_in(checkmark.$$.fragment, local);
+      current = true;
+    },
+    o(local) {
+      transition_out(checkmark.$$.fragment, local);
+      current = false;
+    },
+    d(detaching) {
+      if (detaching) detach(button);
+      destroy_component(checkmark);
+    }
+  };
 }
 
 // (74:2) {#if !hasDailyNoteSettings && !hasWeeklyNoteSettings}
 function create_if_block$4(ctx) {
-	let p;
+  let p;
 
-	return {
-		c() {
-			p = element("p");
-			p.textContent = "With this plugin, you can quickly create and navigate to daily, weekly,\n      and monthly notes. Enable them below to get started.";
-		},
-		m(target, anchor) {
-			insert(target, p, anchor);
-		},
-		d(detaching) {
-			if (detaching) detach(p);
-		}
-	};
+  return {
+    c() {
+      p = element("p");
+      p.textContent = "With this plugin, you can quickly create and navigate to daily, weekly,\n      and monthly notes. Enable them below to get started.";
+    },
+    m(target, anchor) {
+      insert(target, p, anchor);
+    },
+    d(detaching) {
+      if (detaching) detach(p);
+    }
+  };
 }
 
 function create_fragment$4(ctx) {
-	let div;
-	let h3;
-	let t1;
-	let t2;
-	let t3;
-	let t4;
-	let button;
-	let div_outro;
-	let current;
-	let mounted;
-	let dispose;
-	let if_block0 = /*hasDailyNoteSettings*/ ctx[3] && create_if_block_3(ctx);
-	let if_block1 = /*hasWeeklyNoteSettings*/ ctx[4] && create_if_block_1$2(ctx);
-	let if_block2 = !/*hasDailyNoteSettings*/ ctx[3] && !/*hasWeeklyNoteSettings*/ ctx[4] && create_if_block$4();
+  let div;
+  let h3;
+  let t1;
+  let t2;
+  let t3;
+  let t4;
+  let button;
+  let div_outro;
+  let current;
+  let mounted;
+  let dispose;
+  let if_block0 = /*hasDailyNoteSettings*/ ctx[3] && create_if_block_3(ctx);
+  let if_block1 = /*hasWeeklyNoteSettings*/ ctx[4] && create_if_block_1$2(ctx);
+  let if_block2 = !/*hasDailyNoteSettings*/ ctx[3] && !/*hasWeeklyNoteSettings*/ ctx[4] && create_if_block$4();
 
-	return {
-		c() {
-			div = element("div");
-			h3 = element("h3");
-			h3.textContent = "Getting Started";
-			t1 = space();
-			if (if_block0) if_block0.c();
-			t2 = space();
-			if (if_block1) if_block1.c();
-			t3 = space();
-			if (if_block2) if_block2.c();
-			t4 = space();
-			button = element("button");
-			button.textContent = "Dismiss";
-			attr(button, "class", "svelte-1alo0m9");
-			attr(div, "class", "settings-banner");
-		},
-		m(target, anchor) {
-			insert(target, div, anchor);
-			append(div, h3);
-			append(div, t1);
-			if (if_block0) if_block0.m(div, null);
-			append(div, t2);
-			if (if_block1) if_block1.m(div, null);
-			append(div, t3);
-			if (if_block2) if_block2.m(div, null);
-			append(div, t4);
-			append(div, button);
-			current = true;
+  return {
+    c() {
+      div = element("div");
+      h3 = element("h3");
+      h3.textContent = "Getting Started";
+      t1 = space();
+      if (if_block0) if_block0.c();
+      t2 = space();
+      if (if_block1) if_block1.c();
+      t3 = space();
+      if (if_block2) if_block2.c();
+      t4 = space();
+      button = element("button");
+      button.textContent = "Dismiss";
+      attr(button, "class", "svelte-1alo0m9");
+      attr(div, "class", "settings-banner");
+    },
+    m(target, anchor) {
+      insert(target, div, anchor);
+      append(div, h3);
+      append(div, t1);
+      if (if_block0) if_block0.m(div, null);
+      append(div, t2);
+      if (if_block1) if_block1.m(div, null);
+      append(div, t3);
+      if (if_block2) if_block2.m(div, null);
+      append(div, t4);
+      append(div, button);
+      current = true;
 
-			if (!mounted) {
-				dispose = listen(button, "click", function () {
-					if (is_function(/*handleTeardown*/ ctx[1])) /*handleTeardown*/ ctx[1].apply(this, arguments);
-				});
+      if (!mounted) {
+        dispose = listen(button, "click", function () {
+          if (is_function(/*handleTeardown*/ ctx[1])) /*handleTeardown*/ ctx[1].apply(this, arguments);
+        });
 
-				mounted = true;
-			}
-		},
-		p(new_ctx, [dirty]) {
-			ctx = new_ctx;
+        mounted = true;
+      }
+    },
+    p(new_ctx, [dirty]) {
+      ctx = new_ctx;
 
-			if (/*hasDailyNoteSettings*/ ctx[3]) {
-				if (if_block0) {
-					if_block0.p(ctx, dirty);
+      if (/*hasDailyNoteSettings*/ ctx[3]) {
+        if (if_block0) {
+          if_block0.p(ctx, dirty);
 
-					if (dirty & /*hasDailyNoteSettings*/ 8) {
-						transition_in(if_block0, 1);
-					}
-				} else {
-					if_block0 = create_if_block_3(ctx);
-					if_block0.c();
-					transition_in(if_block0, 1);
-					if_block0.m(div, t2);
-				}
-			} else if (if_block0) {
-				group_outros();
+          if (dirty & /*hasDailyNoteSettings*/ 8) {
+            transition_in(if_block0, 1);
+          }
+        } else {
+          if_block0 = create_if_block_3(ctx);
+          if_block0.c();
+          transition_in(if_block0, 1);
+          if_block0.m(div, t2);
+        }
+      } else if (if_block0) {
+        group_outros();
 
-				transition_out(if_block0, 1, 1, () => {
-					if_block0 = null;
-				});
+        transition_out(if_block0, 1, 1, () => {
+          if_block0 = null;
+        });
 
-				check_outros();
-			}
+        check_outros();
+      }
 
-			if (/*hasWeeklyNoteSettings*/ ctx[4]) {
-				if (if_block1) {
-					if_block1.p(ctx, dirty);
+      if (/*hasWeeklyNoteSettings*/ ctx[4]) {
+        if (if_block1) {
+          if_block1.p(ctx, dirty);
 
-					if (dirty & /*hasWeeklyNoteSettings*/ 16) {
-						transition_in(if_block1, 1);
-					}
-				} else {
-					if_block1 = create_if_block_1$2(ctx);
-					if_block1.c();
-					transition_in(if_block1, 1);
-					if_block1.m(div, t3);
-				}
-			} else if (if_block1) {
-				group_outros();
+          if (dirty & /*hasWeeklyNoteSettings*/ 16) {
+            transition_in(if_block1, 1);
+          }
+        } else {
+          if_block1 = create_if_block_1$2(ctx);
+          if_block1.c();
+          transition_in(if_block1, 1);
+          if_block1.m(div, t3);
+        }
+      } else if (if_block1) {
+        group_outros();
 
-				transition_out(if_block1, 1, 1, () => {
-					if_block1 = null;
-				});
+        transition_out(if_block1, 1, 1, () => {
+          if_block1 = null;
+        });
 
-				check_outros();
-			}
+        check_outros();
+      }
 
-			if (!/*hasDailyNoteSettings*/ ctx[3] && !/*hasWeeklyNoteSettings*/ ctx[4]) {
-				if (if_block2) ; else {
-					if_block2 = create_if_block$4();
-					if_block2.c();
-					if_block2.m(div, t4);
-				}
-			} else if (if_block2) {
-				if_block2.d(1);
-				if_block2 = null;
-			}
-		},
-		i(local) {
-			if (current) return;
-			transition_in(if_block0);
-			transition_in(if_block1);
-			if (div_outro) div_outro.end(1);
-			current = true;
-		},
-		o(local) {
-			transition_out(if_block0);
-			transition_out(if_block1);
-			div_outro = create_out_transition(div, slide, {});
-			current = false;
-		},
-		d(detaching) {
-			if (detaching) detach(div);
-			if (if_block0) if_block0.d();
-			if (if_block1) if_block1.d();
-			if (if_block2) if_block2.d();
-			if (detaching && div_outro) div_outro.end();
-			mounted = false;
-			dispose();
-		}
-	};
+      if (!/*hasDailyNoteSettings*/ ctx[3] && !/*hasWeeklyNoteSettings*/ ctx[4]) {
+        if (if_block2); else {
+          if_block2 = create_if_block$4();
+          if_block2.c();
+          if_block2.m(div, t4);
+        }
+      } else if (if_block2) {
+        if_block2.d(1);
+        if_block2 = null;
+      }
+    },
+    i(local) {
+      if (current) return;
+      transition_in(if_block0);
+      transition_in(if_block1);
+      if (div_outro) div_outro.end(1);
+      current = true;
+    },
+    o(local) {
+      transition_out(if_block0);
+      transition_out(if_block1);
+      div_outro = create_out_transition(div, slide, {});
+      current = false;
+    },
+    d(detaching) {
+      if (detaching) detach(div);
+      if (if_block0) if_block0.d();
+      if (if_block1) if_block1.d();
+      if (if_block2) if_block2.d();
+      if (detaching && div_outro) div_outro.end();
+      mounted = false;
+      dispose();
+    }
+  };
 }
 
 function instance$4($$self, $$props, $$invalidate) {
-	let $settings,
-		$$unsubscribe_settings = noop,
-		$$subscribe_settings = () => ($$unsubscribe_settings(), $$unsubscribe_settings = subscribe(settings, $$value => $$invalidate(5, $settings = $$value)), settings);
+  let $settings,
+    $$unsubscribe_settings = noop,
+    $$subscribe_settings = () => ($$unsubscribe_settings(), $$unsubscribe_settings = subscribe(settings, $$value => $$invalidate(5, $settings = $$value)), settings);
 
-	$$self.$$.on_destroy.push(() => $$unsubscribe_settings());
+  $$self.$$.on_destroy.push(() => $$unsubscribe_settings());
 
 
-	let { settings } = $$props;
-	$$subscribe_settings();
-	let { handleTeardown } = $$props;
-	let { migrateDailyNoteSettings } = $$props;
-	let hasDailyNoteSettings;
-	let hasWeeklyNoteSettings;
+  let { settings } = $$props;
+  $$subscribe_settings();
+  let { handleTeardown } = $$props;
+  let { migrateDailyNoteSettings } = $$props;
+  let hasDailyNoteSettings;
+  let hasWeeklyNoteSettings;
 
-	$$self.$$set = $$props => {
-		if ("settings" in $$props) $$subscribe_settings($$invalidate(0, settings = $$props.settings));
-		if ("handleTeardown" in $$props) $$invalidate(1, handleTeardown = $$props.handleTeardown);
-		if ("migrateDailyNoteSettings" in $$props) $$invalidate(2, migrateDailyNoteSettings = $$props.migrateDailyNoteSettings);
-	};
+  $$self.$$set = $$props => {
+    if ("settings" in $$props) $$subscribe_settings($$invalidate(0, settings = $$props.settings));
+    if ("handleTeardown" in $$props) $$invalidate(1, handleTeardown = $$props.handleTeardown);
+    if ("migrateDailyNoteSettings" in $$props) $$invalidate(2, migrateDailyNoteSettings = $$props.migrateDailyNoteSettings);
+  };
 
-	{
-		$$invalidate(3, hasDailyNoteSettings = hasLegacyDailyNoteSettings());
-		$$invalidate(4, hasWeeklyNoteSettings = hasLegacyWeeklyNoteSettings());
-	}
+  {
+    $$invalidate(3, hasDailyNoteSettings = hasLegacyDailyNoteSettings());
+    $$invalidate(4, hasWeeklyNoteSettings = hasLegacyWeeklyNoteSettings());
+  }
 
-	return [
-		settings,
-		handleTeardown,
-		migrateDailyNoteSettings,
-		hasDailyNoteSettings,
-		hasWeeklyNoteSettings,
-		$settings
-	];
+  return [
+    settings,
+    handleTeardown,
+    migrateDailyNoteSettings,
+    hasDailyNoteSettings,
+    hasWeeklyNoteSettings,
+    $settings
+  ];
 }
 
 class GettingStartedBanner extends SvelteComponent {
-	constructor(options) {
-		super();
-		if (!document.getElementById("svelte-1alo0m9-style")) add_css();
+  constructor(options) {
+    super();
+    if (!document.getElementById("svelte-1alo0m9-style")) add_css();
 
-		init(this, options, instance$4, create_fragment$4, safe_not_equal, {
-			settings: 0,
-			handleTeardown: 1,
-			migrateDailyNoteSettings: 2
-		});
-	}
+    init(this, options, instance$4, create_fragment$4, safe_not_equal, {
+      settings: 0,
+      handleTeardown: 1,
+      migrateDailyNoteSettings: 2
+    });
+  }
 }
 
 function getBasename(format) {
-    const isTemplateNested = format.indexOf("/") !== -1;
-    return isTemplateNested ? format.split("/").pop() : format;
+  const isTemplateNested = format.indexOf("/") !== -1;
+  return isTemplateNested ? format.split("/").pop() : format;
 }
 function isValidFilename(filename) {
-    const illegalRe = /[?<>\\:*|"]/g;
-    const controlRe = /[\x00-\x1f\x80-\x9f]/g;
-    const reservedRe = /^\.+$/;
-    const windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
-    return (!illegalRe.test(filename) &&
-        !controlRe.test(filename) &&
-        !reservedRe.test(filename) &&
-        !windowsReservedRe.test(filename));
+  const illegalRe = /[?<>\\:*|"]/g;
+  const controlRe = /[\x00-\x1f\x80-\x9f]/g;
+  const reservedRe = /^\.+$/;
+  const windowsReservedRe = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/i;
+  return (!illegalRe.test(filename) &&
+    !controlRe.test(filename) &&
+    !reservedRe.test(filename) &&
+    !windowsReservedRe.test(filename));
 }
 function validateFormat(format, periodicity) {
-    if (!format) {
-        return "";
-    }
-    if (!isValidFilename(format)) {
-        return "Format contains illegal characters";
-    }
-    if (periodicity === "daily" &&
-        !["m", "d", "y"].every((requiredChar) => getBasename(format)
-            .replace(/\[[^\]]*\]/g, "") // remove everything within brackets
-            .toLowerCase()
-            .indexOf(requiredChar) !== -1)) {
-        return "Filename must be unique";
-    }
+  if (!format) {
+    return "";
+  }
+  if (!isValidFilename(format)) {
+    return "Format contains illegal characters";
+  }
+  if (periodicity === "daily" &&
+    !["m", "d", "y"].every((requiredChar) => getBasename(format)
+      .replace(/\[[^\]]*\]/g, "") // remove everything within brackets
+      .toLowerCase()
+      .indexOf(requiredChar) !== -1)) {
+    return "Filename must be unique";
+  }
 }
 function validateTemplate(template) {
-    if (!template) {
-        return "";
-    }
-    const { metadataCache } = window.app;
-    const file = metadataCache.getFirstLinkpathDest(template, "");
-    if (!file) {
-        return "Template file not found";
-    }
+  if (!template) {
     return "";
+  }
+  const { metadataCache } = window.app;
+  const file = metadataCache.getFirstLinkpathDest(template, "");
+  if (!file) {
+    return "Template file not found";
+  }
+  return "";
 }
 function validateFolder(folder) {
-    if (!folder || folder === "/") {
-        return "";
-    }
-    const { vault } = window.app;
-    if (!vault.getAbstractFileByPath(obsidian.normalizePath(folder))) {
-        return "Folder not found in vault";
-    }
+  if (!folder || folder === "/") {
     return "";
+  }
+  const { vault } = window.app;
+  if (!vault.getAbstractFileByPath(obsidian.normalizePath(folder))) {
+    return "Folder not found in vault";
+  }
+  return "";
 }
 
 /* src/settings/NoteFormatSetting.svelte generated by Svelte v3.35.0 */
 
 function create_if_block_1$1(ctx) {
-	let div;
-	let t0;
-	let strong0;
-	let t1;
-	let br;
-	let t2;
-	let strong1;
-	let t3;
+  let div;
+  let t0;
+  let strong0;
+  let t1;
+  let br;
+  let t2;
+  let strong1;
+  let t3;
 
-	return {
-		c() {
-			div = element("div");
-			t0 = text("New files will be created at ");
-			strong0 = element("strong");
-			t1 = text(/*value*/ ctx[2]);
-			br = element("br");
-			t2 = text("\n          Format: ");
-			strong1 = element("strong");
-			t3 = text(/*basename*/ ctx[7]);
-		},
-		m(target, anchor) {
-			insert(target, div, anchor);
-			append(div, t0);
-			append(div, strong0);
-			append(strong0, t1);
-			append(div, br);
-			append(div, t2);
-			append(div, strong1);
-			append(strong1, t3);
-		},
-		p(ctx, dirty) {
-			if (dirty & /*value*/ 4) set_data(t1, /*value*/ ctx[2]);
-			if (dirty & /*basename*/ 128) set_data(t3, /*basename*/ ctx[7]);
-		},
-		d(detaching) {
-			if (detaching) detach(div);
-		}
-	};
+  return {
+    c() {
+      div = element("div");
+      t0 = text("New files will be created at ");
+      strong0 = element("strong");
+      t1 = text(/*value*/ ctx[2]);
+      br = element("br");
+      t2 = text("\n          Format: ");
+      strong1 = element("strong");
+      t3 = text(/*basename*/ ctx[7]);
+    },
+    m(target, anchor) {
+      insert(target, div, anchor);
+      append(div, t0);
+      append(div, strong0);
+      append(strong0, t1);
+      append(div, br);
+      append(div, t2);
+      append(div, strong1);
+      append(strong1, t3);
+    },
+    p(ctx, dirty) {
+      if (dirty & /*value*/ 4) set_data(t1, /*value*/ ctx[2]);
+      if (dirty & /*basename*/ 128) set_data(t3, /*basename*/ ctx[7]);
+    },
+    d(detaching) {
+      if (detaching) detach(div);
+    }
+  };
 }
 
 // (56:4) {#if error}
 function create_if_block$3(ctx) {
-	let div;
-	let t;
+  let div;
+  let t;
 
-	return {
-		c() {
-			div = element("div");
-			t = text(/*error*/ ctx[5]);
-			attr(div, "class", "has-error");
-		},
-		m(target, anchor) {
-			insert(target, div, anchor);
-			append(div, t);
-		},
-		p(ctx, dirty) {
-			if (dirty & /*error*/ 32) set_data(t, /*error*/ ctx[5]);
-		},
-		d(detaching) {
-			if (detaching) detach(div);
-		}
-	};
+  return {
+    c() {
+      div = element("div");
+      t = text(/*error*/ ctx[5]);
+      attr(div, "class", "has-error");
+    },
+    m(target, anchor) {
+      insert(target, div, anchor);
+      append(div, t);
+    },
+    p(ctx, dirty) {
+      if (dirty & /*error*/ 32) set_data(t, /*error*/ ctx[5]);
+    },
+    d(detaching) {
+      if (detaching) detach(div);
+    }
+  };
 }
 
 function create_fragment$3(ctx) {
-	let div5;
-	let div3;
-	let div0;
-	let t1;
-	let div2;
-	let a;
-	let t3;
-	let div1;
-	let t4;
-	let b;
-	let t5_value = window.moment().format(/*value*/ ctx[2] || /*defaultFormat*/ ctx[8]) + "";
-	let t5;
-	let t6;
-	let t7;
-	let t8;
-	let div4;
-	let input;
-	let mounted;
-	let dispose;
-	let if_block0 = /*isTemplateNested*/ ctx[6] && create_if_block_1$1(ctx);
-	let if_block1 = /*error*/ ctx[5] && create_if_block$3(ctx);
+  let div5;
+  let div3;
+  let div0;
+  let t1;
+  let div2;
+  let a;
+  let t3;
+  let div1;
+  let t4;
+  let b;
+  let t5_value = window.moment().format(/*value*/ ctx[2] || /*defaultFormat*/ ctx[8]) + "";
+  let t5;
+  let t6;
+  let t7;
+  let t8;
+  let div4;
+  let input;
+  let mounted;
+  let dispose;
+  let if_block0 = /*isTemplateNested*/ ctx[6] && create_if_block_1$1(ctx);
+  let if_block1 = /*error*/ ctx[5] && create_if_block$3(ctx);
 
-	return {
-		c() {
-			div5 = element("div");
-			div3 = element("div");
-			div0 = element("div");
-			div0.textContent = "Format";
-			t1 = space();
-			div2 = element("div");
-			a = element("a");
-			a.textContent = "Syntax Reference";
-			t3 = space();
-			div1 = element("div");
-			t4 = text("Your current syntax looks like this: ");
-			b = element("b");
-			t5 = text(t5_value);
-			t6 = space();
-			if (if_block0) if_block0.c();
-			t7 = space();
-			if (if_block1) if_block1.c();
-			t8 = space();
-			div4 = element("div");
-			input = element("input");
-			attr(div0, "class", "setting-item-name");
-			attr(a, "href", "https://momentjs.com/docs/#/displaying/format/");
-			attr(b, "class", "u-pop");
-			attr(div2, "class", "setting-item-description");
-			attr(div3, "class", "setting-item-info");
-			attr(input, "type", "text");
-			attr(input, "spellcheck", false);
-			attr(input, "placeholder", /*defaultFormat*/ ctx[8]);
-			toggle_class(input, "has-error", !!/*error*/ ctx[5]);
-			attr(div4, "class", "setting-item-control");
-			attr(div5, "class", "setting-item");
-		},
-		m(target, anchor) {
-			insert(target, div5, anchor);
-			append(div5, div3);
-			append(div3, div0);
-			append(div3, t1);
-			append(div3, div2);
-			append(div2, a);
-			append(div2, t3);
-			append(div2, div1);
-			append(div1, t4);
-			append(div1, b);
-			append(b, t5);
-			append(div2, t6);
-			if (if_block0) if_block0.m(div2, null);
-			append(div3, t7);
-			if (if_block1) if_block1.m(div3, null);
-			append(div5, t8);
-			append(div5, div4);
-			append(div4, input);
-			set_input_value(input, /*$settings*/ ctx[3][/*periodicity*/ ctx[1]].format);
+  return {
+    c() {
+      div5 = element("div");
+      div3 = element("div");
+      div0 = element("div");
+      div0.textContent = "Format";
+      t1 = space();
+      div2 = element("div");
+      a = element("a");
+      a.textContent = "Syntax Reference";
+      t3 = space();
+      div1 = element("div");
+      t4 = text("Your current syntax looks like this: ");
+      b = element("b");
+      t5 = text(t5_value);
+      t6 = space();
+      if (if_block0) if_block0.c();
+      t7 = space();
+      if (if_block1) if_block1.c();
+      t8 = space();
+      div4 = element("div");
+      input = element("input");
+      attr(div0, "class", "setting-item-name");
+      attr(a, "href", "https://momentjs.com/docs/#/displaying/format/");
+      attr(b, "class", "u-pop");
+      attr(div2, "class", "setting-item-description");
+      attr(div3, "class", "setting-item-info");
+      attr(input, "type", "text");
+      attr(input, "spellcheck", false);
+      attr(input, "placeholder", /*defaultFormat*/ ctx[8]);
+      toggle_class(input, "has-error", !!/*error*/ ctx[5]);
+      attr(div4, "class", "setting-item-control");
+      attr(div5, "class", "setting-item");
+    },
+    m(target, anchor) {
+      insert(target, div5, anchor);
+      append(div5, div3);
+      append(div3, div0);
+      append(div3, t1);
+      append(div3, div2);
+      append(div2, a);
+      append(div2, t3);
+      append(div2, div1);
+      append(div1, t4);
+      append(div1, b);
+      append(b, t5);
+      append(div2, t6);
+      if (if_block0) if_block0.m(div2, null);
+      append(div3, t7);
+      if (if_block1) if_block1.m(div3, null);
+      append(div5, t8);
+      append(div5, div4);
+      append(div4, input);
+      set_input_value(input, /*$settings*/ ctx[3][/*periodicity*/ ctx[1]].format);
 			/*input_binding*/ ctx[12](input);
 
-			if (!mounted) {
-				dispose = [
-					listen(input, "input", /*input_input_handler*/ ctx[11]),
-					listen(input, "change", /*onChange*/ ctx[10]),
-					listen(input, "input", /*clearError*/ ctx[9])
-				];
+      if (!mounted) {
+        dispose = [
+          listen(input, "input", /*input_input_handler*/ ctx[11]),
+          listen(input, "change", /*onChange*/ ctx[10]),
+          listen(input, "input", /*clearError*/ ctx[9])
+        ];
 
-				mounted = true;
-			}
-		},
-		p(ctx, [dirty]) {
-			if (dirty & /*value*/ 4 && t5_value !== (t5_value = window.moment().format(/*value*/ ctx[2] || /*defaultFormat*/ ctx[8]) + "")) set_data(t5, t5_value);
+        mounted = true;
+      }
+    },
+    p(ctx, [dirty]) {
+      if (dirty & /*value*/ 4 && t5_value !== (t5_value = window.moment().format(/*value*/ ctx[2] || /*defaultFormat*/ ctx[8]) + "")) set_data(t5, t5_value);
 
-			if (/*isTemplateNested*/ ctx[6]) {
-				if (if_block0) {
-					if_block0.p(ctx, dirty);
-				} else {
-					if_block0 = create_if_block_1$1(ctx);
-					if_block0.c();
-					if_block0.m(div2, null);
-				}
-			} else if (if_block0) {
-				if_block0.d(1);
-				if_block0 = null;
-			}
+      if (/*isTemplateNested*/ ctx[6]) {
+        if (if_block0) {
+          if_block0.p(ctx, dirty);
+        } else {
+          if_block0 = create_if_block_1$1(ctx);
+          if_block0.c();
+          if_block0.m(div2, null);
+        }
+      } else if (if_block0) {
+        if_block0.d(1);
+        if_block0 = null;
+      }
 
-			if (/*error*/ ctx[5]) {
-				if (if_block1) {
-					if_block1.p(ctx, dirty);
-				} else {
-					if_block1 = create_if_block$3(ctx);
-					if_block1.c();
-					if_block1.m(div3, null);
-				}
-			} else if (if_block1) {
-				if_block1.d(1);
-				if_block1 = null;
-			}
+      if (/*error*/ ctx[5]) {
+        if (if_block1) {
+          if_block1.p(ctx, dirty);
+        } else {
+          if_block1 = create_if_block$3(ctx);
+          if_block1.c();
+          if_block1.m(div3, null);
+        }
+      } else if (if_block1) {
+        if_block1.d(1);
+        if_block1 = null;
+      }
 
-			if (dirty & /*$settings, periodicity*/ 10 && input.value !== /*$settings*/ ctx[3][/*periodicity*/ ctx[1]].format) {
-				set_input_value(input, /*$settings*/ ctx[3][/*periodicity*/ ctx[1]].format);
-			}
+      if (dirty & /*$settings, periodicity*/ 10 && input.value !== /*$settings*/ ctx[3][/*periodicity*/ ctx[1]].format) {
+        set_input_value(input, /*$settings*/ ctx[3][/*periodicity*/ ctx[1]].format);
+      }
 
-			if (dirty & /*error*/ 32) {
-				toggle_class(input, "has-error", !!/*error*/ ctx[5]);
-			}
-		},
-		i: noop,
-		o: noop,
-		d(detaching) {
-			if (detaching) detach(div5);
-			if (if_block0) if_block0.d();
-			if (if_block1) if_block1.d();
+      if (dirty & /*error*/ 32) {
+        toggle_class(input, "has-error", !!/*error*/ ctx[5]);
+      }
+    },
+    i: noop,
+    o: noop,
+    d(detaching) {
+      if (detaching) detach(div5);
+      if (if_block0) if_block0.d();
+      if (if_block1) if_block1.d();
 			/*input_binding*/ ctx[12](null);
-			mounted = false;
-			run_all(dispose);
-		}
-	};
+      mounted = false;
+      run_all(dispose);
+    }
+  };
 }
 
 function instance$3($$self, $$props, $$invalidate) {
-	let $settings,
-		$$unsubscribe_settings = noop,
-		$$subscribe_settings = () => ($$unsubscribe_settings(), $$unsubscribe_settings = subscribe(settings, $$value => $$invalidate(3, $settings = $$value)), settings);
+  let $settings,
+    $$unsubscribe_settings = noop,
+    $$subscribe_settings = () => ($$unsubscribe_settings(), $$unsubscribe_settings = subscribe(settings, $$value => $$invalidate(3, $settings = $$value)), settings);
 
-	$$self.$$.on_destroy.push(() => $$unsubscribe_settings());
+  $$self.$$.on_destroy.push(() => $$unsubscribe_settings());
 
 
-	let { settings } = $$props;
-	$$subscribe_settings();
-	let { periodicity } = $$props;
+  let { settings } = $$props;
+  $$subscribe_settings();
+  let { periodicity } = $$props;
 
-	const DEFAULT_FORMATS = {
-		daily: DEFAULT_DAILY_NOTE_FORMAT_1,
-		weekly: DEFAULT_WEEKLY_NOTE_FORMAT_1,
-		monthly: DEFAULT_MONTHLY_NOTE_FORMAT_1,
-		quarterly: DEFAULT_QUARTERLY_NOTE_FORMAT_1,
-		yearly: DEFAULT_YEARLY_NOTE_FORMAT_1
-	};
+  const DEFAULT_FORMATS = {
+    daily: DEFAULT_DAILY_NOTE_FORMAT_1,
+    weekly: DEFAULT_WEEKLY_NOTE_FORMAT_1,
+    monthly: DEFAULT_MONTHLY_NOTE_FORMAT_1,
+    quarterly: DEFAULT_QUARTERLY_NOTE_FORMAT_1,
+    yearly: DEFAULT_YEARLY_NOTE_FORMAT_1
+  };
 
-	const defaultFormat = DEFAULT_FORMATS[periodicity];
-	let inputEl;
-	let value;
-	let error;
-	let isTemplateNested;
-	let basename;
+  const defaultFormat = DEFAULT_FORMATS[periodicity];
+  let inputEl;
+  let value;
+  let error;
+  let isTemplateNested;
+  let basename;
 
-	onMount(() => {
-		$$invalidate(5, error = validateFormat(inputEl.value, periodicity));
-	});
+  onMount(() => {
+    $$invalidate(5, error = validateFormat(inputEl.value, periodicity));
+  });
 
-	function clearError() {
-		$$invalidate(5, error = "");
-	}
+  function clearError() {
+    $$invalidate(5, error = "");
+  }
 
-	function onChange() {
-		$$invalidate(5, error = validateFormat(inputEl.value, periodicity));
-	}
+  function onChange() {
+    $$invalidate(5, error = validateFormat(inputEl.value, periodicity));
+  }
 
-	function input_input_handler() {
-		$settings[periodicity].format = this.value;
-		settings.set($settings);
-		$$invalidate(1, periodicity);
-	}
+  function input_input_handler() {
+    $settings[periodicity].format = this.value;
+    settings.set($settings);
+    $$invalidate(1, periodicity);
+  }
 
-	function input_binding($$value) {
-		binding_callbacks[$$value ? "unshift" : "push"](() => {
-			inputEl = $$value;
-			$$invalidate(4, inputEl);
-		});
-	}
+  function input_binding($$value) {
+    binding_callbacks[$$value ? "unshift" : "push"](() => {
+      inputEl = $$value;
+      $$invalidate(4, inputEl);
+    });
+  }
 
-	$$self.$$set = $$props => {
-		if ("settings" in $$props) $$subscribe_settings($$invalidate(0, settings = $$props.settings));
-		if ("periodicity" in $$props) $$invalidate(1, periodicity = $$props.periodicity);
-	};
+  $$self.$$set = $$props => {
+    if ("settings" in $$props) $$subscribe_settings($$invalidate(0, settings = $$props.settings));
+    if ("periodicity" in $$props) $$invalidate(1, periodicity = $$props.periodicity);
+  };
 
-	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$settings, periodicity, value*/ 14) {
-			{
-				$$invalidate(2, value = $settings[periodicity].format || "");
-				$$invalidate(6, isTemplateNested = value.indexOf("/") !== -1);
-				$$invalidate(7, basename = getBasename(value));
-			}
-		}
-	};
+  $$self.$$.update = () => {
+    if ($$self.$$.dirty & /*$settings, periodicity, value*/ 14) {
+      {
+        $$invalidate(2, value = $settings[periodicity].format || "");
+        $$invalidate(6, isTemplateNested = value.indexOf("/") !== -1);
+        $$invalidate(7, basename = getBasename(value));
+      }
+    }
+  };
 
-	return [
-		settings,
-		periodicity,
-		value,
-		$settings,
-		inputEl,
-		error,
-		isTemplateNested,
-		basename,
-		defaultFormat,
-		clearError,
-		onChange,
-		input_input_handler,
-		input_binding
-	];
+  return [
+    settings,
+    periodicity,
+    value,
+    $settings,
+    inputEl,
+    error,
+    isTemplateNested,
+    basename,
+    defaultFormat,
+    clearError,
+    onChange,
+    input_input_handler,
+    input_binding
+  ];
 }
 
 class NoteFormatSetting extends SvelteComponent {
-	constructor(options) {
-		super();
-		init(this, options, instance$3, create_fragment$3, safe_not_equal, { settings: 0, periodicity: 1 });
-	}
+  constructor(options) {
+    super();
+    init(this, options, instance$3, create_fragment$3, safe_not_equal, { settings: 0, periodicity: 1 });
+  }
 }
 
 var top = 'top';
@@ -2783,17 +2783,17 @@ function contains(parent, child) {
     return true;
   } // then fallback to custom implementation with Shadow DOM support
   else if (rootNode && isShadowRoot(rootNode)) {
-      var next = child;
+    var next = child;
 
-      do {
-        if (next && parent.isSameNode(next)) {
-          return true;
-        } // $FlowFixMe[prop-missing]: need a better way to handle this...
+    do {
+      if (next && parent.isSameNode(next)) {
+        return true;
+      } // $FlowFixMe[prop-missing]: need a better way to handle this...
 
 
-        next = next.parentNode || next.host;
-      } while (next);
-    } // Give up, the result is false
+      next = next.parentNode || next.host;
+    } while (next);
+  } // Give up, the result is false
 
 
   return false;
@@ -2810,7 +2810,7 @@ function isTableElement(element) {
 function getDocumentElement(element) {
   // $FlowFixMe[incompatible-return]: assume body is always available
   return ((isElement(element) ? element.ownerDocument : // $FlowFixMe[prop-missing]
-  element.document) || window.document).documentElement;
+    element.document) || window.document).documentElement;
 }
 
 function getParentNode(element) {
@@ -2823,7 +2823,7 @@ function getParentNode(element) {
     // $FlowFixMe[prop-missing]
     element.assignedSlot || // step into the shadow DOM of the parent of a slotted node
     element.parentNode || ( // DOM Element detected
-    isShadowRoot(element) ? element.host : null) || // ShadowRoot detected
+      isShadowRoot(element) ? element.host : null) || // ShadowRoot detected
     // $FlowFixMe[incompatible-call]: HTMLElement is a Node
     getDocumentElement(element) // fallback
 
@@ -2832,7 +2832,7 @@ function getParentNode(element) {
 
 function getTrueOffsetParent(element) {
   if (!isHTMLElement(element) || // https://github.com/popperjs/popper-core/issues/837
-  getComputedStyle$1(element).position === 'fixed') {
+    getComputedStyle$1(element).position === 'fixed') {
     return null;
   }
 
@@ -2920,8 +2920,8 @@ function arrow(_ref) {
   var _state$modifiersData$;
 
   var state = _ref.state,
-      name = _ref.name,
-      options = _ref.options;
+    name = _ref.name,
+    options = _ref.options;
   var arrowElement = state.elements.arrow;
   var popperOffsets = state.modifiersData.popperOffsets;
   var basePlacement = getBasePlacement(state.placement);
@@ -2955,9 +2955,9 @@ function arrow(_ref) {
 
 function effect$1(_ref2) {
   var state = _ref2.state,
-      options = _ref2.options;
+    options = _ref2.options;
   var _options$element = options.element,
-      arrowElement = _options$element === void 0 ? '[data-popper-arrow]' : _options$element;
+    arrowElement = _options$element === void 0 ? '[data-popper-arrow]' : _options$element;
 
   if (arrowElement == null) {
     return;
@@ -3011,7 +3011,7 @@ var unsetSides = {
 
 function roundOffsetsByDPR(_ref) {
   var x = _ref.x,
-      y = _ref.y;
+    y = _ref.y;
   var win = window;
   var dpr = win.devicePixelRatio || 1;
   return {
@@ -3024,19 +3024,19 @@ function mapToStyles(_ref2) {
   var _Object$assign2;
 
   var popper = _ref2.popper,
-      popperRect = _ref2.popperRect,
-      placement = _ref2.placement,
-      offsets = _ref2.offsets,
-      position = _ref2.position,
-      gpuAcceleration = _ref2.gpuAcceleration,
-      adaptive = _ref2.adaptive,
-      roundOffsets = _ref2.roundOffsets;
+    popperRect = _ref2.popperRect,
+    placement = _ref2.placement,
+    offsets = _ref2.offsets,
+    position = _ref2.position,
+    gpuAcceleration = _ref2.gpuAcceleration,
+    adaptive = _ref2.adaptive,
+    roundOffsets = _ref2.roundOffsets;
 
   var _ref3 = roundOffsets === true ? roundOffsetsByDPR(offsets) : typeof roundOffsets === 'function' ? roundOffsets(offsets) : offsets,
-      _ref3$x = _ref3.x,
-      x = _ref3$x === void 0 ? 0 : _ref3$x,
-      _ref3$y = _ref3.y,
-      y = _ref3$y === void 0 ? 0 : _ref3$y;
+    _ref3$x = _ref3.x,
+    x = _ref3$x === void 0 ? 0 : _ref3$x,
+    _ref3$y = _ref3.y,
+    y = _ref3$y === void 0 ? 0 : _ref3$y;
 
   var hasX = offsets.hasOwnProperty('x');
   var hasY = offsets.hasOwnProperty('y');
@@ -3091,13 +3091,13 @@ function mapToStyles(_ref2) {
 
 function computeStyles(_ref4) {
   var state = _ref4.state,
-      options = _ref4.options;
+    options = _ref4.options;
   var _options$gpuAccelerat = options.gpuAcceleration,
-      gpuAcceleration = _options$gpuAccelerat === void 0 ? true : _options$gpuAccelerat,
-      _options$adaptive = options.adaptive,
-      adaptive = _options$adaptive === void 0 ? true : _options$adaptive,
-      _options$roundOffsets = options.roundOffsets,
-      roundOffsets = _options$roundOffsets === void 0 ? true : _options$roundOffsets;
+    gpuAcceleration = _options$gpuAccelerat === void 0 ? true : _options$gpuAccelerat,
+    _options$adaptive = options.adaptive,
+    adaptive = _options$adaptive === void 0 ? true : _options$adaptive,
+    _options$roundOffsets = options.roundOffsets,
+    roundOffsets = _options$roundOffsets === void 0 ? true : _options$roundOffsets;
 
   if (process.env.NODE_ENV !== "production") {
     var transitionProperty = getComputedStyle$1(state.elements.popper).transitionProperty || '';
@@ -3154,12 +3154,12 @@ var passive = {
 
 function effect(_ref) {
   var state = _ref.state,
-      instance = _ref.instance,
-      options = _ref.options;
+    instance = _ref.instance,
+    options = _ref.options;
   var _options$scroll = options.scroll,
-      scroll = _options$scroll === void 0 ? true : _options$scroll,
-      _options$resize = options.resize,
-      resize = _options$resize === void 0 ? true : _options$resize;
+    scroll = _options$scroll === void 0 ? true : _options$scroll,
+    _options$resize = options.resize,
+    resize = _options$resize === void 0 ? true : _options$resize;
   var window = getWindow(state.elements.popper);
   var scrollParents = [].concat(state.scrollParents.reference, state.scrollParents.popper);
 
@@ -3191,7 +3191,7 @@ var eventListeners = {
   name: 'eventListeners',
   enabled: true,
   phase: 'write',
-  fn: function fn() {},
+  fn: function fn() { },
   effect: effect,
   data: {}
 };
@@ -3305,9 +3305,9 @@ function getDocumentRect(element) {
 function isScrollParent(element) {
   // Firefox wants us to check `-x` and `-y` variations as well
   var _getComputedStyle = getComputedStyle$1(element),
-      overflow = _getComputedStyle.overflow,
-      overflowX = _getComputedStyle.overflowX,
-      overflowY = _getComputedStyle.overflowY;
+    overflow = _getComputedStyle.overflow,
+    overflowX = _getComputedStyle.overflowX,
+    overflowY = _getComputedStyle.overflowY;
 
   return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
 }
@@ -3345,7 +3345,7 @@ function listScrollParents(element, list) {
   var target = isBody ? [win].concat(win.visualViewport || [], isScrollParent(scrollParent) ? scrollParent : []) : scrollParent;
   var updatedList = list.concat(target);
   return isBody ? updatedList : // $FlowFixMe[incompatible-call]: isBody tells us target will be an HTMLElement here
-  updatedList.concat(listScrollParents(getParentNode(target)));
+    updatedList.concat(listScrollParents(getParentNode(target)));
 }
 
 function rectToClientRect(rect) {
@@ -3419,8 +3419,8 @@ function getVariation(placement) {
 
 function computeOffsets(_ref) {
   var reference = _ref.reference,
-      element = _ref.element,
-      placement = _ref.placement;
+    element = _ref.element,
+    placement = _ref.placement;
   var basePlacement = placement ? getBasePlacement(placement) : null;
   var variation = placement ? getVariation(placement) : null;
   var commonX = reference.x + reference.width / 2 - element.width / 2;
@@ -3488,18 +3488,18 @@ function detectOverflow(state, options) {
   }
 
   var _options = options,
-      _options$placement = _options.placement,
-      placement = _options$placement === void 0 ? state.placement : _options$placement,
-      _options$boundary = _options.boundary,
-      boundary = _options$boundary === void 0 ? clippingParents : _options$boundary,
-      _options$rootBoundary = _options.rootBoundary,
-      rootBoundary = _options$rootBoundary === void 0 ? viewport : _options$rootBoundary,
-      _options$elementConte = _options.elementContext,
-      elementContext = _options$elementConte === void 0 ? popper : _options$elementConte,
-      _options$altBoundary = _options.altBoundary,
-      altBoundary = _options$altBoundary === void 0 ? false : _options$altBoundary,
-      _options$padding = _options.padding,
-      padding = _options$padding === void 0 ? 0 : _options$padding;
+    _options$placement = _options.placement,
+    placement = _options$placement === void 0 ? state.placement : _options$placement,
+    _options$boundary = _options.boundary,
+    boundary = _options$boundary === void 0 ? clippingParents : _options$boundary,
+    _options$rootBoundary = _options.rootBoundary,
+    rootBoundary = _options$rootBoundary === void 0 ? viewport : _options$rootBoundary,
+    _options$elementConte = _options.elementContext,
+    elementContext = _options$elementConte === void 0 ? popper : _options$elementConte,
+    _options$altBoundary = _options.altBoundary,
+    altBoundary = _options$altBoundary === void 0 ? false : _options$altBoundary,
+    _options$padding = _options.padding,
+    padding = _options$padding === void 0 ? 0 : _options$padding;
   var paddingObject = mergePaddingObject(typeof padding !== 'number' ? padding : expandToHashMap(padding, basePlacements));
   var altContext = elementContext === popper ? reference : popper;
   var referenceElement = state.elements.reference;
@@ -3543,13 +3543,13 @@ function computeAutoPlacement(state, options) {
   }
 
   var _options = options,
-      placement = _options.placement,
-      boundary = _options.boundary,
-      rootBoundary = _options.rootBoundary,
-      padding = _options.padding,
-      flipVariations = _options.flipVariations,
-      _options$allowedAutoP = _options.allowedAutoPlacements,
-      allowedAutoPlacements = _options$allowedAutoP === void 0 ? placements : _options$allowedAutoP;
+    placement = _options.placement,
+    boundary = _options.boundary,
+    rootBoundary = _options.rootBoundary,
+    padding = _options.padding,
+    flipVariations = _options.flipVariations,
+    _options$allowedAutoP = _options.allowedAutoPlacements,
+    allowedAutoPlacements = _options$allowedAutoP === void 0 ? placements : _options$allowedAutoP;
   var variation = getVariation(placement);
   var placements$1 = variation ? flipVariations ? variationPlacements : variationPlacements.filter(function (placement) {
     return getVariation(placement) === variation;
@@ -3592,25 +3592,25 @@ function getExpandedFallbackPlacements(placement) {
 
 function flip(_ref) {
   var state = _ref.state,
-      options = _ref.options,
-      name = _ref.name;
+    options = _ref.options,
+    name = _ref.name;
 
   if (state.modifiersData[name]._skip) {
     return;
   }
 
   var _options$mainAxis = options.mainAxis,
-      checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis,
-      _options$altAxis = options.altAxis,
-      checkAltAxis = _options$altAxis === void 0 ? true : _options$altAxis,
-      specifiedFallbackPlacements = options.fallbackPlacements,
-      padding = options.padding,
-      boundary = options.boundary,
-      rootBoundary = options.rootBoundary,
-      altBoundary = options.altBoundary,
-      _options$flipVariatio = options.flipVariations,
-      flipVariations = _options$flipVariatio === void 0 ? true : _options$flipVariatio,
-      allowedAutoPlacements = options.allowedAutoPlacements;
+    checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis,
+    _options$altAxis = options.altAxis,
+    checkAltAxis = _options$altAxis === void 0 ? true : _options$altAxis,
+    specifiedFallbackPlacements = options.fallbackPlacements,
+    padding = options.padding,
+    boundary = options.boundary,
+    rootBoundary = options.rootBoundary,
+    altBoundary = options.altBoundary,
+    _options$flipVariatio = options.flipVariations,
+    flipVariations = _options$flipVariatio === void 0 ? true : _options$flipVariatio,
+    allowedAutoPlacements = options.allowedAutoPlacements;
   var preferredPlacement = state.options.placement;
   var basePlacement = getBasePlacement(preferredPlacement);
   var isBasePlacement = basePlacement === preferredPlacement;
@@ -3745,7 +3745,7 @@ function isAnySideFullyClipped(overflow) {
 
 function hide(_ref) {
   var state = _ref.state,
-      name = _ref.name;
+    name = _ref.name;
   var referenceRect = state.rects.reference;
   var popperRect = state.rects.popper;
   var preventedOffsets = state.modifiersData.preventOverflow;
@@ -3787,8 +3787,8 @@ function distanceAndSkiddingToXY(placement, rects, offset) {
   var _ref = typeof offset === 'function' ? offset(Object.assign({}, rects, {
     placement: placement
   })) : offset,
-      skidding = _ref[0],
-      distance = _ref[1];
+    skidding = _ref[0],
+    distance = _ref[1];
 
   skidding = skidding || 0;
   distance = (distance || 0) * invertDistance;
@@ -3803,17 +3803,17 @@ function distanceAndSkiddingToXY(placement, rects, offset) {
 
 function offset(_ref2) {
   var state = _ref2.state,
-      options = _ref2.options,
-      name = _ref2.name;
+    options = _ref2.options,
+    name = _ref2.name;
   var _options$offset = options.offset,
-      offset = _options$offset === void 0 ? [0, 0] : _options$offset;
+    offset = _options$offset === void 0 ? [0, 0] : _options$offset;
   var data = placements.reduce(function (acc, placement) {
     acc[placement] = distanceAndSkiddingToXY(placement, state.rects, offset);
     return acc;
   }, {});
   var _data$state$placement = data[state.placement],
-      x = _data$state$placement.x,
-      y = _data$state$placement.y;
+    x = _data$state$placement.x,
+    y = _data$state$placement.y;
 
   if (state.modifiersData.popperOffsets != null) {
     state.modifiersData.popperOffsets.x += x;
@@ -3834,7 +3834,7 @@ var offset$1 = {
 
 function popperOffsets(_ref) {
   var state = _ref.state,
-      name = _ref.name;
+    name = _ref.name;
   // Offsets are the actual position the popper needs to have to be
   // properly positioned near its reference element
   // This is the most basic placement, and will be adjusted by
@@ -3862,20 +3862,20 @@ function getAltAxis(axis) {
 
 function preventOverflow(_ref) {
   var state = _ref.state,
-      options = _ref.options,
-      name = _ref.name;
+    options = _ref.options,
+    name = _ref.name;
   var _options$mainAxis = options.mainAxis,
-      checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis,
-      _options$altAxis = options.altAxis,
-      checkAltAxis = _options$altAxis === void 0 ? false : _options$altAxis,
-      boundary = options.boundary,
-      rootBoundary = options.rootBoundary,
-      altBoundary = options.altBoundary,
-      padding = options.padding,
-      _options$tether = options.tether,
-      tether = _options$tether === void 0 ? true : _options$tether,
-      _options$tetherOffset = options.tetherOffset,
-      tetherOffset = _options$tetherOffset === void 0 ? 0 : _options$tetherOffset;
+    checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis,
+    _options$altAxis = options.altAxis,
+    checkAltAxis = _options$altAxis === void 0 ? false : _options$altAxis,
+    boundary = options.boundary,
+    rootBoundary = options.rootBoundary,
+    altBoundary = options.altBoundary,
+    padding = options.padding,
+    _options$tether = options.tether,
+    tether = _options$tether === void 0 ? true : _options$tether,
+    _options$tetherOffset = options.tetherOffset,
+    tetherOffset = _options$tetherOffset === void 0 ? 0 : _options$tetherOffset;
   var overflow = detectOverflow(state, {
     boundary: boundary,
     rootBoundary: rootBoundary,
@@ -4008,7 +4008,7 @@ function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
 
   if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
     if (getNodeName(offsetParent) !== 'body' || // https://github.com/popperjs/popper-core/issues/1078
-    isScrollParent(documentElement)) {
+      isScrollParent(documentElement)) {
       scroll = getNodeScroll(offsetParent);
     }
 
@@ -4224,10 +4224,10 @@ function popperGenerator(generatorOptions) {
   }
 
   var _generatorOptions = generatorOptions,
-      _generatorOptions$def = _generatorOptions.defaultModifiers,
-      defaultModifiers = _generatorOptions$def === void 0 ? [] : _generatorOptions$def,
-      _generatorOptions$def2 = _generatorOptions.defaultOptions,
-      defaultOptions = _generatorOptions$def2 === void 0 ? DEFAULT_OPTIONS : _generatorOptions$def2;
+    _generatorOptions$def = _generatorOptions.defaultModifiers,
+    defaultModifiers = _generatorOptions$def === void 0 ? [] : _generatorOptions$def,
+    _generatorOptions$def2 = _generatorOptions.defaultOptions,
+    defaultOptions = _generatorOptions$def2 === void 0 ? DEFAULT_OPTIONS : _generatorOptions$def2;
   return function createPopper(reference, popper, options) {
     if (options === void 0) {
       options = defaultOptions;
@@ -4284,10 +4284,10 @@ function popperGenerator(generatorOptions) {
           }
 
           var _getComputedStyle = getComputedStyle$1(popper),
-              marginTop = _getComputedStyle.marginTop,
-              marginRight = _getComputedStyle.marginRight,
-              marginBottom = _getComputedStyle.marginBottom,
-              marginLeft = _getComputedStyle.marginLeft; // We no longer take into account `margins` on the popper, and it can
+            marginTop = _getComputedStyle.marginTop,
+            marginRight = _getComputedStyle.marginRight,
+            marginBottom = _getComputedStyle.marginBottom,
+            marginLeft = _getComputedStyle.marginLeft; // We no longer take into account `margins` on the popper, and it can
           // cause bugs with positioning, so we'll warn the consumer
 
 
@@ -4312,8 +4312,8 @@ function popperGenerator(generatorOptions) {
         }
 
         var _state$elements = state.elements,
-            reference = _state$elements.reference,
-            popper = _state$elements.popper; // Don't proceed if `reference` or `popper` are not valid elements
+          reference = _state$elements.reference,
+          popper = _state$elements.popper; // Don't proceed if `reference` or `popper` are not valid elements
         // anymore
 
         if (!areValidElements(reference, popper)) {
@@ -4362,10 +4362,10 @@ function popperGenerator(generatorOptions) {
           }
 
           var _state$orderedModifie = state.orderedModifiers[index],
-              fn = _state$orderedModifie.fn,
-              _state$orderedModifie2 = _state$orderedModifie.options,
-              _options = _state$orderedModifie2 === void 0 ? {} : _state$orderedModifie2,
-              name = _state$orderedModifie.name;
+            fn = _state$orderedModifie.fn,
+            _state$orderedModifie2 = _state$orderedModifie.options,
+            _options = _state$orderedModifie2 === void 0 ? {} : _state$orderedModifie2,
+            name = _state$orderedModifie.name;
 
           if (typeof fn === 'function') {
             state = fn({
@@ -4412,9 +4412,9 @@ function popperGenerator(generatorOptions) {
     function runModifierEffects() {
       state.orderedModifiers.forEach(function (_ref3) {
         var name = _ref3.name,
-            _ref3$options = _ref3.options,
-            options = _ref3$options === void 0 ? {} : _ref3$options,
-            effect = _ref3.effect;
+          _ref3$options = _ref3.options,
+          options = _ref3$options === void 0 ? {} : _ref3$options,
+          effect = _ref3.effect;
 
         if (typeof effect === 'function') {
           var cleanupFn = effect({
@@ -4424,7 +4424,7 @@ function popperGenerator(generatorOptions) {
             options: options
           });
 
-          var noopFn = function noopFn() {};
+          var noopFn = function noopFn() { };
 
           effectCleanupFns.push(cleanupFn || noopFn);
         }
@@ -4448,1122 +4448,1122 @@ var createPopper = /*#__PURE__*/popperGenerator({
 }); // eslint-disable-next-line import/no-unused-modules
 
 class Suggest {
-    constructor(owner, containerEl, scope) {
-        this.owner = owner;
-        this.containerEl = containerEl;
-        containerEl.on("click", ".suggestion-item", this.onSuggestionClick.bind(this));
-        containerEl.on("mousemove", ".suggestion-item", this.onSuggestionMouseover.bind(this));
-        scope.register([], "ArrowUp", (event) => {
-            if (!event.isComposing) {
-                this.setSelectedItem(this.selectedItem - 1, true);
-                return false;
-            }
-        });
-        scope.register([], "ArrowDown", (event) => {
-            if (!event.isComposing) {
-                this.setSelectedItem(this.selectedItem + 1, true);
-                return false;
-            }
-        });
-        scope.register([], "Enter", (event) => {
-            if (!event.isComposing) {
-                this.useSelectedItem(event);
-                return false;
-            }
-        });
-    }
-    onSuggestionClick(event, el) {
-        event.preventDefault();
-        const item = this.suggestions.indexOf(el);
-        this.setSelectedItem(item, false);
+  constructor(owner, containerEl, scope) {
+    this.owner = owner;
+    this.containerEl = containerEl;
+    containerEl.on("click", ".suggestion-item", this.onSuggestionClick.bind(this));
+    containerEl.on("mousemove", ".suggestion-item", this.onSuggestionMouseover.bind(this));
+    scope.register([], "ArrowUp", (event) => {
+      if (!event.isComposing) {
+        this.setSelectedItem(this.selectedItem - 1, true);
+        return false;
+      }
+    });
+    scope.register([], "ArrowDown", (event) => {
+      if (!event.isComposing) {
+        this.setSelectedItem(this.selectedItem + 1, true);
+        return false;
+      }
+    });
+    scope.register([], "Enter", (event) => {
+      if (!event.isComposing) {
         this.useSelectedItem(event);
+        return false;
+      }
+    });
+  }
+  onSuggestionClick(event, el) {
+    event.preventDefault();
+    const item = this.suggestions.indexOf(el);
+    this.setSelectedItem(item, false);
+    this.useSelectedItem(event);
+  }
+  onSuggestionMouseover(_event, el) {
+    const item = this.suggestions.indexOf(el);
+    this.setSelectedItem(item, false);
+  }
+  setSuggestions(values) {
+    this.containerEl.empty();
+    const suggestionEls = [];
+    values.forEach((value) => {
+      const suggestionEl = this.containerEl.createDiv("suggestion-item");
+      this.owner.renderSuggestion(value, suggestionEl);
+      suggestionEls.push(suggestionEl);
+    });
+    this.values = values;
+    this.suggestions = suggestionEls;
+    this.setSelectedItem(0, false);
+  }
+  useSelectedItem(event) {
+    const currentValue = this.values[this.selectedItem];
+    if (currentValue) {
+      this.owner.selectSuggestion(currentValue, event);
     }
-    onSuggestionMouseover(_event, el) {
-        const item = this.suggestions.indexOf(el);
-        this.setSelectedItem(item, false);
+  }
+  setSelectedItem(selectedIndex, scrollIntoView) {
+    const normalizedIndex = wrapAround(selectedIndex, this.suggestions.length);
+    const prevSelectedSuggestion = this.suggestions[this.selectedItem];
+    const selectedSuggestion = this.suggestions[normalizedIndex];
+    prevSelectedSuggestion === null || prevSelectedSuggestion === void 0 ? void 0 : prevSelectedSuggestion.removeClass("is-selected");
+    selectedSuggestion === null || selectedSuggestion === void 0 ? void 0 : selectedSuggestion.addClass("is-selected");
+    this.selectedItem = normalizedIndex;
+    if (scrollIntoView) {
+      selectedSuggestion.scrollIntoView(false);
     }
-    setSuggestions(values) {
-        this.containerEl.empty();
-        const suggestionEls = [];
-        values.forEach((value) => {
-            const suggestionEl = this.containerEl.createDiv("suggestion-item");
-            this.owner.renderSuggestion(value, suggestionEl);
-            suggestionEls.push(suggestionEl);
-        });
-        this.values = values;
-        this.suggestions = suggestionEls;
-        this.setSelectedItem(0, false);
-    }
-    useSelectedItem(event) {
-        const currentValue = this.values[this.selectedItem];
-        if (currentValue) {
-            this.owner.selectSuggestion(currentValue, event);
-        }
-    }
-    setSelectedItem(selectedIndex, scrollIntoView) {
-        const normalizedIndex = wrapAround(selectedIndex, this.suggestions.length);
-        const prevSelectedSuggestion = this.suggestions[this.selectedItem];
-        const selectedSuggestion = this.suggestions[normalizedIndex];
-        prevSelectedSuggestion === null || prevSelectedSuggestion === void 0 ? void 0 : prevSelectedSuggestion.removeClass("is-selected");
-        selectedSuggestion === null || selectedSuggestion === void 0 ? void 0 : selectedSuggestion.addClass("is-selected");
-        this.selectedItem = normalizedIndex;
-        if (scrollIntoView) {
-            selectedSuggestion.scrollIntoView(false);
-        }
-    }
+  }
 }
 class TextInputSuggest {
-    constructor(app, inputEl) {
-        this.app = app;
-        this.inputEl = inputEl;
-        this.scope = new obsidian.Scope();
-        this.suggestEl = createDiv("suggestion-container");
-        const suggestion = this.suggestEl.createDiv("suggestion");
-        this.suggest = new Suggest(this, suggestion, this.scope);
-        this.scope.register([], "Escape", this.close.bind(this));
-        this.inputEl.addEventListener("input", this.onInputChanged.bind(this));
-        this.inputEl.addEventListener("focus", this.onInputChanged.bind(this));
-        this.inputEl.addEventListener("blur", this.close.bind(this));
-        this.suggestEl.on("mousedown", ".suggestion-container", (event) => {
-            event.preventDefault();
-        });
+  constructor(app, inputEl) {
+    this.app = app;
+    this.inputEl = inputEl;
+    this.scope = new obsidian.Scope();
+    this.suggestEl = createDiv("suggestion-container");
+    const suggestion = this.suggestEl.createDiv("suggestion");
+    this.suggest = new Suggest(this, suggestion, this.scope);
+    this.scope.register([], "Escape", this.close.bind(this));
+    this.inputEl.addEventListener("input", this.onInputChanged.bind(this));
+    this.inputEl.addEventListener("focus", this.onInputChanged.bind(this));
+    this.inputEl.addEventListener("blur", this.close.bind(this));
+    this.suggestEl.on("mousedown", ".suggestion-container", (event) => {
+      event.preventDefault();
+    });
+  }
+  onInputChanged() {
+    const inputStr = this.inputEl.value;
+    const suggestions = this.getSuggestions(inputStr);
+    if (suggestions.length > 0) {
+      this.suggest.setSuggestions(suggestions);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.open(this.app.dom.appContainerEl, this.inputEl);
     }
-    onInputChanged() {
-        const inputStr = this.inputEl.value;
-        const suggestions = this.getSuggestions(inputStr);
-        if (suggestions.length > 0) {
-            this.suggest.setSuggestions(suggestions);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            this.open(this.app.dom.appContainerEl, this.inputEl);
-        }
-    }
-    open(container, inputEl) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.app.keymap.pushScope(this.scope);
-        container.appendChild(this.suggestEl);
-        this.popper = createPopper(inputEl, this.suggestEl, {
-            placement: "bottom-start",
-            modifiers: [
-                {
-                    name: "sameWidth",
-                    enabled: true,
-                    fn: ({ state, instance }) => {
-                        // Note: positioning needs to be calculated twice -
-                        // first pass - positioning it according to the width of the popper
-                        // second pass - position it with the width bound to the reference element
-                        // we need to early exit to avoid an infinite loop
-                        const targetWidth = `${state.rects.reference.width}px`;
-                        if (state.styles.popper.width === targetWidth) {
-                            return;
-                        }
-                        state.styles.popper.width = targetWidth;
-                        instance.update();
-                    },
-                    phase: "beforeWrite",
-                    requires: ["computeStyles"],
-                },
-            ],
-        });
-    }
-    close() {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.app.keymap.popScope(this.scope);
-        this.suggest.setSuggestions([]);
-        this.popper.destroy();
-        this.suggestEl.detach();
-    }
+  }
+  open(container, inputEl) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.app.keymap.pushScope(this.scope);
+    container.appendChild(this.suggestEl);
+    this.popper = createPopper(inputEl, this.suggestEl, {
+      placement: "bottom-start",
+      modifiers: [
+        {
+          name: "sameWidth",
+          enabled: true,
+          fn: ({ state, instance }) => {
+            // Note: positioning needs to be calculated twice -
+            // first pass - positioning it according to the width of the popper
+            // second pass - position it with the width bound to the reference element
+            // we need to early exit to avoid an infinite loop
+            const targetWidth = `${state.rects.reference.width}px`;
+            if (state.styles.popper.width === targetWidth) {
+              return;
+            }
+            state.styles.popper.width = targetWidth;
+            instance.update();
+          },
+          phase: "beforeWrite",
+          requires: ["computeStyles"],
+        },
+      ],
+    });
+  }
+  close() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.app.keymap.popScope(this.scope);
+    this.suggest.setSuggestions([]);
+    this.popper.destroy();
+    this.suggestEl.detach();
+  }
 }
 
 class FileSuggest extends TextInputSuggest {
-    getSuggestions(inputStr) {
-        const abstractFiles = this.app.vault.getAllLoadedFiles();
-        const files = [];
-        const lowerCaseInputStr = inputStr.toLowerCase();
-        abstractFiles.forEach((file) => {
-            if (file instanceof obsidian.TFile &&
-                file.extension === "md" &&
-                file.path.toLowerCase().contains(lowerCaseInputStr)) {
-                files.push(file);
-            }
-        });
-        return files;
-    }
-    renderSuggestion(file, el) {
-        el.setText(file.path);
-    }
-    selectSuggestion(file) {
-        this.inputEl.value = file.path;
-        this.inputEl.trigger("input");
-        this.close();
-    }
+  getSuggestions(inputStr) {
+    const abstractFiles = this.app.vault.getAllLoadedFiles();
+    const files = [];
+    const lowerCaseInputStr = inputStr.toLowerCase();
+    abstractFiles.forEach((file) => {
+      if (file instanceof obsidian.TFile &&
+        file.extension === "md" &&
+        file.path.toLowerCase().contains(lowerCaseInputStr)) {
+        files.push(file);
+      }
+    });
+    return files;
+  }
+  renderSuggestion(file, el) {
+    el.setText(file.path);
+  }
+  selectSuggestion(file) {
+    this.inputEl.value = file.path;
+    this.inputEl.trigger("input");
+    this.close();
+  }
 }
 class FolderSuggest extends TextInputSuggest {
-    getSuggestions(inputStr) {
-        const abstractFiles = this.app.vault.getAllLoadedFiles();
-        const folders = [];
-        const lowerCaseInputStr = inputStr.toLowerCase();
-        abstractFiles.forEach((folder) => {
-            if (folder instanceof obsidian.TFolder &&
-                folder.path.toLowerCase().contains(lowerCaseInputStr)) {
-                folders.push(folder);
-            }
-        });
-        return folders;
-    }
-    renderSuggestion(file, el) {
-        el.setText(file.path);
-    }
-    selectSuggestion(file) {
-        this.inputEl.value = file.path;
-        this.inputEl.trigger("input");
-        this.close();
-    }
+  getSuggestions(inputStr) {
+    const abstractFiles = this.app.vault.getAllLoadedFiles();
+    const folders = [];
+    const lowerCaseInputStr = inputStr.toLowerCase();
+    abstractFiles.forEach((folder) => {
+      if (folder instanceof obsidian.TFolder &&
+        folder.path.toLowerCase().contains(lowerCaseInputStr)) {
+        folders.push(folder);
+      }
+    });
+    return folders;
+  }
+  renderSuggestion(file, el) {
+    el.setText(file.path);
+  }
+  selectSuggestion(file) {
+    this.inputEl.value = file.path;
+    this.inputEl.trigger("input");
+    this.close();
+  }
 }
 
 /* src/settings/NoteTemplateSetting.svelte generated by Svelte v3.35.0 */
 
 function create_if_block$2(ctx) {
-	let div;
-	let t;
+  let div;
+  let t;
 
-	return {
-		c() {
-			div = element("div");
-			t = text(/*error*/ ctx[3]);
-			attr(div, "class", "has-error");
-		},
-		m(target, anchor) {
-			insert(target, div, anchor);
-			append(div, t);
-		},
-		p(ctx, dirty) {
-			if (dirty & /*error*/ 8) set_data(t, /*error*/ ctx[3]);
-		},
-		d(detaching) {
-			if (detaching) detach(div);
-		}
-	};
+  return {
+    c() {
+      div = element("div");
+      t = text(/*error*/ ctx[3]);
+      attr(div, "class", "has-error");
+    },
+    m(target, anchor) {
+      insert(target, div, anchor);
+      append(div, t);
+    },
+    p(ctx, dirty) {
+      if (dirty & /*error*/ 8) set_data(t, /*error*/ ctx[3]);
+    },
+    d(detaching) {
+      if (detaching) detach(div);
+    }
+  };
 }
 
 function create_fragment$2(ctx) {
-	let div4;
-	let div2;
-	let div0;
-	let t0_value = capitalize(/*periodicity*/ ctx[1]) + "";
-	let t0;
-	let t1;
-	let t2;
-	let div1;
-	let t4;
-	let t5;
-	let div3;
-	let input;
-	let mounted;
-	let dispose;
-	let if_block = /*error*/ ctx[3] && create_if_block$2(ctx);
+  let div4;
+  let div2;
+  let div0;
+  let t0_value = capitalize(/*periodicity*/ ctx[1]) + "";
+  let t0;
+  let t1;
+  let t2;
+  let div1;
+  let t4;
+  let t5;
+  let div3;
+  let input;
+  let mounted;
+  let dispose;
+  let if_block = /*error*/ ctx[3] && create_if_block$2(ctx);
 
-	return {
-		c() {
-			div4 = element("div");
-			div2 = element("div");
-			div0 = element("div");
-			t0 = text(t0_value);
-			t1 = text(" Note Template");
-			t2 = space();
-			div1 = element("div");
-			div1.textContent = "Choose the file to use as a template";
-			t4 = space();
-			if (if_block) if_block.c();
-			t5 = space();
-			div3 = element("div");
-			input = element("input");
-			attr(div0, "class", "setting-item-name");
-			attr(div1, "class", "setting-item-description");
-			attr(div2, "class", "setting-item-info");
-			attr(input, "type", "text");
-			attr(input, "spellcheck", false);
-			attr(input, "placeholder", "Example: folder/note");
-			toggle_class(input, "has-error", !!/*error*/ ctx[3]);
-			attr(div3, "class", "setting-item-control");
-			attr(div4, "class", "setting-item");
-		},
-		m(target, anchor) {
-			insert(target, div4, anchor);
-			append(div4, div2);
-			append(div2, div0);
-			append(div0, t0);
-			append(div0, t1);
-			append(div2, t2);
-			append(div2, div1);
-			append(div2, t4);
-			if (if_block) if_block.m(div2, null);
-			append(div4, t5);
-			append(div4, div3);
-			append(div3, input);
+  return {
+    c() {
+      div4 = element("div");
+      div2 = element("div");
+      div0 = element("div");
+      t0 = text(t0_value);
+      t1 = text(" Note Template");
+      t2 = space();
+      div1 = element("div");
+      div1.textContent = "Choose the file to use as a template";
+      t4 = space();
+      if (if_block) if_block.c();
+      t5 = space();
+      div3 = element("div");
+      input = element("input");
+      attr(div0, "class", "setting-item-name");
+      attr(div1, "class", "setting-item-description");
+      attr(div2, "class", "setting-item-info");
+      attr(input, "type", "text");
+      attr(input, "spellcheck", false);
+      attr(input, "placeholder", "Example: folder/note");
+      toggle_class(input, "has-error", !!/*error*/ ctx[3]);
+      attr(div3, "class", "setting-item-control");
+      attr(div4, "class", "setting-item");
+    },
+    m(target, anchor) {
+      insert(target, div4, anchor);
+      append(div4, div2);
+      append(div2, div0);
+      append(div0, t0);
+      append(div0, t1);
+      append(div2, t2);
+      append(div2, div1);
+      append(div2, t4);
+      if (if_block) if_block.m(div2, null);
+      append(div4, t5);
+      append(div4, div3);
+      append(div3, input);
 			/*input_binding*/ ctx[7](input);
-			set_input_value(input, /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].template);
+      set_input_value(input, /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].template);
 
-			if (!mounted) {
-				dispose = [
-					listen(input, "input", /*input_input_handler*/ ctx[8]),
-					listen(input, "change", /*validateOnBlur*/ ctx[5]),
-					listen(input, "input", /*clearError*/ ctx[6])
-				];
+      if (!mounted) {
+        dispose = [
+          listen(input, "input", /*input_input_handler*/ ctx[8]),
+          listen(input, "change", /*validateOnBlur*/ ctx[5]),
+          listen(input, "input", /*clearError*/ ctx[6])
+        ];
 
-				mounted = true;
-			}
-		},
-		p(ctx, [dirty]) {
-			if (dirty & /*periodicity*/ 2 && t0_value !== (t0_value = capitalize(/*periodicity*/ ctx[1]) + "")) set_data(t0, t0_value);
+        mounted = true;
+      }
+    },
+    p(ctx, [dirty]) {
+      if (dirty & /*periodicity*/ 2 && t0_value !== (t0_value = capitalize(/*periodicity*/ ctx[1]) + "")) set_data(t0, t0_value);
 
-			if (/*error*/ ctx[3]) {
-				if (if_block) {
-					if_block.p(ctx, dirty);
-				} else {
-					if_block = create_if_block$2(ctx);
-					if_block.c();
-					if_block.m(div2, null);
-				}
-			} else if (if_block) {
-				if_block.d(1);
-				if_block = null;
-			}
+      if (/*error*/ ctx[3]) {
+        if (if_block) {
+          if_block.p(ctx, dirty);
+        } else {
+          if_block = create_if_block$2(ctx);
+          if_block.c();
+          if_block.m(div2, null);
+        }
+      } else if (if_block) {
+        if_block.d(1);
+        if_block = null;
+      }
 
-			if (dirty & /*$settings, periodicity*/ 6 && input.value !== /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].template) {
-				set_input_value(input, /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].template);
-			}
+      if (dirty & /*$settings, periodicity*/ 6 && input.value !== /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].template) {
+        set_input_value(input, /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].template);
+      }
 
-			if (dirty & /*error*/ 8) {
-				toggle_class(input, "has-error", !!/*error*/ ctx[3]);
-			}
-		},
-		i: noop,
-		o: noop,
-		d(detaching) {
-			if (detaching) detach(div4);
-			if (if_block) if_block.d();
+      if (dirty & /*error*/ 8) {
+        toggle_class(input, "has-error", !!/*error*/ ctx[3]);
+      }
+    },
+    i: noop,
+    o: noop,
+    d(detaching) {
+      if (detaching) detach(div4);
+      if (if_block) if_block.d();
 			/*input_binding*/ ctx[7](null);
-			mounted = false;
-			run_all(dispose);
-		}
-	};
+      mounted = false;
+      run_all(dispose);
+    }
+  };
 }
 
 function instance$2($$self, $$props, $$invalidate) {
-	let $settings,
-		$$unsubscribe_settings = noop,
-		$$subscribe_settings = () => ($$unsubscribe_settings(), $$unsubscribe_settings = subscribe(settings, $$value => $$invalidate(2, $settings = $$value)), settings);
+  let $settings,
+    $$unsubscribe_settings = noop,
+    $$subscribe_settings = () => ($$unsubscribe_settings(), $$unsubscribe_settings = subscribe(settings, $$value => $$invalidate(2, $settings = $$value)), settings);
 
-	$$self.$$.on_destroy.push(() => $$unsubscribe_settings());
+  $$self.$$.on_destroy.push(() => $$unsubscribe_settings());
 
 
-	let { settings } = $$props;
-	$$subscribe_settings();
-	let { periodicity } = $$props;
-	let error;
-	let inputEl;
+  let { settings } = $$props;
+  $$subscribe_settings();
+  let { periodicity } = $$props;
+  let error;
+  let inputEl;
 
-	function validateOnBlur() {
-		$$invalidate(3, error = validateTemplate(inputEl.value));
-	}
+  function validateOnBlur() {
+    $$invalidate(3, error = validateTemplate(inputEl.value));
+  }
 
-	function clearError() {
-		$$invalidate(3, error = "");
-	}
+  function clearError() {
+    $$invalidate(3, error = "");
+  }
 
-	onMount(() => {
-		$$invalidate(3, error = validateTemplate(inputEl.value));
-		new FileSuggest(window.app, inputEl);
-	});
+  onMount(() => {
+    $$invalidate(3, error = validateTemplate(inputEl.value));
+    new FileSuggest(window.app, inputEl);
+  });
 
-	function input_binding($$value) {
-		binding_callbacks[$$value ? "unshift" : "push"](() => {
-			inputEl = $$value;
-			$$invalidate(4, inputEl);
-		});
-	}
+  function input_binding($$value) {
+    binding_callbacks[$$value ? "unshift" : "push"](() => {
+      inputEl = $$value;
+      $$invalidate(4, inputEl);
+    });
+  }
 
-	function input_input_handler() {
-		$settings[periodicity].template = this.value;
-		settings.set($settings);
-		$$invalidate(1, periodicity);
-	}
+  function input_input_handler() {
+    $settings[periodicity].template = this.value;
+    settings.set($settings);
+    $$invalidate(1, periodicity);
+  }
 
-	$$self.$$set = $$props => {
-		if ("settings" in $$props) $$subscribe_settings($$invalidate(0, settings = $$props.settings));
-		if ("periodicity" in $$props) $$invalidate(1, periodicity = $$props.periodicity);
-	};
+  $$self.$$set = $$props => {
+    if ("settings" in $$props) $$subscribe_settings($$invalidate(0, settings = $$props.settings));
+    if ("periodicity" in $$props) $$invalidate(1, periodicity = $$props.periodicity);
+  };
 
-	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$settings, periodicity*/ 6) {
-			$settings[periodicity].template || "";
-		}
-	};
+  $$self.$$.update = () => {
+    if ($$self.$$.dirty & /*$settings, periodicity*/ 6) {
+      $settings[periodicity].template || "";
+    }
+  };
 
-	return [
-		settings,
-		periodicity,
-		$settings,
-		error,
-		inputEl,
-		validateOnBlur,
-		clearError,
-		input_binding,
-		input_input_handler
-	];
+  return [
+    settings,
+    periodicity,
+    $settings,
+    error,
+    inputEl,
+    validateOnBlur,
+    clearError,
+    input_binding,
+    input_input_handler
+  ];
 }
 
 class NoteTemplateSetting extends SvelteComponent {
-	constructor(options) {
-		super();
-		init(this, options, instance$2, create_fragment$2, safe_not_equal, { settings: 0, periodicity: 1 });
-	}
+  constructor(options) {
+    super();
+    init(this, options, instance$2, create_fragment$2, safe_not_equal, { settings: 0, periodicity: 1 });
+  }
 }
 
 /* src/settings/NoteFolderSetting.svelte generated by Svelte v3.35.0 */
 
 function create_if_block$1(ctx) {
-	let div;
-	let t;
+  let div;
+  let t;
 
-	return {
-		c() {
-			div = element("div");
-			t = text(/*error*/ ctx[4]);
-			attr(div, "class", "has-error");
-		},
-		m(target, anchor) {
-			insert(target, div, anchor);
-			append(div, t);
-		},
-		p(ctx, dirty) {
-			if (dirty & /*error*/ 16) set_data(t, /*error*/ ctx[4]);
-		},
-		d(detaching) {
-			if (detaching) detach(div);
-		}
-	};
+  return {
+    c() {
+      div = element("div");
+      t = text(/*error*/ ctx[4]);
+      attr(div, "class", "has-error");
+    },
+    m(target, anchor) {
+      insert(target, div, anchor);
+      append(div, t);
+    },
+    p(ctx, dirty) {
+      if (dirty & /*error*/ 16) set_data(t, /*error*/ ctx[4]);
+    },
+    d(detaching) {
+      if (detaching) detach(div);
+    }
+  };
 }
 
 function create_fragment$1(ctx) {
-	let div4;
-	let div2;
-	let div0;
-	let t1;
-	let div1;
-	let t2;
-	let t3;
-	let t4;
-	let t5;
-	let t6;
-	let div3;
-	let input;
-	let mounted;
-	let dispose;
-	let if_block = /*error*/ ctx[4] && create_if_block$1(ctx);
+  let div4;
+  let div2;
+  let div0;
+  let t1;
+  let div1;
+  let t2;
+  let t3;
+  let t4;
+  let t5;
+  let t6;
+  let div3;
+  let input;
+  let mounted;
+  let dispose;
+  let if_block = /*error*/ ctx[4] && create_if_block$1(ctx);
 
-	return {
-		c() {
-			div4 = element("div");
-			div2 = element("div");
-			div0 = element("div");
-			div0.textContent = "Note Folder";
-			t1 = space();
-			div1 = element("div");
-			t2 = text("New ");
-			t3 = text(/*periodicity*/ ctx[1]);
-			t4 = text(" notes will be placed here");
-			t5 = space();
-			if (if_block) if_block.c();
-			t6 = space();
-			div3 = element("div");
-			input = element("input");
-			attr(div0, "class", "setting-item-name");
-			attr(div1, "class", "setting-item-description");
-			attr(div2, "class", "setting-item-info");
-			attr(input, "type", "text");
-			attr(input, "spellcheck", false);
-			attr(input, "placeholder", "Example: folder 1/folder 2");
-			toggle_class(input, "has-error", !!/*error*/ ctx[4]);
-			attr(div3, "class", "setting-item-control");
-			attr(div4, "class", "setting-item");
-		},
-		m(target, anchor) {
-			insert(target, div4, anchor);
-			append(div4, div2);
-			append(div2, div0);
-			append(div2, t1);
-			append(div2, div1);
-			append(div1, t2);
-			append(div1, t3);
-			append(div1, t4);
-			append(div2, t5);
-			if (if_block) if_block.m(div2, null);
-			append(div4, t6);
-			append(div4, div3);
-			append(div3, input);
-			set_input_value(input, /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].folder);
+  return {
+    c() {
+      div4 = element("div");
+      div2 = element("div");
+      div0 = element("div");
+      div0.textContent = "Note Folder";
+      t1 = space();
+      div1 = element("div");
+      t2 = text("New ");
+      t3 = text(/*periodicity*/ ctx[1]);
+      t4 = text(" notes will be placed here");
+      t5 = space();
+      if (if_block) if_block.c();
+      t6 = space();
+      div3 = element("div");
+      input = element("input");
+      attr(div0, "class", "setting-item-name");
+      attr(div1, "class", "setting-item-description");
+      attr(div2, "class", "setting-item-info");
+      attr(input, "type", "text");
+      attr(input, "spellcheck", false);
+      attr(input, "placeholder", "Example: folder 1/folder 2");
+      toggle_class(input, "has-error", !!/*error*/ ctx[4]);
+      attr(div3, "class", "setting-item-control");
+      attr(div4, "class", "setting-item");
+    },
+    m(target, anchor) {
+      insert(target, div4, anchor);
+      append(div4, div2);
+      append(div2, div0);
+      append(div2, t1);
+      append(div2, div1);
+      append(div1, t2);
+      append(div1, t3);
+      append(div1, t4);
+      append(div2, t5);
+      if (if_block) if_block.m(div2, null);
+      append(div4, t6);
+      append(div4, div3);
+      append(div3, input);
+      set_input_value(input, /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].folder);
 			/*input_binding*/ ctx[8](input);
 
-			if (!mounted) {
-				dispose = [
-					listen(input, "input", /*input_input_handler*/ ctx[7]),
-					listen(input, "change", /*onChange*/ ctx[5]),
-					listen(input, "input", /*clearError*/ ctx[6])
-				];
+      if (!mounted) {
+        dispose = [
+          listen(input, "input", /*input_input_handler*/ ctx[7]),
+          listen(input, "change", /*onChange*/ ctx[5]),
+          listen(input, "input", /*clearError*/ ctx[6])
+        ];
 
-				mounted = true;
-			}
-		},
-		p(ctx, [dirty]) {
-			if (dirty & /*periodicity*/ 2) set_data(t3, /*periodicity*/ ctx[1]);
+        mounted = true;
+      }
+    },
+    p(ctx, [dirty]) {
+      if (dirty & /*periodicity*/ 2) set_data(t3, /*periodicity*/ ctx[1]);
 
-			if (/*error*/ ctx[4]) {
-				if (if_block) {
-					if_block.p(ctx, dirty);
-				} else {
-					if_block = create_if_block$1(ctx);
-					if_block.c();
-					if_block.m(div2, null);
-				}
-			} else if (if_block) {
-				if_block.d(1);
-				if_block = null;
-			}
+      if (/*error*/ ctx[4]) {
+        if (if_block) {
+          if_block.p(ctx, dirty);
+        } else {
+          if_block = create_if_block$1(ctx);
+          if_block.c();
+          if_block.m(div2, null);
+        }
+      } else if (if_block) {
+        if_block.d(1);
+        if_block = null;
+      }
 
-			if (dirty & /*$settings, periodicity*/ 6 && input.value !== /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].folder) {
-				set_input_value(input, /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].folder);
-			}
+      if (dirty & /*$settings, periodicity*/ 6 && input.value !== /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].folder) {
+        set_input_value(input, /*$settings*/ ctx[2][/*periodicity*/ ctx[1]].folder);
+      }
 
-			if (dirty & /*error*/ 16) {
-				toggle_class(input, "has-error", !!/*error*/ ctx[4]);
-			}
-		},
-		i: noop,
-		o: noop,
-		d(detaching) {
-			if (detaching) detach(div4);
-			if (if_block) if_block.d();
+      if (dirty & /*error*/ 16) {
+        toggle_class(input, "has-error", !!/*error*/ ctx[4]);
+      }
+    },
+    i: noop,
+    o: noop,
+    d(detaching) {
+      if (detaching) detach(div4);
+      if (if_block) if_block.d();
 			/*input_binding*/ ctx[8](null);
-			mounted = false;
-			run_all(dispose);
-		}
-	};
+      mounted = false;
+      run_all(dispose);
+    }
+  };
 }
 
 function instance$1($$self, $$props, $$invalidate) {
-	let $settings,
-		$$unsubscribe_settings = noop,
-		$$subscribe_settings = () => ($$unsubscribe_settings(), $$unsubscribe_settings = subscribe(settings, $$value => $$invalidate(2, $settings = $$value)), settings);
+  let $settings,
+    $$unsubscribe_settings = noop,
+    $$subscribe_settings = () => ($$unsubscribe_settings(), $$unsubscribe_settings = subscribe(settings, $$value => $$invalidate(2, $settings = $$value)), settings);
 
-	$$self.$$.on_destroy.push(() => $$unsubscribe_settings());
+  $$self.$$.on_destroy.push(() => $$unsubscribe_settings());
 
 
-	let { settings } = $$props;
-	$$subscribe_settings();
-	let { periodicity } = $$props;
-	let inputEl;
-	let error;
+  let { settings } = $$props;
+  $$subscribe_settings();
+  let { periodicity } = $$props;
+  let inputEl;
+  let error;
 
-	function onChange() {
-		$$invalidate(4, error = validateFolder(inputEl.value));
-	}
+  function onChange() {
+    $$invalidate(4, error = validateFolder(inputEl.value));
+  }
 
-	function clearError() {
-		$$invalidate(4, error = "");
-	}
+  function clearError() {
+    $$invalidate(4, error = "");
+  }
 
-	onMount(() => {
-		$$invalidate(4, error = validateFolder(inputEl.value));
-		new FolderSuggest(window.app, inputEl);
-	});
+  onMount(() => {
+    $$invalidate(4, error = validateFolder(inputEl.value));
+    new FolderSuggest(window.app, inputEl);
+  });
 
-	function input_input_handler() {
-		$settings[periodicity].folder = this.value;
-		settings.set($settings);
-		$$invalidate(1, periodicity);
-	}
+  function input_input_handler() {
+    $settings[periodicity].folder = this.value;
+    settings.set($settings);
+    $$invalidate(1, periodicity);
+  }
 
-	function input_binding($$value) {
-		binding_callbacks[$$value ? "unshift" : "push"](() => {
-			inputEl = $$value;
-			$$invalidate(3, inputEl);
-		});
-	}
+  function input_binding($$value) {
+    binding_callbacks[$$value ? "unshift" : "push"](() => {
+      inputEl = $$value;
+      $$invalidate(3, inputEl);
+    });
+  }
 
-	$$self.$$set = $$props => {
-		if ("settings" in $$props) $$subscribe_settings($$invalidate(0, settings = $$props.settings));
-		if ("periodicity" in $$props) $$invalidate(1, periodicity = $$props.periodicity);
-	};
+  $$self.$$set = $$props => {
+    if ("settings" in $$props) $$subscribe_settings($$invalidate(0, settings = $$props.settings));
+    if ("periodicity" in $$props) $$invalidate(1, periodicity = $$props.periodicity);
+  };
 
-	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*$settings, periodicity*/ 6) {
-			$settings[periodicity].folder || "";
-		}
-	};
+  $$self.$$.update = () => {
+    if ($$self.$$.dirty & /*$settings, periodicity*/ 6) {
+      $settings[periodicity].folder || "";
+    }
+  };
 
-	return [
-		settings,
-		periodicity,
-		$settings,
-		inputEl,
-		error,
-		onChange,
-		clearError,
-		input_input_handler,
-		input_binding
-	];
+  return [
+    settings,
+    periodicity,
+    $settings,
+    inputEl,
+    error,
+    onChange,
+    clearError,
+    input_input_handler,
+    input_binding
+  ];
 }
 
 class NoteFolderSetting extends SvelteComponent {
-	constructor(options) {
-		super();
-		init(this, options, instance$1, create_fragment$1, safe_not_equal, { settings: 0, periodicity: 1 });
-	}
+  constructor(options) {
+    super();
+    init(this, options, instance$1, create_fragment$1, safe_not_equal, { settings: 0, periodicity: 1 });
+  }
 }
 
 /* src/settings/SettingsTab.svelte generated by Svelte v3.35.0 */
 
 function get_each_context(ctx, list, i) {
-	const child_ctx = ctx.slice();
-	child_ctx[9] = list[i];
-	return child_ctx;
+  const child_ctx = ctx.slice();
+  child_ctx[9] = list[i];
+  return child_ctx;
 }
 
 // (33:0) {#if $settingsStore.showGettingStartedBanner}
 function create_if_block_1(ctx) {
-	let gettingstartedbanner;
-	let current;
+  let gettingstartedbanner;
+  let current;
 
-	gettingstartedbanner = new GettingStartedBanner({
-			props: {
-				migrateDailyNoteSettings: /*migrateDailyNoteSettings*/ ctx[2],
-				settings: /*settingsStore*/ ctx[1],
-				handleTeardown: /*func*/ ctx[6]
-			}
-		});
+  gettingstartedbanner = new GettingStartedBanner({
+    props: {
+      migrateDailyNoteSettings: /*migrateDailyNoteSettings*/ ctx[2],
+      settings: /*settingsStore*/ ctx[1],
+      handleTeardown: /*func*/ ctx[6]
+    }
+  });
 
-	return {
-		c() {
-			create_component(gettingstartedbanner.$$.fragment);
-		},
-		m(target, anchor) {
-			mount_component(gettingstartedbanner, target, anchor);
-			current = true;
-		},
-		p(ctx, dirty) {
-			const gettingstartedbanner_changes = {};
-			if (dirty & /*$settingsStore*/ 1) gettingstartedbanner_changes.handleTeardown = /*func*/ ctx[6];
-			gettingstartedbanner.$set(gettingstartedbanner_changes);
-		},
-		i(local) {
-			if (current) return;
-			transition_in(gettingstartedbanner.$$.fragment, local);
-			current = true;
-		},
-		o(local) {
-			transition_out(gettingstartedbanner.$$.fragment, local);
-			current = false;
-		},
-		d(detaching) {
-			destroy_component(gettingstartedbanner, detaching);
-		}
-	};
+  return {
+    c() {
+      create_component(gettingstartedbanner.$$.fragment);
+    },
+    m(target, anchor) {
+      mount_component(gettingstartedbanner, target, anchor);
+      current = true;
+    },
+    p(ctx, dirty) {
+      const gettingstartedbanner_changes = {};
+      if (dirty & /*$settingsStore*/ 1) gettingstartedbanner_changes.handleTeardown = /*func*/ ctx[6];
+      gettingstartedbanner.$set(gettingstartedbanner_changes);
+    },
+    i(local) {
+      if (current) return;
+      transition_in(gettingstartedbanner.$$.fragment, local);
+      current = true;
+    },
+    o(local) {
+      transition_out(gettingstartedbanner.$$.fragment, local);
+      current = false;
+    },
+    d(detaching) {
+      destroy_component(gettingstartedbanner, detaching);
+    }
+  };
 }
 
 // (62:2) {#if $settingsStore[periodicity].enabled}
 function create_if_block(ctx) {
-	let div;
-	let noteformatsetting;
-	let t0;
-	let notetemplatesetting;
-	let t1;
-	let notefoldersetting;
-	let t2;
-	let div_intro;
-	let div_outro;
-	let current;
+  let div;
+  let noteformatsetting;
+  let t0;
+  let notetemplatesetting;
+  let t1;
+  let notefoldersetting;
+  let t2;
+  let div_intro;
+  let div_outro;
+  let current;
 
-	noteformatsetting = new NoteFormatSetting({
-			props: {
-				periodicity: /*periodicity*/ ctx[9],
-				settings: /*settingsStore*/ ctx[1]
-			}
-		});
+  noteformatsetting = new NoteFormatSetting({
+    props: {
+      periodicity: /*periodicity*/ ctx[9],
+      settings: /*settingsStore*/ ctx[1]
+    }
+  });
 
-	notetemplatesetting = new NoteTemplateSetting({
-			props: {
-				periodicity: /*periodicity*/ ctx[9],
-				settings: /*settingsStore*/ ctx[1]
-			}
-		});
+  notetemplatesetting = new NoteTemplateSetting({
+    props: {
+      periodicity: /*periodicity*/ ctx[9],
+      settings: /*settingsStore*/ ctx[1]
+    }
+  });
 
-	notefoldersetting = new NoteFolderSetting({
-			props: {
-				periodicity: /*periodicity*/ ctx[9],
-				settings: /*settingsStore*/ ctx[1]
-			}
-		});
+  notefoldersetting = new NoteFolderSetting({
+    props: {
+      periodicity: /*periodicity*/ ctx[9],
+      settings: /*settingsStore*/ ctx[1]
+    }
+  });
 
-	return {
-		c() {
-			div = element("div");
-			create_component(noteformatsetting.$$.fragment);
-			t0 = space();
-			create_component(notetemplatesetting.$$.fragment);
-			t1 = space();
-			create_component(notefoldersetting.$$.fragment);
-			t2 = space();
-		},
-		m(target, anchor) {
-			insert(target, div, anchor);
-			mount_component(noteformatsetting, div, null);
-			append(div, t0);
-			mount_component(notetemplatesetting, div, null);
-			append(div, t1);
-			mount_component(notefoldersetting, div, null);
-			append(div, t2);
-			current = true;
-		},
-		p: noop,
-		i(local) {
-			if (current) return;
-			transition_in(noteformatsetting.$$.fragment, local);
-			transition_in(notetemplatesetting.$$.fragment, local);
-			transition_in(notefoldersetting.$$.fragment, local);
+  return {
+    c() {
+      div = element("div");
+      create_component(noteformatsetting.$$.fragment);
+      t0 = space();
+      create_component(notetemplatesetting.$$.fragment);
+      t1 = space();
+      create_component(notefoldersetting.$$.fragment);
+      t2 = space();
+    },
+    m(target, anchor) {
+      insert(target, div, anchor);
+      mount_component(noteformatsetting, div, null);
+      append(div, t0);
+      mount_component(notetemplatesetting, div, null);
+      append(div, t1);
+      mount_component(notefoldersetting, div, null);
+      append(div, t2);
+      current = true;
+    },
+    p: noop,
+    i(local) {
+      if (current) return;
+      transition_in(noteformatsetting.$$.fragment, local);
+      transition_in(notetemplatesetting.$$.fragment, local);
+      transition_in(notefoldersetting.$$.fragment, local);
 
-			add_render_callback(() => {
-				if (div_outro) div_outro.end(1);
-				if (!div_intro) div_intro = create_in_transition(div, slide, {});
-				div_intro.start();
-			});
+      add_render_callback(() => {
+        if (div_outro) div_outro.end(1);
+        if (!div_intro) div_intro = create_in_transition(div, slide, {});
+        div_intro.start();
+      });
 
-			current = true;
-		},
-		o(local) {
-			transition_out(noteformatsetting.$$.fragment, local);
-			transition_out(notetemplatesetting.$$.fragment, local);
-			transition_out(notefoldersetting.$$.fragment, local);
-			if (div_intro) div_intro.invalidate();
-			div_outro = create_out_transition(div, slide, {});
-			current = false;
-		},
-		d(detaching) {
-			if (detaching) detach(div);
-			destroy_component(noteformatsetting);
-			destroy_component(notetemplatesetting);
-			destroy_component(notefoldersetting);
-			if (detaching && div_outro) div_outro.end();
-		}
-	};
+      current = true;
+    },
+    o(local) {
+      transition_out(noteformatsetting.$$.fragment, local);
+      transition_out(notetemplatesetting.$$.fragment, local);
+      transition_out(notefoldersetting.$$.fragment, local);
+      if (div_intro) div_intro.invalidate();
+      div_outro = create_out_transition(div, slide, {});
+      current = false;
+    },
+    d(detaching) {
+      if (detaching) detach(div);
+      destroy_component(noteformatsetting);
+      destroy_component(notetemplatesetting);
+      destroy_component(notefoldersetting);
+      if (detaching && div_outro) div_outro.end();
+    }
+  };
 }
 
 // (42:0) {#each periodicities as periodicity}
 function create_each_block(ctx) {
-	let div4;
-	let div1;
-	let div0;
-	let h3;
-	let t0_value = capitalize(/*periodicity*/ ctx[9]) + "";
-	let t0;
-	let t1;
-	let t2;
-	let div3;
-	let div2;
-	let t3;
-	let if_block_anchor;
-	let current;
-	let mounted;
-	let dispose;
+  let div4;
+  let div1;
+  let div0;
+  let h3;
+  let t0_value = capitalize(/*periodicity*/ ctx[9]) + "";
+  let t0;
+  let t1;
+  let t2;
+  let div3;
+  let div2;
+  let t3;
+  let if_block_anchor;
+  let current;
+  let mounted;
+  let dispose;
 
-	function click_handler() {
-		return /*click_handler*/ ctx[7](/*periodicity*/ ctx[9]);
-	}
+  function click_handler() {
+    return /*click_handler*/ ctx[7](/*periodicity*/ ctx[9]);
+  }
 
-	let if_block = /*$settingsStore*/ ctx[0][/*periodicity*/ ctx[9]].enabled && create_if_block(ctx);
+  let if_block = /*$settingsStore*/ ctx[0][/*periodicity*/ ctx[9]].enabled && create_if_block(ctx);
 
-	return {
-		c() {
-			div4 = element("div");
-			div1 = element("div");
-			div0 = element("div");
-			h3 = element("h3");
-			t0 = text(t0_value);
-			t1 = text(" Notes");
-			t2 = space();
-			div3 = element("div");
-			div2 = element("div");
-			t3 = space();
-			if (if_block) if_block.c();
-			if_block_anchor = empty();
-			attr(div0, "class", "setting-item-name");
-			attr(div1, "class", "setting-item-info");
-			attr(div2, "class", "checkbox-container");
-			toggle_class(div2, "is-enabled", /*$settingsStore*/ ctx[0][/*periodicity*/ ctx[9]].enabled);
-			attr(div3, "class", "setting-item-control");
-			attr(div4, "class", "setting-item setting-item-heading");
-		},
-		m(target, anchor) {
-			insert(target, div4, anchor);
-			append(div4, div1);
-			append(div1, div0);
-			append(div0, h3);
-			append(h3, t0);
-			append(h3, t1);
-			append(div4, t2);
-			append(div4, div3);
-			append(div3, div2);
-			insert(target, t3, anchor);
-			if (if_block) if_block.m(target, anchor);
-			insert(target, if_block_anchor, anchor);
-			current = true;
+  return {
+    c() {
+      div4 = element("div");
+      div1 = element("div");
+      div0 = element("div");
+      h3 = element("h3");
+      t0 = text(t0_value);
+      t1 = text(" Notes");
+      t2 = space();
+      div3 = element("div");
+      div2 = element("div");
+      t3 = space();
+      if (if_block) if_block.c();
+      if_block_anchor = empty();
+      attr(div0, "class", "setting-item-name");
+      attr(div1, "class", "setting-item-info");
+      attr(div2, "class", "checkbox-container");
+      toggle_class(div2, "is-enabled", /*$settingsStore*/ ctx[0][/*periodicity*/ ctx[9]].enabled);
+      attr(div3, "class", "setting-item-control");
+      attr(div4, "class", "setting-item setting-item-heading");
+    },
+    m(target, anchor) {
+      insert(target, div4, anchor);
+      append(div4, div1);
+      append(div1, div0);
+      append(div0, h3);
+      append(h3, t0);
+      append(h3, t1);
+      append(div4, t2);
+      append(div4, div3);
+      append(div3, div2);
+      insert(target, t3, anchor);
+      if (if_block) if_block.m(target, anchor);
+      insert(target, if_block_anchor, anchor);
+      current = true;
 
-			if (!mounted) {
-				dispose = listen(div2, "click", click_handler);
-				mounted = true;
-			}
-		},
-		p(new_ctx, dirty) {
-			ctx = new_ctx;
+      if (!mounted) {
+        dispose = listen(div2, "click", click_handler);
+        mounted = true;
+      }
+    },
+    p(new_ctx, dirty) {
+      ctx = new_ctx;
 
-			if (dirty & /*$settingsStore, periodicities*/ 9) {
-				toggle_class(div2, "is-enabled", /*$settingsStore*/ ctx[0][/*periodicity*/ ctx[9]].enabled);
-			}
+      if (dirty & /*$settingsStore, periodicities*/ 9) {
+        toggle_class(div2, "is-enabled", /*$settingsStore*/ ctx[0][/*periodicity*/ ctx[9]].enabled);
+      }
 
-			if (/*$settingsStore*/ ctx[0][/*periodicity*/ ctx[9]].enabled) {
-				if (if_block) {
-					if_block.p(ctx, dirty);
+      if (/*$settingsStore*/ ctx[0][/*periodicity*/ ctx[9]].enabled) {
+        if (if_block) {
+          if_block.p(ctx, dirty);
 
-					if (dirty & /*$settingsStore*/ 1) {
-						transition_in(if_block, 1);
-					}
-				} else {
-					if_block = create_if_block(ctx);
-					if_block.c();
-					transition_in(if_block, 1);
-					if_block.m(if_block_anchor.parentNode, if_block_anchor);
-				}
-			} else if (if_block) {
-				group_outros();
+          if (dirty & /*$settingsStore*/ 1) {
+            transition_in(if_block, 1);
+          }
+        } else {
+          if_block = create_if_block(ctx);
+          if_block.c();
+          transition_in(if_block, 1);
+          if_block.m(if_block_anchor.parentNode, if_block_anchor);
+        }
+      } else if (if_block) {
+        group_outros();
 
-				transition_out(if_block, 1, 1, () => {
-					if_block = null;
-				});
+        transition_out(if_block, 1, 1, () => {
+          if_block = null;
+        });
 
-				check_outros();
-			}
-		},
-		i(local) {
-			if (current) return;
-			transition_in(if_block);
-			current = true;
-		},
-		o(local) {
-			transition_out(if_block);
-			current = false;
-		},
-		d(detaching) {
-			if (detaching) detach(div4);
-			if (detaching) detach(t3);
-			if (if_block) if_block.d(detaching);
-			if (detaching) detach(if_block_anchor);
-			mounted = false;
-			dispose();
-		}
-	};
+        check_outros();
+      }
+    },
+    i(local) {
+      if (current) return;
+      transition_in(if_block);
+      current = true;
+    },
+    o(local) {
+      transition_out(if_block);
+      current = false;
+    },
+    d(detaching) {
+      if (detaching) detach(div4);
+      if (detaching) detach(t3);
+      if (if_block) if_block.d(detaching);
+      if (detaching) detach(if_block_anchor);
+      mounted = false;
+      dispose();
+    }
+  };
 }
 
 function create_fragment(ctx) {
-	let t;
-	let each_1_anchor;
-	let current;
-	let if_block = /*$settingsStore*/ ctx[0].showGettingStartedBanner && create_if_block_1(ctx);
-	let each_value = /*periodicities*/ ctx[3];
-	let each_blocks = [];
+  let t;
+  let each_1_anchor;
+  let current;
+  let if_block = /*$settingsStore*/ ctx[0].showGettingStartedBanner && create_if_block_1(ctx);
+  let each_value = /*periodicities*/ ctx[3];
+  let each_blocks = [];
 
-	for (let i = 0; i < each_value.length; i += 1) {
-		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
-	}
+  for (let i = 0; i < each_value.length; i += 1) {
+    each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+  }
 
-	const out = i => transition_out(each_blocks[i], 1, 1, () => {
-		each_blocks[i] = null;
-	});
+  const out = i => transition_out(each_blocks[i], 1, 1, () => {
+    each_blocks[i] = null;
+  });
 
-	return {
-		c() {
-			if (if_block) if_block.c();
-			t = space();
+  return {
+    c() {
+      if (if_block) if_block.c();
+      t = space();
 
-			for (let i = 0; i < each_blocks.length; i += 1) {
-				each_blocks[i].c();
-			}
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].c();
+      }
 
-			each_1_anchor = empty();
-		},
-		m(target, anchor) {
-			if (if_block) if_block.m(target, anchor);
-			insert(target, t, anchor);
+      each_1_anchor = empty();
+    },
+    m(target, anchor) {
+      if (if_block) if_block.m(target, anchor);
+      insert(target, t, anchor);
 
-			for (let i = 0; i < each_blocks.length; i += 1) {
-				each_blocks[i].m(target, anchor);
-			}
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].m(target, anchor);
+      }
 
-			insert(target, each_1_anchor, anchor);
-			current = true;
-		},
-		p(ctx, [dirty]) {
-			if (/*$settingsStore*/ ctx[0].showGettingStartedBanner) {
-				if (if_block) {
-					if_block.p(ctx, dirty);
+      insert(target, each_1_anchor, anchor);
+      current = true;
+    },
+    p(ctx, [dirty]) {
+      if (/*$settingsStore*/ ctx[0].showGettingStartedBanner) {
+        if (if_block) {
+          if_block.p(ctx, dirty);
 
-					if (dirty & /*$settingsStore*/ 1) {
-						transition_in(if_block, 1);
-					}
-				} else {
-					if_block = create_if_block_1(ctx);
-					if_block.c();
-					transition_in(if_block, 1);
-					if_block.m(t.parentNode, t);
-				}
-			} else if (if_block) {
-				group_outros();
+          if (dirty & /*$settingsStore*/ 1) {
+            transition_in(if_block, 1);
+          }
+        } else {
+          if_block = create_if_block_1(ctx);
+          if_block.c();
+          transition_in(if_block, 1);
+          if_block.m(t.parentNode, t);
+        }
+      } else if (if_block) {
+        group_outros();
 
-				transition_out(if_block, 1, 1, () => {
-					if_block = null;
-				});
+        transition_out(if_block, 1, 1, () => {
+          if_block = null;
+        });
 
-				check_outros();
-			}
+        check_outros();
+      }
 
-			if (dirty & /*periodicities, settingsStore, $settingsStore, capitalize*/ 11) {
-				each_value = /*periodicities*/ ctx[3];
-				let i;
+      if (dirty & /*periodicities, settingsStore, $settingsStore, capitalize*/ 11) {
+        each_value = /*periodicities*/ ctx[3];
+        let i;
 
-				for (i = 0; i < each_value.length; i += 1) {
-					const child_ctx = get_each_context(ctx, each_value, i);
+        for (i = 0; i < each_value.length; i += 1) {
+          const child_ctx = get_each_context(ctx, each_value, i);
 
-					if (each_blocks[i]) {
-						each_blocks[i].p(child_ctx, dirty);
-						transition_in(each_blocks[i], 1);
-					} else {
-						each_blocks[i] = create_each_block(child_ctx);
-						each_blocks[i].c();
-						transition_in(each_blocks[i], 1);
-						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
-					}
-				}
+          if (each_blocks[i]) {
+            each_blocks[i].p(child_ctx, dirty);
+            transition_in(each_blocks[i], 1);
+          } else {
+            each_blocks[i] = create_each_block(child_ctx);
+            each_blocks[i].c();
+            transition_in(each_blocks[i], 1);
+            each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+          }
+        }
 
-				group_outros();
+        group_outros();
 
-				for (i = each_value.length; i < each_blocks.length; i += 1) {
-					out(i);
-				}
+        for (i = each_value.length; i < each_blocks.length; i += 1) {
+          out(i);
+        }
 
-				check_outros();
-			}
-		},
-		i(local) {
-			if (current) return;
-			transition_in(if_block);
+        check_outros();
+      }
+    },
+    i(local) {
+      if (current) return;
+      transition_in(if_block);
 
-			for (let i = 0; i < each_value.length; i += 1) {
-				transition_in(each_blocks[i]);
-			}
+      for (let i = 0; i < each_value.length; i += 1) {
+        transition_in(each_blocks[i]);
+      }
 
-			current = true;
-		},
-		o(local) {
-			transition_out(if_block);
-			each_blocks = each_blocks.filter(Boolean);
+      current = true;
+    },
+    o(local) {
+      transition_out(if_block);
+      each_blocks = each_blocks.filter(Boolean);
 
-			for (let i = 0; i < each_blocks.length; i += 1) {
-				transition_out(each_blocks[i]);
-			}
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        transition_out(each_blocks[i]);
+      }
 
-			current = false;
-		},
-		d(detaching) {
-			if (if_block) if_block.d(detaching);
-			if (detaching) detach(t);
-			destroy_each(each_blocks, detaching);
-			if (detaching) detach(each_1_anchor);
-		}
-	};
+      current = false;
+    },
+    d(detaching) {
+      if (if_block) if_block.d(detaching);
+      if (detaching) detach(t);
+      destroy_each(each_blocks, detaching);
+      if (detaching) detach(each_1_anchor);
+    }
+  };
 }
 
 function instance($$self, $$props, $$invalidate) {
-	let $settingsStore;
+  let $settingsStore;
 
-	let { settings } = $$props;
-	let { onUpdateSettings } = $$props;
-	let settingsStore = writable(settings);
-	component_subscribe($$self, settingsStore, value => $$invalidate(0, $settingsStore = value));
-	const unsubscribeFromSettings = settingsStore.subscribe(onUpdateSettings);
+  let { settings } = $$props;
+  let { onUpdateSettings } = $$props;
+  let settingsStore = writable(settings);
+  component_subscribe($$self, settingsStore, value => $$invalidate(0, $settingsStore = value));
+  const unsubscribeFromSettings = settingsStore.subscribe(onUpdateSettings);
 
-	function migrateDailyNoteSettings() {
-		const dailyNoteSettings = getLegacyDailyNoteSettings();
+  function migrateDailyNoteSettings() {
+    const dailyNoteSettings = getLegacyDailyNoteSettings();
 
-		settingsStore.update(old => Object.assign(Object.assign({}, old), {
-			daily: Object.assign(Object.assign({}, dailyNoteSettings), { enabled: true }),
-			hasMigratedDailyNoteSettings: true
-		}));
-	}
+    settingsStore.update(old => Object.assign(Object.assign({}, old), {
+      daily: Object.assign(Object.assign({}, dailyNoteSettings), { enabled: true }),
+      hasMigratedDailyNoteSettings: true
+    }));
+  }
 
-	const periodicities = ["daily", "weekly", "monthly", "quarterly", "yearly"];
+  const periodicities = ["daily", "weekly", "monthly", "quarterly", "yearly"];
 
-	onDestroy(() => {
-		unsubscribeFromSettings();
-	});
+  onDestroy(() => {
+    unsubscribeFromSettings();
+  });
 
-	const func = () => {
-		set_store_value(settingsStore, $settingsStore.showGettingStartedBanner = false, $settingsStore);
-	};
+  const func = () => {
+    set_store_value(settingsStore, $settingsStore.showGettingStartedBanner = false, $settingsStore);
+  };
 
-	const click_handler = periodicity => {
-		set_store_value(settingsStore, $settingsStore[periodicity].enabled = !$settingsStore[periodicity].enabled, $settingsStore);
-	};
+  const click_handler = periodicity => {
+    set_store_value(settingsStore, $settingsStore[periodicity].enabled = !$settingsStore[periodicity].enabled, $settingsStore);
+  };
 
-	$$self.$$set = $$props => {
-		if ("settings" in $$props) $$invalidate(4, settings = $$props.settings);
-		if ("onUpdateSettings" in $$props) $$invalidate(5, onUpdateSettings = $$props.onUpdateSettings);
-	};
+  $$self.$$set = $$props => {
+    if ("settings" in $$props) $$invalidate(4, settings = $$props.settings);
+    if ("onUpdateSettings" in $$props) $$invalidate(5, onUpdateSettings = $$props.onUpdateSettings);
+  };
 
-	return [
-		$settingsStore,
-		settingsStore,
-		migrateDailyNoteSettings,
-		periodicities,
-		settings,
-		onUpdateSettings,
-		func,
-		click_handler
-	];
+  return [
+    $settingsStore,
+    settingsStore,
+    migrateDailyNoteSettings,
+    periodicities,
+    settings,
+    onUpdateSettings,
+    func,
+    click_handler
+  ];
 }
 
 class SettingsTab extends SvelteComponent {
-	constructor(options) {
-		super();
-		init(this, options, instance, create_fragment, safe_not_equal, { settings: 4, onUpdateSettings: 5 });
-	}
+  constructor(options) {
+    super();
+    init(this, options, instance, create_fragment, safe_not_equal, { settings: 4, onUpdateSettings: 5 });
+  }
 }
 
 const DEFAULT_SETTINGS = Object.freeze({
-    format: "",
-    template: "",
-    folder: "",
+  format: "",
+  template: "",
+  folder: "",
 });
 class PeriodicNotesSettingsTab extends obsidian.PluginSettingTab {
-    constructor(app, plugin) {
-        super(app, plugin);
-        this.plugin = plugin;
-    }
-    display() {
-        this.containerEl.empty();
-        this.view = new SettingsTab({
-            target: this.containerEl,
-            props: {
-                settings: this.plugin.settings,
-                onUpdateSettings: this.plugin.updateSettings,
-            },
-        });
-    }
+  constructor(app, plugin) {
+    super(app, plugin);
+    this.plugin = plugin;
+  }
+  display() {
+    this.containerEl.empty();
+    this.view = new SettingsTab({
+      target: this.containerEl,
+      props: {
+        settings: this.plugin.settings,
+        onUpdateSettings: this.plugin.updateSettings,
+      },
+    });
+  }
 }
 
 class PeriodicNotesPlugin extends obsidian.Plugin {
-    async onload() {
-        this.ribbonEl = null;
-        this.updateSettings = this.updateSettings.bind(this);
-        await this.loadSettings();
-        this.addSettingTab(new PeriodicNotesSettingsTab(this.app, this));
-        this.app.workspace.onLayoutReady(this.onLayoutReady.bind(this));
-        obsidian.addIcon("calendar-day", calendarDayIcon);
-        obsidian.addIcon("calendar-week", calendarWeekIcon);
-        obsidian.addIcon("calendar-month", calendarMonthIcon);
-        obsidian.addIcon("calendar-quarter", calendarQuarterIcon);
-        obsidian.addIcon("calendar-year", calendarYearIcon);
+  async onload() {
+    this.ribbonEl = null;
+    this.updateSettings = this.updateSettings.bind(this);
+    await this.loadSettings();
+    this.addSettingTab(new PeriodicNotesSettingsTab(this.app, this));
+    this.app.workspace.onLayoutReady(this.onLayoutReady.bind(this));
+    obsidian.addIcon("calendar-day", calendarDayIcon);
+    obsidian.addIcon("calendar-week", calendarWeekIcon);
+    obsidian.addIcon("calendar-month", calendarMonthIcon);
+    obsidian.addIcon("calendar-quarter", calendarQuarterIcon);
+    obsidian.addIcon("calendar-year", calendarYearIcon);
+  }
+  onLayoutReady() {
+    // If the user has Calendar Weekly Notes settings, migrate them automatically,
+    // since the functionality will be deprecated.
+    if (this.isInitialLoad && hasLegacyWeeklyNoteSettings()) {
+      this.migrateWeeklySettings();
+      this.settings.weekly.enabled = true;
     }
-    onLayoutReady() {
-        // If the user has Calendar Weekly Notes settings, migrate them automatically,
-        // since the functionality will be deprecated.
-        if (this.isInitialLoad && hasLegacyWeeklyNoteSettings()) {
-            this.migrateWeeklySettings();
-            this.settings.weekly.enabled = true;
-        }
-        this.configureRibbonIcons();
-        this.configureCommands();
-    }
-    migrateWeeklySettings() {
-        const calendarSettings = getLegacyWeeklyNoteSettings();
-        this.updateSettings(Object.assign(Object.assign({}, this.settings), {
-            weekly: Object.assign(Object.assign({}, calendarSettings), { enabled: true }),
-            hasMigratedWeeklyNoteSettings: true,
-        }));
-    }
-    configureRibbonIcons() {
-        var _a;
-        (_a = this.ribbonEl) === null || _a === void 0 ? void 0 : _a.detach();
-        const configuredPeriodicities = [
-            "daily",
-            "weekly",
-            "monthly",
-            "quarterly",
-            "yearly",
-        ].filter((periodicity) => this.settings[periodicity].enabled);
-        if (configuredPeriodicities.length) {
-            const periodicity = configuredPeriodicities[0];
-            const config = periodConfigs[periodicity];
-            this.ribbonEl = this.addRibbonIcon(`calendar-${config.unitOfTime}`, `Open ${config.relativeUnit}`, (event) => openPeriodicNote(periodicity, window.moment(), isMetaPressed(event)));
-            this.ribbonEl.addEventListener("contextmenu", (ev) => {
-                showFileMenu(this.app, this.settings, {
-                    x: ev.pageX,
-                    y: ev.pageY,
-                });
-            });
-        }
-    }
-    configureCommands() {
-        // Remove disabled commands
-        ["daily", "weekly", "monthly", "quarterly", "yearly"]
-            .filter((periodicity) => !this.settings[periodicity].enabled)
-            .forEach((periodicity) => {
-            getCommands(periodicity).forEach((command) =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            this.app.commands.removeCommand(`periodic-notes:${command.id}`));
+    this.configureRibbonIcons();
+    this.configureCommands();
+  }
+  migrateWeeklySettings() {
+    const calendarSettings = getLegacyWeeklyNoteSettings();
+    this.updateSettings(Object.assign(Object.assign({}, this.settings), {
+      weekly: Object.assign(Object.assign({}, calendarSettings), { enabled: true }),
+      hasMigratedWeeklyNoteSettings: true,
+    }));
+  }
+  configureRibbonIcons() {
+    var _a;
+    (_a = this.ribbonEl) === null || _a === void 0 ? void 0 : _a.detach();
+    const configuredPeriodicities = [
+      "daily",
+      "weekly",
+      "monthly",
+      "quarterly",
+      "yearly",
+    ].filter((periodicity) => this.settings[periodicity].enabled);
+    if (configuredPeriodicities.length) {
+      const periodicity = configuredPeriodicities[0];
+      const config = periodConfigs[periodicity];
+      this.ribbonEl = this.addRibbonIcon(`calendar-${config.unitOfTime}`, `Open ${config.relativeUnit}`, (event) => openPeriodicNote(periodicity, window.moment(), isMetaPressed(event)));
+      this.ribbonEl.addEventListener("contextmenu", (ev) => {
+        showFileMenu(this.app, this.settings, {
+          x: ev.pageX,
+          y: ev.pageY,
         });
-        // register enabled commands
-        ["daily", "weekly", "monthly", "quarterly", "yearly"]
-            .filter((periodicity) => this.settings[periodicity].enabled)
-            .forEach((periodicity) => {
-            getCommands(periodicity).forEach(this.addCommand.bind(this));
-        });
+      });
     }
-    async loadSettings() {
-        const settings = await this.loadData();
-        if (!settings) {
-            this.isInitialLoad = true;
-        }
-        this.settings = Object.assign({}, {
-            showGettingStartedBanner: true,
-            hasMigratedDailyNoteSettings: false,
-            hasMigratedWeeklyNoteSettings: false,
-            daily: Object.assign({}, DEFAULT_SETTINGS),
-            weekly: Object.assign({}, DEFAULT_SETTINGS),
-            monthly: Object.assign({}, DEFAULT_SETTINGS),
-            quarterly: Object.assign({}, DEFAULT_SETTINGS),
-            yearly: Object.assign({}, DEFAULT_SETTINGS),
-        }, settings || {});
+  }
+  configureCommands() {
+    // Remove disabled commands
+    ["daily", "weekly", "monthly", "quarterly", "yearly"]
+      .filter((periodicity) => !this.settings[periodicity].enabled)
+      .forEach((periodicity) => {
+        getCommands(periodicity).forEach((command) =>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          this.app.commands.removeCommand(`periodic-notes:${command.id}`));
+      });
+    // register enabled commands
+    ["daily", "weekly", "monthly", "quarterly", "yearly"]
+      .filter((periodicity) => this.settings[periodicity].enabled)
+      .forEach((periodicity) => {
+        getCommands(periodicity).forEach(this.addCommand.bind(this));
+      });
+  }
+  async loadSettings() {
+    const settings = await this.loadData();
+    if (!settings) {
+      this.isInitialLoad = true;
     }
-    onSettingsUpdate() {
-        this.configureCommands();
-        this.configureRibbonIcons();
-        // Integrations (i.e. Calendar Plugin) can listen for changes to settings
-        this.app.workspace.trigger(SETTINGS_UPDATED);
-    }
-    async updateSettings(val) {
-        this.settings = val;
-        await this.saveData(this.settings);
-        this.onSettingsUpdate();
-    }
+    this.settings = Object.assign({}, {
+      showGettingStartedBanner: true,
+      hasMigratedDailyNoteSettings: false,
+      hasMigratedWeeklyNoteSettings: false,
+      daily: Object.assign({}, DEFAULT_SETTINGS),
+      weekly: Object.assign({}, DEFAULT_SETTINGS),
+      monthly: Object.assign({}, DEFAULT_SETTINGS),
+      quarterly: Object.assign({}, DEFAULT_SETTINGS),
+      yearly: Object.assign({}, DEFAULT_SETTINGS),
+    }, settings || {});
+  }
+  onSettingsUpdate() {
+    this.configureCommands();
+    this.configureRibbonIcons();
+    // Integrations (i.e. Calendar Plugin) can listen for changes to settings
+    this.app.workspace.trigger(SETTINGS_UPDATED);
+  }
+  async updateSettings(val) {
+    this.settings = val;
+    await this.saveData(this.settings);
+    this.onSettingsUpdate();
+  }
 }
 
 module.exports = PeriodicNotesPlugin;
