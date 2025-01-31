@@ -223,8 +223,16 @@ function isFormatAmbiguous(format, granularity) {
   }
   return false;
 }
+/* NB(PNK)
+ *
+ * To work around e.g. https://github.com/liamcain/obsidian-periodic-notes/issues/245
+ *
+ * - Collapse getDateFromFile(), which was a one-liner calling getDateFromFilename().
+ * - Use the entire file.path instead of file.name, and the entire .format instead
+ *   of the last component.
+ *
+ */
 function getDateFromFile(file, granularity) {
-  const filename = file.basename;
   const getSettings = {
     day: getDailyNoteSettings,
     week: getWeeklyNoteSettings,
@@ -233,21 +241,20 @@ function getDateFromFile(file, granularity) {
     year: getYearlyNoteSettings,
   };
   const noteDate = window.moment(file.path, getSettings[granularity]().format, true);
+  /* console.debug(`${file.path} | ${filename} | ${format} | ${noteDate}`); */
   if (!noteDate.isValid()) {
     return null;
-  }
-  console.debug(`${file.path} | ${filename} | ${format} | ${noteDate}`)
-  if (isFormatAmbiguous(format, granularity)) {
-    if (granularity === "week") {
-      const cleanFormat = removeEscapedCharacters(format);
-      if (/w{1,2}/i.test(cleanFormat)) {
-        return window.moment(filename,
-          // If format contains week, remove day & month formatting
-          format.replace(/M{1,4}/g, "").replace(/D{1,4}/g, ""), false);
-      }
+  } else if (isFormatAmbiguous(format, granularity) && granularity === "week") {
+    const cleanFormat = removeEscapedCharacters(format);
+    if (/w{1,2}/i.test(cleanFormat)) {
+      return window.moment(filename,
+        // If format contains week, remove day & month formatting
+        format.replace(/M{1,4}/g, "").replace(/D{1,4}/g, ""), false);
     }
+
+  } else {
+    return noteDate;
   }
-  return noteDate;
 }
 
 class DailyNotesFolderMissingError extends Error {
@@ -690,7 +697,6 @@ var getAllQuarterlyNotes_1 = getAllQuarterlyNotes;
 var getAllWeeklyNotes_1 = getAllWeeklyNotes;
 var getAllYearlyNotes_1 = getAllYearlyNotes;
 var getDailyNote_1 = getDailyNote;
-var getDateFromFile_1 = getDateFromFile;
 var getMonthlyNote_1 = getMonthlyNote;
 var getQuarterlyNote_1 = getQuarterlyNote;
 var getWeeklyNote_1 = getWeeklyNote;
@@ -763,6 +769,11 @@ function isMetaPressed(e) {
   return isMacOS() ? e.metaKey : e.ctrlKey;
 }
 
+/* NB(PNK)
+  *
+  * Work around https://github.com/liamcain/obsidian-periodic-notes/issues/238:
+  * - Add unitOfTime2. See also openPeriodicNote().
+  */
 const periodConfigs = {
   daily: {
     unitOfTime: "day",
@@ -805,6 +816,11 @@ const periodConfigs = {
     getAllNotes: getAllYearlyNotes_1,
   },
 };
+/* NB(PNK)
+  *
+  * Work around https://github.com/liamcain/obsidian-periodic-notes/issues/238:
+  * - Use unitOfTime2 instead of unitOfTime2.
+  */
 async function openPeriodicNote(periodicity, date, inNewSplit) {
   const config = periodConfigs[periodicity];
   const startOfPeriod = date.clone().startOf(config.unitOfTime2);
@@ -881,7 +897,7 @@ function getCommands(periodicity) {
       checkCallback: (checking) => {
         if (checking) {
           const activeFile = getActiveFile();
-          return !!(activeFile && getDateFromFile_1(activeFile, config.unitOfTime));
+          return !!(activeFile && getDateFromFile(activeFile, config.unitOfTime));
         }
         openNextNote(periodicity);
       },
@@ -892,7 +908,7 @@ function getCommands(periodicity) {
       checkCallback: (checking) => {
         if (checking) {
           const activeFile = getActiveFile();
-          return !!(activeFile && getDateFromFile_1(activeFile, config.unitOfTime));
+          return !!(activeFile && getDateFromFile(activeFile, config.unitOfTime));
         }
         openPrevNote(periodicity);
       },
