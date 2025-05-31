@@ -2,9 +2,9 @@
   "id": "periodic-notes",
   "name": "Periodic Notes",
   "description": "Personal fork of https://github.com/liamcain/obsidian-periodic-notes.",
-  "version": "0.0.18",
+  "version": "1.0.1-beta.0",
   "author": "Paul Natsuo Kishimoto",
-  "authorUrl": "https://codeberg.org/khaeru/obsidian-periodic-notes",
+  "authorUrl": "https://github.com/chillu/obsidian-periodic-notes",
   "isDesktopOnly": false,
   "minAppVersion": "1.8.0"
 }
